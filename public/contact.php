@@ -1,21 +1,5 @@
-<?php
-
-echo 'This is the contact page';
-
-?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Contact Page</title>
-</head>
-<body>
-    <a href="/index.php">List</a>
-    <a href="/edit.php">Edit</a>
-    <a href="/create.php">Create</a>
+<?php require_once __DIR__.'/partials/header.php';?>
+<?php require_once __DIR__.'/partials/menu.php';?>
 
     <form action="post">
         <fieldset>
@@ -35,5 +19,4 @@ echo 'This is the contact page';
             <button type="submit">Send Message</button>
         </fieldset>
     </form>
-</body>
-</html>
+<?php require_once __DIR__.'/partials/footer.php';?>

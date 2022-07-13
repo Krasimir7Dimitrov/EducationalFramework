@@ -1,0 +1,17 @@
+{
+    "name": "onelab/educational-framework",
+    "description": "Test purposes framework",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Sabev",
+            "email": "psabev@parachut.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

@@ -1,4 +1,13 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+//Да се намери първия сегмент от URL и чрез него да се инициализира контролер
+//Ако няма такъв сегмент по дефаулт да се инициализира някой от контролерите
+
+// Да се намери и хване втория сегмент от URL ako има такъв и ако има валиден контролер, и да се рендира екшъна вътре;
+
+
+
 $host = "db";
 $port = "3306";
 $database = "db";
@@ -19,20 +28,8 @@ try {
 
 ?>
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<a href="/edit.php">Edit</a>
-<a href="/create.php">Create</a>
-<a href="/contact.php">Contact Us</a>
-
+<?php require_once __DIR__.'/partials/header.php'?>
+<?php require_once __DIR__.'/partials/menu.php'?>
 <table>
     <tr>
         <th>Make</th>
@@ -58,11 +55,4 @@ try {
 
 </table>
 
-<style>
-    tr{
-        mar: 10px;
-    }
-</style>
-</body>
-
-</html>
+<?php require_once __DIR__.'/partials/footer.php'?>
