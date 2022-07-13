@@ -23,6 +23,8 @@ services:
       - '3306:3306'
     env_file: 
       - ./service-config/env/mariadb.env
+    volumes:
+      - ./dbdata:/var/lib/mysql
   mail:
     image: 'reachfive/fake-smtp-server'
     ports: 
