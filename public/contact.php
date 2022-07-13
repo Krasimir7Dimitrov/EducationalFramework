@@ -1,23 +1,13 @@
 <?php
+include "templates/header.php";
+include "templates/footer.php";
 
-echo 'This is the contact page';
-
+if (isset($_POST['submit'])) {
+    echo $_POST['message'];
+}
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Contact Page</title>
-</head>
-<body>
-    <a href="/index.php">List</a>
-    <a href="/edit.php">Edit</a>
-    <a href="/create.php">Create</a>
 
-    <form action="post">
+    <form action="contact.php" method="POST">
         <fieldset>
             <legend>Contact Form:</legend>
 
@@ -32,8 +22,8 @@ echo 'This is the contact page';
 
             <label for="message">Message</label><br>
             <input type="text" name="message" placeholder="Enter Your Message"><br>
-            <button type="submit">Send Message</button>
+
+            <input type="submit" name="submit" value="submit" class="btn">
         </fieldset>
     </form>
-</body>
-</html>
+

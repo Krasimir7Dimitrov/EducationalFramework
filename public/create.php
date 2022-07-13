@@ -1,22 +1,19 @@
 <?php
-echo 'This is the create page';
-?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Create</title>
-</head>
-<body>
-<a href="/index.php">List</a>
-<a href="/edit.php">Edit</a>
-<a href="/contact.php">Contact Us</a>
 
-<form action="post">
-    <div>
+include "templates/header.php";
+include "templates/footer.php";
+
+if (isset($_POST['submit'])) {
+    $info = 'This is the information that you have entered:  Make: ' . $_POST['make'] . ' Model : ' . $_POST['model'] . ' Registration Year : ' . $_POST['registration']
+        . ' Transmission : ' . $_POST['transmission'];
+    echo $info;
+    var_dump($_POST['transmission']);
+}
+?>
+
+<form action="create.php" method="POST">
+    <fieldset>
+        <legend>Create form</legend>
         <label for="make">Make</label><br>
         <input type="text" name="make" placeholder="Enter make"><br>
 
@@ -26,11 +23,18 @@ echo 'This is the create page';
         <label for="registration"> First Registration</label><br>
         <input type="text" name="registration" placeholder="Enter registration date"><br>
 
-        <label for="transmission">Transmission</label><br>
-        <input type="text" name="transmission" placeholder="Enter transmission type"><br>
+        <label>Transmission</label><br>
+        <label>
+            <input type="radio" name="transmission" class="with-gap" value="manual">
+            <span>Manual</span>
+        </label>
+        <label>
+            <input type="radio" name="transmission" class="with-gap" value="automatic">
+            <span>Automatic</span>
+        </label> <br>
 
-        <button type="submit">Create record</button>
-    </div>
+
+        <input type="submit" name="submit" value="submit" class="btn">
+    </fieldset>
 </form>
-</body>
-</html>
+

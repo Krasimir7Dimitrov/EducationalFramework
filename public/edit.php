@@ -1,23 +1,13 @@
 <?php
- echo 'This is the edit page';
- ?>
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Edit</title>
-</head>
-<body>
-<a href="/index.php">List</a>
-<a href="/create.php">Create</a>
-<a href="/contact.php">Contact Us</a>
+include "templates/header.php";
+include "templates/footer.php";
 
-<form action="post">
-    <div>
+?>
+
+<form action="" method="">
+    <fieldset>
+        <legend>Edit form</legend>
         <label for="make">Make</label><br>
         <input type="text" name="make"><br>
 
@@ -27,11 +17,17 @@
         <label for="registration"> First Registration</label><br>
         <input type="text" name="registration"><br>
 
-        <label for="transmission">Transmission</label><br>
-        <input type="text" name="transmission"><br>
+        <label>Transmission</label><br>
+        <label>
+            <input type="radio" name="transmission" class="with-gap">
+            <span>Manual</span>
+        </label>
+        <label>
+            <input type="radio" name="transmission" class="with-gap">
+            <span>Automatic</span>
+        </label> <br>
 
-        <button type="submit">Edit record</button>
-    </div>
+        <input type="submit" name="submit" value="submit" class="btn">
+    </fieldset>
+
 </form>
-</body>
-</html>
