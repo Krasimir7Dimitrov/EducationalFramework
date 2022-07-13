@@ -1,21 +1,7 @@
 <?php
-$host = "db";
-$port = "3306";
-$database = "db";
-$user = "user";
-$password = "password";
-$results = null;
 
-try {
-    $connection = new PDO("mysql:host=$host;port=$port;charset=utf8mb4;dbname=$database", $user, $password);
-    $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $db = $connection->query('SELECT * FROM cars');
-    $results = $db->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    echo 'Connection Failed' . $e->getMessage();
-}
+require_once 'Listing.php';
+$results = new Listing();
 
 ?>
 
@@ -41,7 +27,7 @@ try {
         <th>Transmission</th>
     </tr>
 
-    <?php foreach ($results as $key => $result) { ?>
+    <?php foreach ($results->getData() as $key => $result) { ?>
         <tr>
             <td><?= $result['make'] ?> </td>
             <td><?= $result['model'] ?> </td>
