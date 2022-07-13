@@ -5,7 +5,23 @@ require_once __DIR__ . '/../vendor/autoload.php';
 //Ако няма такъв сегмент по дефаулт да се инициализира някой от контролерите
 
 // Да се намери и хване втория сегмент от URL ako има такъв и ако има валиден контролер, и да се рендира екшъна вътре;
+$uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+var_dump($uri_path);
+$uri_segments = explode('/', $uri_path);
+
+var_dump($uri_segments[0]);
+var_dump($uri_segments[1]);
+var_dump($uri_segments[2]);
+var_dump($uri_segments[3]);
+
+if ($uri_segments[1] == 'cars') {
+    $cars = new \App\Controllers\CarsController();
+    $cars->index();
+} else {
+    $home = new BaseController();
+    $home->index();
+}
 
 
 $host = "db";
