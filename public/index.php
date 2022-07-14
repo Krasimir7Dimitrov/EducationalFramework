@@ -1,6 +1,13 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+
+$inst = \App\System\DB::getInstance();
+$connection = $inst->connection;
+var_dump($inst->connection); die;
+
+
+
 $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri_segments = explode('/', $uri_path);
 
