@@ -1,20 +1,16 @@
 <?php
 namespace App\Controllers;
 
+use App\Model\Collections\CarsCollection;
 use App\System\AbstractController;
 
 class CarsController extends AbstractController
 {
 
-
     public function index()
     {
-        $data = [
-            'var1' => 'pesho',
-            'var2' => 'gosho',
-            'var3' => 'haralampi',
 
-        ];
+       $data = [];
 
        $this->renderView('cars/index', $data);
     }
