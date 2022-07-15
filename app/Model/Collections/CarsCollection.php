@@ -1,8 +1,6 @@
 <?php
 namespace App\Model\Collections;
 
-use \App\System\DB;
-
 class CarsCollection extends \App\System\BaseCollection
 {
     protected $table = 'cars';
@@ -22,5 +20,4 @@ class CarsCollection extends \App\System\BaseCollection
 
         return $sth->fetchAll();
     }
-
 }
