@@ -7,6 +7,7 @@ class CarsCollection extends \App\System\BaseCollection
 {
     protected $table = 'cars';
 
+
     public function getAllCars()
     {
         $result = $this->db->query('SELECT * FROM cars');

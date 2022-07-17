@@ -1,7 +1,7 @@
 <?php require_once __DIR__.'/partials/header.php'?>
 <?php require_once __DIR__.'/partials/menu.php'?>
 
-<form action="post">
+<form action="../app/Controllers/CarsController.php" method="post">
     <div>
         <label for="make">Make</label><br>
         <input type="text" name="make" placeholder="Enter make"><br>
