@@ -77,11 +77,37 @@ class BaseCollection
         return $query->rowCount();
     }
 
+    /**
+     * @param $where
+     * @return false|int
+     */
     public function delete($where)
     {
+        $addAnd = '';
+        if (empty($where)) {
+            return false;
+        } else {
+            $addAnd = ' AND ';
+        }
 
+        $whereCondition = $this->makeCondition($where);
+
+        $statement = 'DELETE FROM ' . $this->table . ' WHERE 1'. $addAnd . implode(' AND ', $whereCondition);
+        $query = $this->db->prepare($statement);
+
+        foreach ($where as $key => $value) {
+            $query->bindParam(':'. $key, $where[$key]);
+        }
+
+        $query->execute();
+
+        return $query->rowCount();
     }
 
+    /**
+     * @param array $condition
+     * @return array
+     */
     public function makeCondition(array $condition)
     {
         $conditionArray = [];
