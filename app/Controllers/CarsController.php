@@ -9,8 +9,10 @@ class CarsController extends AbstractController
 
     public function index()
     {
+       $collection = new CarsCollection();
 
-       $data = [];
+        $cars = $collection->getAllCars();
+        var_dump($cars); die;
 
        $this->renderView('cars/index', $data);
     }

@@ -55,7 +55,7 @@ RUN apk add --no-cache $PHPIZE_DEPS \
     && docker-php-ext-enable xdebug
 
 RUN apk add --no-cache libxml2-dev \
-    && docker-php-ext-install pdo_mysql soap
+    && docker-php-ext-install pdo_mysql soap mysqli
 
 RUN wget https://get.symfony.com/cli/installer -O - | bash
 
