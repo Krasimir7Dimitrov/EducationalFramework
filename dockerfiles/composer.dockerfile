@@ -6,7 +6,7 @@ RUN apk add --no-cache libxml2-dev
 
 RUN apk add --no-cache git
 
-RUN docker-php-ext-install pdo pdo_mysql soap
+RUN docker-php-ext-install pdo pdo_mysql soap mysqli
 
 RUN addgroup -g 1000 mvc && adduser -G mvc -g mvc -s /bin/sh -D mvc
  
