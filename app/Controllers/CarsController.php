@@ -57,22 +57,22 @@ class CarsController extends AbstractController
         var_dump('This is the update method of the CarsController');
 
         try {
-            $id = 68;
+            //$where = 141;
             $where = [
-                'make' => 'fordfff',
-                'model' => 'mustangfff',
+                'make' => 'ford_created_created_111',
+                'model' => 'mustang_created_created',
                 'first_registration' => '1986'
             ];
 
             $data = [
-                'make' => 'fordfff',
+                'make' => 'fordfff111111111111',
                 'model' => 'mustangfff',
                 'first_registration' => '1986',
                 'transmission' => 1,
                 'updated_at' => date("Y-m-d H:i:s")
             ];
             $inst = new CarsCollection();
-            $inst->update($data, null, $id);
+            $inst->update($data, $where);
             echo 'Success update';
         } catch (\Throwable $t) {
             echo $t;

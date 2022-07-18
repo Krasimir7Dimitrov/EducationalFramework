@@ -23,7 +23,7 @@ class BaseCollection
     public function insert(array $data): int
     {
         if (empty($data)) {
-            throw new \Exception('There is not any values');
+            false;
         }
 
         $singleRecord = false;
@@ -102,16 +102,16 @@ class BaseCollection
      * @return void
      * @throws \Exception
      */
-    public function update(array $data, array $where = null, int $id = null)
+    public function update(array $data, $where)
     {
         $query = "";
-        if (!empty($where) and empty($id)) {
+        if (!empty($where) and is_array($where)) {
             $whereVals = [];
             foreach($where as $key => $val) {
                 $whereVals[] = "$key = :w$key";
                 $query = implode(" AND " ,$whereVals);
             }
-        } elseif (!empty($id) and empty($where)) {
+        } elseif (!empty($data) and is_integer($where)) {
             $query = "id = :id";
         } else {
             throw new \Exception('There is empty value or too many values');
@@ -126,12 +126,12 @@ class BaseCollection
 
         $sth = $this->db->prepare($sql);
 
-        if (!empty($where)) {
+        if (is_array($where)) {
             foreach ($where as $key => $value) {
                 $sth->bindParam(':w' . $key, $where[$key]);
             }
         } else {
-            $sth->bindParam(':id', $id);
+            $sth->bindParam(':id', $where);
         }
         foreach ($data as $key => $value) {
             $sth->bindParam(':' . $key, $data[$key]);
