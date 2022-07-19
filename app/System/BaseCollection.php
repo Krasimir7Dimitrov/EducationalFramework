@@ -12,7 +12,7 @@ class BaseCollection
 
     public function __construct()
     {
-        $dbAdapter = new DbAdapter();
+        $dbAdapter = Registry::get('dbAdapter');
         $this->db = $dbAdapter->getDefaultConnection();
     }
 }

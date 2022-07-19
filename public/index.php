@@ -1,5 +1,21 @@
 <?php
+
+use App\System\Database\DbAdapter;
+use App\System\Registry;
+
 require_once __DIR__ . '/../vendor/autoload.php';
+
+// here we will initialize our Registry
+try {
+    $config = require __DIR__.'/../app/config/config.php';
+    Registry::set('config', $config);
+
+    $dbAdapter = new DbAdapter();
+    Registry::set('dbAdapter', $dbAdapter);
+
+} catch (\Exception $e) {
+    var_dump($e->getMessage());
+}
 
 $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri_segments = explode('/', $uri_path);
@@ -31,6 +47,9 @@ if (!empty($uri_segments[2])) {
 }
 
 $controllerInstance->$action();
+
+Registry::unset('config');
+Registry::unset('dbAdapter');
 
 die();
 $host = "db";

@@ -6,5 +6,6 @@ return [
         'port' => '',
         'username' => '',
         'password' => '',
+        'dbAdapter' => '',
     ]
 ];

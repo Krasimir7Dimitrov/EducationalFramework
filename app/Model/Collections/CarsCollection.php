@@ -1,8 +1,6 @@
 <?php
 namespace App\Model\Collections;
 
-use \App\System\PDO;
-
 class CarsCollection extends \App\System\BaseCollection
 {
     protected $table = 'cars';
