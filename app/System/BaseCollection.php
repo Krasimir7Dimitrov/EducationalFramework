@@ -12,7 +12,13 @@ class BaseCollection
 
     public function __construct()
     {
+        /** @var  $dbAdapter \App\System\Database\DbAdapter */
         $dbAdapter = Registry::get('dbAdapter');
-        $this->db = $dbAdapter->getDefaultConnection();
+        $this->db = $dbAdapter;
+    }
+
+    public function update($where, $data)
+    {
+        return $this->db->update($this->table, $where, $data);
     }
 }
