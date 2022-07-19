@@ -1,7 +1,7 @@
 <?php
 namespace App\Model\Collections;
 
-use \App\System\DB;
+use \App\System\PDO;
 
 class CarsCollection extends \App\System\BaseCollection
 {
@@ -11,7 +11,6 @@ class CarsCollection extends \App\System\BaseCollection
     public function getAllCars()
     {
         $result = $this->db->query('SELECT * FROM cars');
-
         return $result->fetchAll();
     }
 
@@ -22,6 +21,11 @@ class CarsCollection extends \App\System\BaseCollection
         $sth->bindParam('id',$id);
 
         return $sth->fetchAll();
+    }
+
+    public function update($data, $where)
+    {
+        $this->db->update($data, $where);
     }
 
 }
