@@ -14,7 +14,7 @@ class BaseCollection
     {
         /** @var  $dbAdapter \App\System\Database\DbAdapter */
         $dbAdapter = Registry::get('dbAdapter');
-        $this->db = $dbAdapter;
+        $this->db = $dbAdapter->getDefaultConnection();
     }
 
     public function update($where, $data)

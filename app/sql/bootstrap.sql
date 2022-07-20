@@ -37,6 +37,20 @@ VALUES
 (3, 'opel', 'corsa', '2021', 'manual', NULL, NULL),
 (4, 'audi', 'a8', '2022', 'automatic', NULL, NULL);
 
+CREATE TABLE `users` (
+                         `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                         `username` VARCHAR(50) NOT NULL,
+                         `password` VARCHAR(40) NOT NULL,
+                         `email` VARCHAR(50) NOT NULL,
+                         `firstName` VARCHAR(50) NULL DEFAULT NULL,
+                         `lastName` VARCHAR(50) NULL DEFAULT NULL,
+                         `createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+                         `updatedAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                         PRIMARY KEY (`id`)
+)
+    COLLATE='utf8mb4_general_ci'
+    ENGINE=InnoDB
+;
 
 
 

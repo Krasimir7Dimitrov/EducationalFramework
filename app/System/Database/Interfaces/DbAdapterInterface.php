@@ -15,4 +15,6 @@ interface DbAdapterInterface
 
     public function delete($where);
 
+    public static function closeConnection();
+
 }

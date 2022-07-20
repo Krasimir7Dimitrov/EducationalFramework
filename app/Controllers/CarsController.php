@@ -14,6 +14,10 @@ class CarsController extends AbstractController
 
     public function create()
     {
+        if (!$this->isLoggedIn())
+        {
+            header("Location: {$this->config['baseUrl']}"); die();
+        }
         var_dump('This is the create method of the CarsController');
     }
 

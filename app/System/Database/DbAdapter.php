@@ -51,4 +51,9 @@ class DbAdapter
     {
         return $this->defaultConnection;
     }
+
+    public function __destruct()
+    {
+        $this->defaultConnection::closeConnection();
+    }
 }

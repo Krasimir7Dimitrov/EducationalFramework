@@ -22,4 +22,11 @@ class CarsCollection extends \App\System\BaseCollection
         return $this->db->fetchOne($sth, ['id' => $id]);
     }
 
+    public function __destruct()
+    {
+        parent::__destruct();
+
+        echo "Heere we are in cars collection destructor <hr/>";
+    }
+
 }
