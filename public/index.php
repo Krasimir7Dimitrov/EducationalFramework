@@ -1,5 +1,15 @@
 <?php
+
 require_once __DIR__ . '/../vendor/autoload.php';
+
+$config = require __DIR__ . '/../app/config/config.php';
+\App\System\Registry::set('config', $config);
+
+$hi = \App\System\Registry::get('config');
+var_dump($hi['config']['db']['dbAdapter']);
+
+\App\System\Registry::unset('config');
+
 
 $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri_segments = explode('/', $uri_path);
