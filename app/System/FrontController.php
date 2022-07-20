@@ -15,6 +15,7 @@ class FrontController
 
     public function __construct($options = [])
     {
+        echo "Heere we are in front controller constructor <hr/>";
         $this->config = Registry::get('config');
 
         if (empty($options)) {
@@ -87,6 +88,11 @@ class FrontController
             header("Location: {$baseUrl}/{$ctrName}/index"); die();
         }
         return $controller->$action();
+    }
+
+    public function __destruct()
+    {
+        echo "Heere we are in frony controller destructor <hr/>";
     }
 
 }

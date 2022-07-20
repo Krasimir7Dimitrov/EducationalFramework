@@ -23,6 +23,8 @@ class PDO implements DbAdapterInterface
     private function __construct()
     {
         $this->connection = $this->getConnection();
+
+        echo "Heere we are in PDO adapter constructor <hr/>";
     }
 
 
@@ -49,11 +51,8 @@ class PDO implements DbAdapterInterface
         return $stm->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-
-
-
     /**
-     * @return \App\System\PDO
+     * @return \App\System\Database\Adapters\PDO
      */
     public static function getInstance()
     {
@@ -186,7 +185,11 @@ class PDO implements DbAdapterInterface
     }
 
 
+    public function __destruct()
+    {
+        echo "Heere we are in PDO destructor <hr/>";
 
+    }
 
 
 

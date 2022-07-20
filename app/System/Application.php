@@ -10,7 +10,8 @@ class Application
 
     private function __construct()
     {
-        $this->startSession();
+        echo "Heere we are in application constructor <hr/>";
+        //$this->startSession();
         // here we will initialize our Registry
         try {
             $config = require __DIR__.'/../config/config.php';
@@ -43,6 +44,15 @@ class Application
     public function run()
     {
         return (new \App\System\FrontController())->run();
+    }
+
+    public function __destruct()
+    {
+        echo "Heere we are in APPLICATION destructor <hr/>";
+
+        Registry::unset('config');
+        Registry::unset('dbAdapter');
+
     }
 
 }

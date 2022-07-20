@@ -15,10 +15,17 @@ class BaseCollection
         /** @var  $dbAdapter \App\System\Database\DbAdapter */
         $dbAdapter = Registry::get('dbAdapter');
         $this->db = $dbAdapter;
+
+        echo "Heere we are in base collection constructor <hr/>";
     }
 
     public function update($where, $data)
     {
         return $this->db->update($this->table, $where, $data);
+    }
+
+    public function __destruct()
+    {
+        echo "Heere we are in base collection destructor <hr/>";
     }
 }

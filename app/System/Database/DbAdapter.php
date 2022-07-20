@@ -11,9 +11,12 @@ class DbAdapter
 
     public function __construct()
     {
+        echo "Heere we are in db Adapter constructor <hr/>";
         $this->config = Registry::get('config');
         $connectionType = empty($this->config['db']['dbAdapter']) ? 'PDO' : $this->config['db']['dbAdapter'];
         $this->setDefaultConnection($connectionType);
+
+
     }
 
     /**
@@ -50,5 +53,10 @@ class DbAdapter
     public function getDefaultConnection()
     {
         return $this->defaultConnection;
+    }
+
+    public function __destruct()
+    {
+        echo "Heere we are in DB adapter destructor <hr/>";
     }
 }
