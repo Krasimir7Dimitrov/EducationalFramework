@@ -9,8 +9,6 @@ class CarsController extends AbstractController
 
     public function index()
     {
-       $collection = new CarsCollection();
-
        $this->renderView('cars/index', []);
     }
 
