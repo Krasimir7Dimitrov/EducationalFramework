@@ -17,7 +17,7 @@ try {
 } catch (\Exception $e) {
     var_dump($e->getMessage());
 }
-
+Registry::get('dbAdapter');
 $frontController = new \App\System\FrontController();
 $frontController->run();
 

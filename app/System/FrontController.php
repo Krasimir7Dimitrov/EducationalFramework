@@ -52,14 +52,8 @@ class FrontController
         $actionName = $this->config['routing']['defaultAction'];
         if (!empty($uri_segments[2])) {
             $actionName = strtolower($uri_segments[2]);
-            $controllerInstance = new $this->controller();
-            $exists = method_exists($controllerInstance, $actionName);
-
-            if ($exists) {
-                $this->action = $actionName;
-            }
+            $this->action = $actionName;
         }
-        $this->setAction($actionName);
     }
 
     private function setController($controllerName)
@@ -84,17 +78,20 @@ class FrontController
             $notFoundController = $this->config['routing']['NotFoundController'];
 
             header("Location: http://localhost:8080/notfound/index"); die;
-            return (new $notFoundController())->index();
         }
         $controller = new $this->controller();
-
         $action = $this->action;
         $methodExists = method_exists($controller, $action);
-        if (!$methodExists) {
-            $defAction = 'index';
-            return $controller->$defAction();
+
+        if (!empty($this->action) && $methodExists) {
+            $controller->$action();
         }
-        $controller->$action();
+        elseif (!$methodExists) {
+            $defAction = 'index';
+            $segment = explode('\\', $this->controller);
+            $name = strtolower(str_replace('Controller', '', $segment[3]));
+            header("Location: http://localhost:8080/{$name}/{$defAction}"); die;
+        }
     }
 
 }

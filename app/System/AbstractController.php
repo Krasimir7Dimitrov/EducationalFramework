@@ -12,6 +12,4 @@ abstract class AbstractController
         extract($params);
         require_once $viewDir.$viewName.'.phtml';
     }
-
-
 }
