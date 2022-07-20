@@ -11,10 +11,7 @@ class CarsController extends AbstractController
     {
        $collection = new CarsCollection();
 
-        $cars = $collection->getAllCars();
-        var_dump($cars); die;
-
-       $this->renderView('cars/index', $data);
+       $this->renderView('cars/index', []);
     }
 
     public function create()

@@ -1,6 +1,8 @@
 <?php
 namespace App\System\Database;
 
+use App\System\Registry;
+
 class DbAdapter
 {
     private $defaultConnection;
@@ -9,9 +11,8 @@ class DbAdapter
 
     public function __construct()
     {
-        $config = require __DIR__.'/../../config/config.php';
-        $this->config = $config;
-        $connectionType = empty($config['db']['dbAdapter']) ? 'PDO' : $config['db']['dbAdapter'];
+        $this->config = Registry::get('config');
+        $connectionType = empty($this->config['db']['dbAdapter']) ? 'PDO' : $this->config['db']['dbAdapter'];
         $this->setDefaultConnection($connectionType);
     }
 

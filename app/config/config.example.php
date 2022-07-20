@@ -6,5 +6,10 @@ return [
         'port' => '',
         'username' => '',
         'password' => '',
-    ]
+        'dbAdapter' => '',
+    ],
+    'routing' => [
+        'defaultController' => '\\App\\Controllers\\DefaultController',
+        'defaultAction'     => 'index',
+    ],
 ];

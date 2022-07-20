@@ -113,7 +113,7 @@ class PDO implements DbAdapterInterface
      * @param $data
      * @return false|int
      */
-    public function update($where, $data)
+    public function update($table, $where, $data)
     {
         if (empty($data)) {
             return false;
@@ -131,7 +131,7 @@ class PDO implements DbAdapterInterface
             $addAnd = ' AND ';
         }
 
-        $statement = 'UPDATE ' . $this->table . ' SET '. implode(', ', $set) .' WHERE 1'. $addAnd .implode(' AND ', $whereArray);
+        $statement = 'UPDATE ' . $table . ' SET '. implode(', ', $set) .' WHERE 1'. $addAnd .implode(' AND ', $whereArray);
         $query = $this->db->prepare($statement);
 
         foreach ($data as $key => $value) {
