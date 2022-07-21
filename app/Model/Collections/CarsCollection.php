@@ -12,9 +12,6 @@ class CarsCollection extends \App\System\BaseCollection
         return $this->db->fetchAll($sql);
     }
 
-
-
-
     public function getCarById($id)
     {
         $sth = "SELECT * FROM cars c  WHERE c.id = :id";

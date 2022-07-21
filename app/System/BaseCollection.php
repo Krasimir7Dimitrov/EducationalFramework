@@ -3,16 +3,17 @@
 namespace App\System;
 
 use App\System\Database\DbAdapter;
+use App\System\Database\Interfaces\DbAdapterInterface;
 
 class BaseCollection
 {
-    /** @var $db \App\System\Database\Interfaces\DbAdapterInterface */
+    /** @var $db DbAdapterInterface */
     protected $db;
     protected $table = 'none';
 
     public function __construct()
     {
-        /** @var  $dbAdapter \App\System\Database\DbAdapter */
+        /** @var  $dbAdapter DbAdapter */
         $dbAdapter = Registry::get('dbAdapter');
         $this->db = $dbAdapter->getDefaultConnection();
     }
