@@ -28,9 +28,7 @@ class PDO implements \App\System\Interfaces\DbAdaperInterface
         $this->connection = $this->getConnection();
     }
 
-    /**
-     * @return \App\System\PDO
-     */
+
     public static function getInstance()
     {
         if (is_null(self::$instance)) {
@@ -56,7 +54,7 @@ class PDO implements \App\System\Interfaces\DbAdaperInterface
         return $connection;
     }
 
-    public function insert(array $data): int
+    public function insert($table, array $data): int
     {
     if (empty($data)) {
         false;
@@ -77,7 +75,7 @@ class PDO implements \App\System\Interfaces\DbAdaperInterface
         throw new \Exception('There is not any values');
     }
 
-    $insertQuery = "INSERT INTO $this->table (" . implode(', ', $keys) . ") VALUES";
+    $insertQuery = "INSERT INTO $table (" . implode(', ', $keys) . ") VALUES";
 
     $allKeys = [];
     foreach ($data as $array) {
@@ -104,7 +102,7 @@ class PDO implements \App\System\Interfaces\DbAdaperInterface
     }
     $valuesQuery = implode($allValues);
 
-    $sth = $this->db->prepare(
+    $sth = $this->connection->prepare(
         $insertQuery . $valuesQuery
     );
 
@@ -138,7 +136,7 @@ class PDO implements \App\System\Interfaces\DbAdaperInterface
      * @return void
      * @throws \Exception
      */
-    public function update(array $data, $where)
+    public function update($table, array $data, $where): int
     {
         $query = "";
         if (!empty($where) and is_array($where)) {
@@ -158,9 +156,8 @@ class PDO implements \App\System\Interfaces\DbAdaperInterface
             $vals[] = "$key = :$key";
         }
 
-        $sql = "UPDATE $this->table c SET " . implode(", ", $vals) .  " WHERE 1 AND " . $query;
-        var_dump($sql);
-        $sth = $this->db->prepare($sql);
+        $sql = "UPDATE " . $table . " c SET " . implode(", ", $vals) .  " WHERE 1 AND " . $query;
+        $sth = $this->connection->prepare($sql);
 
         if (is_array($where)) {
             foreach ($where as $key => $value) {
@@ -177,10 +174,10 @@ class PDO implements \App\System\Interfaces\DbAdaperInterface
         return (int)$sth->rowCount();
     }
 
-    public function delete($id)
+    public function delete($table, $id)
     {
-        $sth = $this->db->prepare(
-            "DELETE FROM $this->table WHERE id = :id LIMIT 1"
+        $sth = $this->connection->prepare(
+            "DELETE FROM $table WHERE id = :id LIMIT 1"
         );
         $sth->bindParam(':id', $id);
         $sth->execute();

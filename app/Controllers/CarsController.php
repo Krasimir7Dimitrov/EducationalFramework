@@ -23,9 +23,9 @@ class CarsController extends AbstractController
         ];
 
         $hi = new CarsCollection();
-        $hi->insert($data);
-        $hi->update(57, $data);
-        $hi->delete(58);
+        $hi->index();
+        //$hi->update(57, $data);
+        //$hi->delete(58);
 
        $data = [];
 

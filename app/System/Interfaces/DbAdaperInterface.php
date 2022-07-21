@@ -3,9 +3,9 @@ namespace App\System\Interfaces;
 
 interface DbAdaperInterface
 {
-    public function insert(array $data);
+    public function insert($table, array $data);
 
-    public function update(array $data, $where);
+    public function update($table, array $data, $where);
 
-    public function delete($id);
+    public function delete($table, $id);
 }

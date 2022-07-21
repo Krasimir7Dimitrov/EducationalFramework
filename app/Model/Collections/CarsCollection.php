@@ -8,6 +8,10 @@ class CarsCollection extends \App\System\BaseCollection
     protected $table = 'cars';
 
 
+    public function index()
+    {
+        echo 'cool';
+    }
     public function getAllCars()
     {
         $result = $this->db->query('SELECT * FROM cars');
@@ -22,10 +26,4 @@ class CarsCollection extends \App\System\BaseCollection
 
         return $sth->fetchAll();
     }
-
-    public function update($data, $where)
-    {
-        $this->db->update($data, $where);
-    }
-
 }

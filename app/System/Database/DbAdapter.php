@@ -2,6 +2,8 @@
 namespace App\System\Database;
 
 
+use App\System\Registry;
+
 class DbAdapter
 {
     public $config;
@@ -9,11 +11,9 @@ class DbAdapter
 
     public function __construct()
     {
-        $config = require __DIR__."/../../config/config.php";
+        $config = Registry::get('config');
         $this->config = $config;
-        var_dump($config);
         $connectionType = empty($config['db']['dbAdapter']) ? 'PDO' : $config['db']['dbAdapter'];
-        var_dump($connectionType);
         $this->setConnectionToDb($connectionType);
     }
 

@@ -19,11 +19,10 @@ final class Registry
      */
     public static function get($key)
     {
-        if (empty(self::$storage)) {
+        if (empty(self::$storage[$key])) {
             return null;
         }
-        var_dump(self::$storage);
-        return self::$storage;
+        return self::$storage[$key];
     }
 
     /**
