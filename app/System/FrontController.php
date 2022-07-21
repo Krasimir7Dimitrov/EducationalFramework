@@ -40,24 +40,16 @@ class FrontController
         $uri_segments = explode('/', $uri_path);
 
         //Get the controller class
+        $controllerName = $this->config['routing']['defaultController'];
         if (!empty($uri_segments[1])) {
             $controllerName = "\\App\\Controllers\\".ucfirst(strtolower($uri_segments[1])).'Controller';
-            $exists = class_exists($controllerName);
-            if ($exists) {
-                $this->setController($controllerName);
-            }
         }
+        $this->setController($controllerName);
 
         //Get the action method
         $actionName = $this->config['routing']['defaultAction'];
         if (!empty($uri_segments[2])) {
             $actionName = strtolower($uri_segments[2]);
-            $controllerInstance = new $this->controller();
-            $exists = method_exists($controllerInstance, $actionName);
-
-            if ($exists) {
-                $this->action = $actionName;
-            }
         }
         $this->setAction($actionName);
     }
@@ -79,22 +71,22 @@ class FrontController
 
     public function run()
     {
+        $baseUrl = $this->config['baseUrl'];
         $controllerExists = class_exists($this->controller);
         if (!$controllerExists) {
-            $notFoundController = $this->config['routing']['NotFoundController'];
-
-            header("Location: http://localhost:8080/notfound/index"); die;
-            return (new $notFoundController())->index();
+            header("Location: http://localhost:8080/notfound/index"); die();
         }
-        $controller = new $this->controller();
 
+        $controller = new $this->controller();
         $action = $this->action;
         $methodExists = method_exists($controller, $action);
         if (!$methodExists) {
-            $defAction = 'index';
-            return $controller->$defAction();
+            $reflect = new \ReflectionClass($controller);
+            $ctrName = strtolower($reflect->getShortName());
+            $ctrName = str_replace('controller', '', $ctrName);
+            header("Location: {$baseUrl}/{$ctrName}/index"); die();
         }
-        $controller->$action();
+        return $controller->$action();
     }
 
 }

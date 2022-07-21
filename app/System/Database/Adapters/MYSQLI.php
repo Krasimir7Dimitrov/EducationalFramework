@@ -91,4 +91,9 @@ class MYSQLI implements DbAdapterInterface
 
     }
 
+    public static function closeConnection()
+    {
+        self::$instance = null;
+    }
+
 }

@@ -9,13 +9,15 @@ class CarsController extends AbstractController
 
     public function index()
     {
-       $collection = new CarsCollection();
-
        $this->renderView('cars/index', []);
     }
 
     public function create()
     {
+        if (!$this->isLoggedIn())
+        {
+            header("Location: {$this->config['baseUrl']}"); die();
+        }
         var_dump('This is the create method of the CarsController');
     }
 

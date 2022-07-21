@@ -8,6 +8,8 @@ class DefaultController extends AbstractController
 {
     public function index()
     {
-        var_dump('This is the index method of the DefaultCOntroller');
+
+        var_dump($_SESSION);
+        $this->renderView('default/index', []);
     }
 }
