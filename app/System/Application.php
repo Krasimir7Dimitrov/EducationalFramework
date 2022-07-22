@@ -48,11 +48,7 @@ class Application
 
     public function __destruct()
     {
-//        var_dump($_SERVER);
-//        $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-//        var_dump($actual_link);
-//        //var_dump($_SESSION['user']);
-//        var_dump(memory_get_usage());
-//        var_dump($_SERVER['HTTP_X_FORWARDED_FOR']);
+        $test = new \App\System\Debugger\Debugger();
+        var_dump($test->getDebugData());
     }
 }
