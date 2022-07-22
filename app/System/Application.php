@@ -10,7 +10,6 @@ class Application
 
     private function __construct()
     {
-
         $this->startSession();
         // here we will initialize our Registry
         try {
@@ -48,7 +47,6 @@ class Application
 
     public function __destruct()
     {
-        $test = new \App\System\Debugger\Debugger();
-        var_dump($test->getDebugData());
+
     }
 }

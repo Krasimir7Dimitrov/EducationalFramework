@@ -1,8 +1,7 @@
 <?php
 namespace App\System;
 
-use App\System\Debugger\Debugger;
-use App\System\Debugger\PrintingType\ToJson;
+use App\System\Debugbar\Debugbar;
 use App\System\Traits\Auth;
 
 abstract class AbstractController
@@ -13,7 +12,6 @@ abstract class AbstractController
 
     public function __construct()
     {
-
         $this->config = Registry::get('config');
     }
 
