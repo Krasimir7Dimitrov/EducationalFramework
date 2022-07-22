@@ -1,0 +1,42 @@
+<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+?>
+
+<h2>Create car</h2>
+
+<div class="row">
+    <form class="col s6" method="post" action="">
+        <div class="row">
+            <div class="input-field col s3">
+                <input id="make" type="text" class="validate">
+                <label for="make">Make</label>
+            </div>
+            <div class="input-field col s3">
+                <input id="model" type="text" class="validate">
+                <label for="model">Model</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="first_registration" type="text" class="validate">
+                <label for="first_registration">First Registration Year</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="transmission" type="text" class="validate">
+                <label for="transmission">Transmission</label>
+            </div>
+        </div>
+        <div class="row">
+            <input type="submit" name="submit" value="Create" class="btn">
+        </div>
+    </form>
+</div>
+
+
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>
+

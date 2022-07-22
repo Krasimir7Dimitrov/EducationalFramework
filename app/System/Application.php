@@ -8,6 +8,9 @@ class Application
 {
     private static $instance;
 
+    /**
+     * @throws \Exception
+     */
     private function __construct()
     {
         $this->startSession();
@@ -22,7 +25,6 @@ class Application
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-
     }
 
     private function startSession()
@@ -43,6 +45,19 @@ class Application
     public function run()
     {
         return (new \App\System\FrontController())->run();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function __destruct()
+    {
+        $endTime = microtime();
+        try {
+            Registry::set('endTime', $endTime);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
 }

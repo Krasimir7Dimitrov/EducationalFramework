@@ -18,7 +18,7 @@ class CarsController extends AbstractController
         {
             header("Location: {$this->config['baseUrl']}"); die();
         }
-        var_dump('This is the create method of the CarsController');
+        $this->renderView('cars/create', []);
     }
 
     public function update()

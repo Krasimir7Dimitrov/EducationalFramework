@@ -9,4 +9,9 @@ trait Auth
         return !empty($_SESSION['user'] && !empty($_SESSION['loggedIn']));
     }
 
+    public function getUser()
+    {
+        return $this->isLoggedIn() ? $_SESSION['user']['username'] : '';
+    }
+
 }

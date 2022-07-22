@@ -1,14 +1,23 @@
-<a href="/">Home</a>
-<a href="/cars">Cars Listing</a>
-<?php if ($this->isLoggedIn()):  ?>
-    <a href="/cars/create">Create Car</a>
-<?php endif;  ?>
-<?php if (!$this->isLoggedIn()):  ?>
-    <a href="/auth/login">Login</a>
-<?php endif;  ?>
-<?php if ($this->isLoggedIn()):  ?>
-    <form action="/auth/logout" method="post">
-        <input type="submit" value="Logout"/>
-    </form>
-<?php endif;  ?>
+<nav>
+    <div class="nav-wrapper">
+        <ul class="left hide-on-med-and-down">
+            <li><a href="/">Home</a></li>
+            <li><a href="/cars">Cars Listing</a></li>
+            <?php if ($this->isLoggedIn()):  ?>
+                <li><a href="/cars/create">Create Car</a></li>
+            <?php endif;  ?>
+            <?php if (!$this->isLoggedIn()):  ?>
+                <li><a href="/auth/login">Login</a></li>
+            <?php endif;  ?>
+            <?php if ($this->isLoggedIn()):  ?>
+                <form action="/auth/logout" method="post">
+                    <input type="submit" value="Logout"/>
+                </form>
+            <?php endif;  ?>
+        </ul>
+        <?php if ($this->isLoggedIn()): ?>
+            <span class="right">Username: <?= $this->getUser();?> </span>
+        <?php endif; ?>
+    </div>
+</nav>
 
