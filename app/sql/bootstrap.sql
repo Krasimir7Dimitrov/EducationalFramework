@@ -38,22 +38,21 @@ VALUES
 (4, 'audi', 'a8', '2022', 'automatic', NULL, NULL);
 
 CREATE TABLE `users` (
-                         `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                         `username` VARCHAR(50) NOT NULL,
-                         `password` VARCHAR(40) NOT NULL,
-                         `email` VARCHAR(50) NOT NULL,
-                         `firstName` VARCHAR(50) NULL DEFAULT NULL,
-                         `lastName` VARCHAR(50) NULL DEFAULT NULL,
-                         `createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-                         `updatedAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                         PRIMARY KEY (`id`)
+                         `id` INT(11) NOT NULL AUTO_INCREMENT,
+                         `username` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+                         `password` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+                         `email` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+                         `first_name` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+                         `last_name` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+                         `created_at` DATETIME NULL DEFAULT current_timestamp(),
+                         `updated_at` DATETIME NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+                         PRIMARY KEY (`id`) USING BTREE
 )
     COLLATE='utf8mb4_general_ci'
     ENGINE=InnoDB
 ;
 
-
-
+INSERT INTO `db`.`users` (`username`, `password`, `email`, `first_name`, `last_name`) VALUES ('pancho', 'daec07001638deb433e786c59e5dcfd9b084e987', 'psabev@parachut.com', 'Pancho', 'Sabev');
 
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;

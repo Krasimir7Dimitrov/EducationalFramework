@@ -49,13 +49,10 @@ class PDO implements DbAdapterInterface
         return $stm->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-
-
-
     /**
-     * @return \App\System\PDO
+     * @return \App\System\Database\Adapters\PDO
      */
-    public static function getInstance()
+    public static function getInstance(): PDO
     {
         if (is_null(self::$instance)) {
             self::$instance = new PDO();
@@ -84,15 +81,15 @@ class PDO implements DbAdapterInterface
      * @param $data
      * @return false|int
      */
-    public function insert($data)
+    public function insert($table, $data)
     {
         if (empty($data)) {
             return false;
         }
 
         $arrayKeys = array_keys($data);
-        $statement = 'INSERT INTO ' . $this->table . '(' . implode(", ", $arrayKeys) . ') VALUES (:'. implode(", :", $arrayKeys) .')';
-        $query = $this->db->prepare($statement);
+        $statement = 'INSERT INTO ' . $table . '(' . implode(", ", $arrayKeys) . ') VALUES (:'. implode(", :", $arrayKeys) .')';
+        $query = $this->connection->prepare($statement);
 
         foreach ($data as $key => $value) {
             $query->bindParam(':'.$key, $data[$key]);
@@ -102,13 +99,14 @@ class PDO implements DbAdapterInterface
 
         if ($result) {
             $rowCount = $query->rowCount();
-            if ($rowCount) return (int) $this->db->lastInsertId();
+            if ($rowCount) return (int) $this->connection->lastInsertId();
         }
 
         return false;
     }
 
     /**
+     * @param $table
      * @param $where
      * @param $data
      * @return false|int
@@ -132,24 +130,25 @@ class PDO implements DbAdapterInterface
         }
 
         $statement = 'UPDATE ' . $table . ' SET '. implode(', ', $set) .' WHERE 1'. $addAnd .implode(' AND ', $whereArray);
-        $query = $this->db->prepare($statement);
+        $query = $this->connection->prepare($statement);
 
         foreach ($data as $key => $value) {
-            $query->bindParam(':'. $key, $data[$key]);
+            $query->bindParam(':'. $key, $value);
         }
 
         foreach ($where as $key => $value) {
-            $query->bindParam(':w'. $key, $where[$key]);
+            $query->bindParam(':w'. $key, $value);
         }
 
         return $query->rowCount();
     }
 
     /**
+     * @param $table
      * @param $where
-     * @return false|int
+     * @return false
      */
-    public function delete($where)
+    public function delete($table, $where): bool
     {
         $addAnd = '';
         if (empty($where)) {
@@ -160,11 +159,11 @@ class PDO implements DbAdapterInterface
 
         $whereCondition = $this->makeCondition($where);
 
-        $statement = 'DELETE FROM ' . $this->table . ' WHERE 1'. $addAnd . implode(' AND ', $whereCondition);
+        $statement = 'DELETE FROM ' . $table . ' WHERE 1'. $addAnd . implode(' AND ', $whereCondition);
         $query = $this->db->prepare($statement);
 
         foreach ($where as $key => $value) {
-            $query->bindParam(':'. $key, $where[$key]);
+            $query->bindParam(':'. $key, $value);
         }
 
         $query->execute();
@@ -176,7 +175,7 @@ class PDO implements DbAdapterInterface
      * @param array $condition
      * @return array
      */
-    public function makeCondition(array $condition)
+    public function makeCondition(array $condition): array
     {
         $conditionArray = [];
         foreach ($condition as $key => $value) {
@@ -185,9 +184,9 @@ class PDO implements DbAdapterInterface
         return $conditionArray;
     }
 
-
-
-
-
+    public static function closeConnection()
+    {
+        self::$instance = null;
+    }
 
 }

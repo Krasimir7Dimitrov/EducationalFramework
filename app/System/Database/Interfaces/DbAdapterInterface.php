@@ -9,11 +9,11 @@ interface DbAdapterInterface
 
     public function fetchAll($sql, $data);
 
-    public function insert($data);
+    public function insert($table, $data);
 
     public function update($table, $where, $data);
 
-    public function delete($where);
+    public function delete($table, $where);
 
     public static function closeConnection();
 
