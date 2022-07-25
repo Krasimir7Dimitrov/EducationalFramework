@@ -3,10 +3,12 @@
 namespace App\System;
 
 use App\System\Database\DbAdapter;
+use App\System\Debugbar\DebugDataInterface;
 
 class Application
 {
-    private static $instance;
+    private static          $instance;
+    private FrontController $frontController;
 
     private function __construct()
     {
@@ -18,6 +20,8 @@ class Application
 
             $dbAdapter = new DbAdapter();
             Registry::set('dbAdapter', $dbAdapter);
+
+            $this->frontController = new \App\System\FrontController();
 
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
@@ -42,11 +46,35 @@ class Application
 
     public function run()
     {
-        return (new \App\System\FrontController())->run();
+        return $this->frontController->run();
     }
 
     public function __destruct()
     {
 
+    }
+
+    /**
+     * !!! make sure to run this after calling $this->run()
+     * @return DebugDataInterface
+     */
+    public function getDebugData()
+    : DebugDataInterface
+    {
+        $url               = $this->frontController->getUrl();
+        $ip                = $this->frontController->getIp();
+        $userSession       = $_SESSION['user'] ?? [];
+        $controller        = $this->frontController->getController();
+        $controllerAction  = $this->frontController->getControllerAction();
+        $httpRequestMethod = $this->frontController->getHttpMethod();
+        $requestData       = $this->frontController->getRequestData();
+        $queryString       = $this->frontController->getQueryString();
+
+        $memoryUsage              = memory_get_usage();
+        $startTime                = Registry::get('startTime');
+        $endTime                  = microtime(true);
+        $applicationExecutionTime = $endTime - $startTime;
+
+        return new \App\System\Debugbar\DebugData($url, $ip, $userSession, $controller, $controllerAction, $memoryUsage, $httpRequestMethod, $requestData, $queryString, $applicationExecutionTime);
     }
 }

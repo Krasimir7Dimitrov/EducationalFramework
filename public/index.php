@@ -1,10 +1,14 @@
 <?php
+$startTime = microtime(true);
 require_once __DIR__ . '/../vendor/autoload.php';
+\App\System\Registry::set('startTime', $startTime);
 
 $application = \App\System\Application::getInstance();
-$bug = new App\System\Debugbar\Debugbar();
 $application->run();
+$debugData = $application->getDebugData();
 
+$bug = new App\System\Debugbar\Debugbar($debugData);
+$decorator = new \App\System\Debugbar\Decorator($bug);
+$decorator->returnHtml();
 
-
-var_dump($_SESSION);
+//var_dump($_SESSION);

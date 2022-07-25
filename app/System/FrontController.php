@@ -89,4 +89,43 @@ class FrontController
         return $controller->$action();
     }
 
+    public function getUrl()
+    : string
+    {
+        $protocol = $_SERVER['HTTPS'] ?? 'http';
+        $host = $_SERVER['HTTP_HOST'];
+        $uri  = $_SERVER['REQUEST_URI'];
+        return $protocol . '://' . $host . $uri;
+    }
+
+    public function getIp(): string
+    {
+        return $_SERVER['REMOTE_ADDR'] ?? 'N/A';
+    }
+
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    public function getControllerAction()
+    {
+        return $this->action;
+    }
+
+    public function getHttpMethod()
+    {
+        return $_SERVER['REQUEST_METHOD'] ?? 'N/A';
+    }
+
+    public function getRequestData()
+    : array
+    {
+        return !empty($_GET) ? $_GET : (!empty($_POST) ? $_POST : []);
+    }
+
+    public function getQueryString()
+    {
+        return $_SERVER['QUERY_STRING'] ?? 'N/A';
+    }
 }

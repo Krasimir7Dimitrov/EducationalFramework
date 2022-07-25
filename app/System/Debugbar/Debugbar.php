@@ -2,7 +2,7 @@
 
 namespace App\System\Debugbar;
 
-class Debugbar
+class Debugbar implements DebugBarDataInterface
 {
     private $data;
 
@@ -18,30 +18,29 @@ class Debugbar
 
     private $memoryUsed;
 
-    //private $executionTime;
 
-    public $httpMethod = [];
+    public $httpMethod;
 
     private $queryString;
 
-    private $postData;
+    private $requestData;
 
-    private $postRequest;
+    private $executionTime;
 
 
-    public function __construct()
+    public function __construct(DebugDataInterface $debugData)
     {
-        $this->setBaseUrl();
-        $this->setIp();
-        $this->setUserSession();
-        $this->setController();
-        $this->setAction();
-        $this->setMemoryUsed();
-        $this->setHttpData();
-        $this->setQueryString();
-        $this->setPostData();
+        $this->setBaseUrl($debugData->getUrl());
+        $this->setIp($debugData->getIp());
+        $this->setUserSession($debugData->getUserSession());
+        $this->setController($debugData->getController());
+        $this->setAction($debugData->getControllerAction());
+        $this->setMemoryUsed($debugData->getMemoryUsed());
+        $this->setHttpMethod($debugData->getHttpMethod());
+        $this->setQueryString($debugData->getQueryString());
+        $this->setRequestData($debugData->getRequestData());
+        $this->setExecutionTime($debugData->getExecutionTimeInMicroSeconds());
         $this->uniteAllValuesInArray();
-        //$this->setExecutionTime();
     }
 
     /**
@@ -52,77 +51,63 @@ class Debugbar
         return $this->data;
     }
 
-    private function setBaseUrl():void
+    private function setBaseUrl($baseUrl):void
     {
-        $baseUrl = ('URL: http://' . !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'N\A' . !empty($_SERVER['REQUEST_URI'])) ? $_SERVER['REQUEST_URI'] : 'N\A';
         $this->baseUrl = $baseUrl;
     }
 
-    private function setIp()
+    private function setIp($ip)
     {
-        $this->ip = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'N\A';
+        $this->ip = $ip;
     }
 
-    private function setUserSession():void
+    private function setUserSession($userSession):void
     {
-        $userSession = $_SESSION['user'];
         $this->userSession = $userSession;
     }
 
-    private function setController()
+    private function setController($controller)
     {
-        $this->controller = __CLASS__;
+        $this->controller = $controller;
     }
 
-    private function setAction()
+    private function setAction($controllerAction)
     {
-        $this->action = __NAMESPACE__;
+        $this->action = $controllerAction;
     }
 
-    private function setMemoryUsed()
+    private function setMemoryUsed($memoryUsage)
     {
-        $this->memoryUsed = memory_get_usage();
+        $this->memoryUsed = $memoryUsage;
     }
 
-    private function setExecutionTime()
+    private function setExecutionTime($executionTime)
     {
-        $startTime = Registry::get('startTime');
-        $endTime = Registry::get('endTime');
-        $this->executionTime = 'EXECUTION TIME: ' . ($endTime - $startTime);
+        $this->executionTime = $executionTime;
     }
 
-    private function setHttpData()
+    private function setHttpMethod($httpMethod)
     {
-        $postRequest = !empty($_POST) ? $_POST : 'N/A';
-
-        $_SESSION['lastRequest'] = $_SESSION['currentRequest'] ?? null;
-        $_SESSION['currentRequest'] = $this->postRequest;
+        $this->httpMethod = $httpMethod;
     }
 
-    public function getRequest()
+    private function setQueryString($queryString)
     {
-        return $_SESSION['lastRequest'] ?? null;
+        $this->queryString = $queryString;
     }
 
-    private function setQueryString()
+    private function setRequestData($requestData)
     {
-        $this->queryString = !empty($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : 'N/A';
-    }
-
-    private function setPostData()
-    {
-        $this->postData = !empty($_POST) ? $_POST : 'N/A';
+        $this->requestData = $requestData;
     }
 
     private function uniteAllValuesInArray()
     {
-        $reflect = new \ReflectionClass($this);
-        $props   = $reflect->getProperties();
-
-        foreach ($props as $prop) {
-            if ($prop->name !== 'data') {
-                $this->data[$prop->name] = $this->{$prop->name};
-            }
-        }
+        $this->data = get_object_vars($this);
+        unset($this->data['data']);
+        $this->data['previousRequest']           = $_SESSION['DebugBar']['previousRequest'];
+        $_SESSION['DebugBar']['previousRequest'] = array_filter($this->data, function ($key) {
+                return $key !== 'previousRequest';
+            }, ARRAY_FILTER_USE_KEY) ?? [];
     }
 }

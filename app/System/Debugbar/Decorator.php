@@ -6,11 +6,9 @@ class Decorator
 {
     private $data;
 
-    public function __construct()
+    public function __construct(DebugBarDataInterface $debugBarData)
     {
-        $debug = new Debugbar();
-        $data = $debug->getDebugData();
-        $this->data = $data;
+        $this->data = $debugBarData->getDebugData();
     }
 
     public function returnJson()
