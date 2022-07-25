@@ -3,10 +3,14 @@
 namespace App\System;
 
 use App\System\Database\DbAdapter;
+use App\System\Debugbar\Debugbar;
+use App\System\Debugbar\DebugData;
+use App\System\Debugbar\DebugDataInterface;
 
 class Application
 {
     private static $instance;
+    private FrontController $frontController;
 
     /**
      * @throws \Exception
@@ -25,6 +29,8 @@ class Application
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
+
+        $this->frontController = new FrontController();
     }
 
     private function startSession()
@@ -44,7 +50,7 @@ class Application
 
     public function run()
     {
-        return (new \App\System\FrontController())->run();
+        return $this->frontController->run();
     }
 
     /**
@@ -52,12 +58,26 @@ class Application
      */
     public function __destruct()
     {
-        $endTime = microtime();
-        try {
-            Registry::set('endTime', $endTime);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+
+    }
+
+    public function getDebugData(): DebugDataInterface
+    {
+        $url              = $this->frontController->getUrl();
+        $ip               = $this->frontController->getIp();
+        $controller       = $this->frontController->getController();
+        $controllerAction = $this->frontController->getControllerAction();
+        $httpMethod       = $this->frontController->getHttpMethod();
+        $requestData      = $this->frontController->getRequestData();
+        $queryString      = $this->frontController->getQueryString();
+
+        $userSession              = $_SESSION['user'] ?? [];
+        $memoryUsage              = $this->frontController->getMemoryUsage();
+        $startTime                = Registry::get('startTime');
+        $endTime                  = microtime(true);
+        $applicationExecutionTime = $endTime - $startTime;
+
+        return new DebugData($url, $ip, $userSession, $controller, $controllerAction, $memoryUsage, $httpMethod, $requestData, $queryString, $applicationExecutionTime);
     }
 
 }

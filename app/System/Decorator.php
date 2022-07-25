@@ -2,13 +2,15 @@
 
 namespace App\System;
 
+use App\System\Debugbar\DebugbarDataInterface;
+
 class Decorator
 {
-    public $data;
+    private $data;
 
-    public function __construct($format)
+    public function __construct(DebugbarDataInterface $debugbarData, $format)
     {
-        $this->data = Registry::get('debugBarProps');
+        $this->data = $debugbarData->getDebugData();
         $this->formatFactory($format);
     }
 
@@ -54,8 +56,7 @@ class Decorator
 
     public function json($data)
     {
-        $result = json_encode($data, JSON_PRETTY_PRINT);
-        var_dump($result);
+        return json_encode($data, JSON_PRETTY_PRINT);
     }
 
     public function csv($data)

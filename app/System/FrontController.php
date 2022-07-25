@@ -2,6 +2,8 @@
 
 namespace App\System;
 
+use http\Exception\InvalidArgumentException;
+
 class FrontController
 {
     private $controller;
@@ -87,6 +89,50 @@ class FrontController
             header("Location: {$baseUrl}/{$ctrName}/index"); die();
         }
         return $controller->$action();
+    }
+
+    public function getUrl(): string
+    {
+        $httpProtocol = $_SERVER['HTTPS'] ?? 'HTTP';
+        $host = $_SERVER['REMOTE_HOST'];
+        $requestUri = $_SERVER['REQUEST_URI'];
+
+        return $httpProtocol . '://' . $host . $requestUri;
+    }
+
+    public function getIp()
+    {
+        return $_SERVER['REMOTE_ADDR'] ?? 'N\A';
+    }
+
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    public function getControllerAction()
+    {
+        return $this->action;
+    }
+
+    public function getMemoryUsage()
+    {
+        return memory_get_usage();
+    }
+
+    public function getHttpMethod()
+    {
+        return $_SERVER['REQUEST_METHOD'] ?? 'N\A';
+    }
+
+    public function getQueryString()
+    {
+        return $_SERVER['QUERY_STRING'] ?? 'N\A';
+    }
+
+    public function getRequestData()
+    {
+       return !empty($_GET) ? $_GET : (!empty($_POST) ? $_POST : []);
     }
 
 }

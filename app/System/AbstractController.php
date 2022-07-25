@@ -12,8 +12,6 @@ abstract class AbstractController
     public function __construct()
     {
         $this->config = Registry::get('config');
-        $test = (new Debugbar())->getValuesOfAllProperties();
-        $data = Registry::get('debugBarProps');
     }
 
     abstract public function index();
