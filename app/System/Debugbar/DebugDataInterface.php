@@ -4,7 +4,7 @@ namespace App\System\Debugbar;
 
 interface DebugDataInterface
 {
-    public function getUrl(): string;
+    public function getBaseUrl(): string;
 
     public function getIp(): string;
 
@@ -12,15 +12,16 @@ interface DebugDataInterface
 
     public function getController(): string;
 
-    public function getControllerAction(): string;
+    public function getAction(): string;
 
     public function getMemoryUsed(): int;
 
     public function getHttpMethod(): string;
 
-    public function getRequestData(): array;
-
     public function getQueryString(): string;
 
-    public function getExecutionTimeInMicroSeconds(): float;
+    public function getRequestData(): array;
+
+    public function getExecutionTime(): float;
+
 }

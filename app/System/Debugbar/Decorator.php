@@ -6,9 +6,9 @@ class Decorator
 {
     private $data;
 
-    public function __construct(DebugBarDataInterface $debugBarData)
+    public function __construct(DebugBarDataInterface $debugBar)
     {
-        $this->data = $debugBarData->getDebugData();
+        $this->data = $debugBar->getDebugData();
     }
 
     public function returnJson()
@@ -24,6 +24,20 @@ class Decorator
             if (is_array($value)) {
                 $counter = 0;
                 foreach ($value as $secondKey => $val) {
+                    if (is_array($val)) {
+                        $secondCounter = 0;
+                        foreach ($val as $thirdKey => $val2) {
+                            if ($secondCounter === 0) {
+                                array_push($singleArray, $key, $secondKey, $thirdKey, $val2);
+                            }
+                            if ($secondCounter !== 0) {
+                                array_push($singleArray, '', '', $thirdKey, $val2);
+                            }
+                            $secondCounter++;
+                            $singleArray = [];
+                        }
+                    }
+
                     if ($counter === 0) {
                         array_push($singleArray, $key, $secondKey, $val);
                     }
@@ -31,6 +45,7 @@ class Decorator
                         array_push($singleArray, '', $secondKey, $val);
                     }
                     $counter++;
+                    if (!is_array($val))
                     array_push($allArrays, $singleArray);
                     $singleArray = [];
                 }
@@ -46,7 +61,8 @@ class Decorator
         // Loop through file pointer and a line
         foreach ($allArrays as $fields) {
             fputcsv($fp, $fields);
-        }        fclose($fp);
+        }
+        fclose($fp);
     }
 
     public function downloadFile()

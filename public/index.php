@@ -7,8 +7,8 @@ $application = \App\System\Application::getInstance();
 $application->run();
 $debugData = $application->getDebugData();
 
-$bug = new App\System\Debugbar\Debugbar($debugData);
-$decorator = new \App\System\Debugbar\Decorator($bug);
-$decorator->returnHtml();
+$debugData = new \App\System\Debugbar\Debugbar($debugData);
+$decorator = new \App\System\Debugbar\Decorator($debugData);
+$decorator->returnCsv();
 
 //var_dump($_SESSION);

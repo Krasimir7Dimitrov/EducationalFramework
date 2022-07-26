@@ -3,6 +3,7 @@
 namespace App\System;
 
 use App\System\Database\DbAdapter;
+use App\System\Debugbar\DebugData;
 use App\System\Debugbar\DebugDataInterface;
 
 class Application
@@ -24,7 +25,7 @@ class Application
             $this->frontController = new \App\System\FrontController();
 
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+           // throw new \Exception($e->getMessage());
         }
 
     }
@@ -49,6 +50,7 @@ class Application
         return $this->frontController->run();
     }
 
+
     public function __destruct()
     {
 
@@ -56,10 +58,10 @@ class Application
 
     /**
      * !!! make sure to run this after calling $this->run()
-     * @return DebugDataInterface
+
      */
     public function getDebugData()
-    : DebugDataInterface
+
     {
         $url               = $this->frontController->getUrl();
         $ip                = $this->frontController->getIp();
@@ -75,6 +77,6 @@ class Application
         $endTime                  = microtime(true);
         $applicationExecutionTime = $endTime - $startTime;
 
-        return new \App\System\Debugbar\DebugData($url, $ip, $userSession, $controller, $controllerAction, $memoryUsage, $httpRequestMethod, $requestData, $queryString, $applicationExecutionTime);
+        return new DebugData($url, $ip, $userSession, $controller, $controllerAction, $memoryUsage, $httpRequestMethod, $requestData, $queryString, $applicationExecutionTime);
     }
 }
