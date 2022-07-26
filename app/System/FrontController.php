@@ -94,7 +94,7 @@ class FrontController
     public function getUrl(): string
     {
         $httpProtocol = $_SERVER['HTTPS'] ?? 'HTTP';
-        $host = $_SERVER['REMOTE_HOST'];
+        $host = $_SERVER['HTTP_HOST'];
         $requestUri = $_SERVER['REQUEST_URI'];
 
         return $httpProtocol . '://' . $host . $requestUri;

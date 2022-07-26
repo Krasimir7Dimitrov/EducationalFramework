@@ -37,10 +37,10 @@ class Debugbar implements DebugbarDataInterface
         $this->setUserInfo($debugData->getUserSession());
         $this->setHttpMethod($debugData->getHttpMethod());
         $this->setQueryString($debugData->getQueryString());
-        $this->setRequestData($debugData->getRequestData());
+        $this->getValuesOfAllProperties();
     }
 
-    public function getDebugData()
+    public function getDebugData(): array
     {
         return $this->data;
     }
@@ -90,36 +90,21 @@ class Debugbar implements DebugbarDataInterface
         $this->queryString = $queryString;
     }
 
-    public function setRequestData($requestData)
-    {
-//        $this->lastPostData = !empty($_POST) ? $_POST : 'N/A';
-//
-//        $_SESSION['lastRequest'] = $_SESSION['currentRequest'] ?? null;
-//        $_SESSION['currentRequest'] = $this->lastPostData;
-    }
 
     /**
      * @return array
      * @throws \Exception
      */
-    public function getValuesOfAllProperties(): array
+    public function getValuesOfAllProperties()
     {
-        $data = [];
-        $values = get_object_vars($this);
+        $this->data = get_object_vars($this);
+        unset($this->data['data']);
+        $this->data['previousRequest']           = $_SESSION['DebugBar']['previousRequest'];
+        $_SESSION['DebugBar']['previousRequest'] = array_filter($this->data, function ($key) {
+                return $key !== 'previousRequest';
+            }, ARRAY_FILTER_USE_KEY) ?? [];
 
-        foreach ($values as $key => $value) {
-            $data[$key] = $value;
-        }
-
-//        $data['lastPostData'] = json_encode($this->getLastPostData());
-//        $data['lastGetData'] = json_encode($this->getLastGetData());
-
-        try {
-            Registry::set('debugBarProps', $data);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-        return $data;
+        return $this->data;
     }
 
 }

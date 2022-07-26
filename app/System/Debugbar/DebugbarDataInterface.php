@@ -4,5 +4,5 @@ namespace App\System\Debugbar;
 
 interface DebugbarDataInterface
 {
-    public function getDebugData();
+    public function getDebugData(): array;
 }

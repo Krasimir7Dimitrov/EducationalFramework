@@ -12,4 +12,4 @@ $application->run();
 $debugData = $application->getDebugData();
 
 $debugBar = new \App\System\Debugbar\Debugbar($debugData);
-$decorator = new \App\System\Decorator($debugBar,'html');
+$decorator = new \App\System\Decorator($debugBar);
