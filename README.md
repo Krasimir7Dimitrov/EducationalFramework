@@ -7,9 +7,9 @@ The first time it will take some time so don't worry :)
 
 - To use other services like composer or npm you can use:
 ```sh
-$ docker compose run --rm npm ...
+$ docker compose run --rm npm
 ```
 or
 ```sh
-$ docker compose run --rm composer ...
+$ docker compose run --rm composer
 ```
