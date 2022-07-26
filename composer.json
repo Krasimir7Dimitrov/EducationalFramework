@@ -6,14 +6,25 @@
         {
             "name": "Sabev",
             "email": "psabev@parachut.com"
+        },
+        {
+            "name": "Krasimir Dimitrov",
+            "email": "kdimitrov@parachut.com"
         }
     ],
     "require": {
-        "ext-mysqli": "*"
+        "ext-mysqli": "*",
+        "ext-readline": "*"
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/"
         }
+    },
+    "scripts": {
+        "report": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php app/System/CLI/report.php"
+        ]
     }
 }
