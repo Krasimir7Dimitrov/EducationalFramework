@@ -19,11 +19,10 @@ class CarsCollection extends \App\System\BaseCollection
         return $this->db->fetchOne($sth, ['id' => $id]);
     }
 
-    public function __destruct()
+    public function getCarsRegisteredBetween(string $startYear, string $endYear)
     {
-        parent::__destruct();
+        $query = "SELECT * FROM cars AS c WHERE c.first_registration BETWEEN :startYear AND :endYear ORDER BY c.first_registration";
 
-        echo "Heere we are in cars collection destructor <hr/>";
+        return $this->db->fetchAll($query, compact('startYear', 'endYear'));
     }
-
 }

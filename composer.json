@@ -6,10 +6,15 @@
         {
             "name": "Sabev",
             "email": "psabev@parachut.com"
+        },
+        {
+            "name": "Krasimir Dimitrov",
+            "email": "kdimitrov@parachut.com"
         }
     ],
     "require": {
-        "ext-mysqli": "*"
+        "ext-mysqli": "*",
+        "ext-readline": "*"
     },
     "autoload": {
         "psr-4": {
