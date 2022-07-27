@@ -13,8 +13,17 @@ $passedParams = getopt('', array_merge($requiredParams, $optionalParams));
 
 if (isset($passedParams['usage'])) {
     // TODO: print the help menu
-    echo 'usage menu' . PHP_EOL;
-
+    echo 'Usage menu' . PHP_EOL;
+    $helperTextForCli = 'This script can be used to generate a report for all cars from the database registered between certain period of time. ';
+    $helperTextForCli .= 'startYear and endYear could be passed as params both when prompted or directly after the script name followed by \'--\'. ';
+    $helperTextForCli .= 'For example if you want to pass \'startYear\' before prompt, you should do the following \'docker compose run --rm composer report -- --startYear=2020\'. ';
+    $helperTextForCli .= 'If there are other required params that you do not pass on the same line, you will be prompted to enter them when run the script. ';
+    $helperTextForCli .= 'The following params are required for the script: \'startYear\', \'endYear\'. ';
+    $helperTextForCli .= 'Those params are optional : \'sendEmailToUserId\', \'usage\' ';
+    $helperTextForCli .= 'The param \'sendEmailToUserId\' can be passed in order to send email with the generated report to a certain user. This param will be the \'id\' from the database. ';
+    $helperTextForCli .= 'For example if you want to generate a report for all cars registered between 2020 and 2022 and send it to user with \'id\' = 1, you should do the following : 
+    \'docker compose run --rm composer report -- --startYear=2020 --endYear=2022 --sendEmailToUserId=1\'' . PHP_EOL;
+    echo $helperTextForCli;
     exit(0);
 }
 
