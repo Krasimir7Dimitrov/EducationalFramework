@@ -7,16 +7,16 @@ class CarsCollection extends \App\System\BaseCollection
 
     public function getAllCars()
     {
-        $sql = "SELECT * FROM cars";
+        $query = "SELECT * FROM cars";
 
-        return $this->db->fetchAll($sql);
+        return $this->db->fetchAll($query);
     }
 
     public function getCarById($id)
     {
-        $sth = "SELECT * FROM cars c  WHERE c.id = :id";
+        $query = "SELECT * FROM cars c  WHERE c.id = :id";
 
-        return $this->db->fetchOne($sth, ['id' => $id]);
+        return $this->db->fetchOne($query, compact('id'));
     }
 
     public function getCarsRegisteredBetween(string $startYear, string $endYear)
@@ -24,5 +24,12 @@ class CarsCollection extends \App\System\BaseCollection
         $query = "SELECT * FROM cars AS c WHERE c.first_registration BETWEEN :startYear AND :endYear ORDER BY c.first_registration";
 
         return $this->db->fetchAll($query, compact('startYear', 'endYear'));
+    }
+
+    public function getEmailByUserId(int $id)
+    {
+        $query = "SELECT email FROM users AS u WHERE u.id = :id";
+
+        return $this->db->fetchOne($query, compact('id'));
     }
 }

@@ -27,8 +27,6 @@ if (isset($passedParams['usage'])) {
     exit(0);
 }
 
-//print_r($params);
-
 foreach ($requiredParams as $requiredParam) {
     $replacedRequiredParam = str_replace(':', '', $requiredParam);
     // TODO: validate the input to be correct value. Hint endYear must be greater than or equal to startYear
@@ -37,15 +35,36 @@ foreach ($requiredParams as $requiredParam) {
     }
 }
 
-//var_dump($passedParams);
+if (isset($passedParams['startYear']) && isset($passedParams['endYear'])) {
+    if ($passedParams['endYear'] < $passedParams['startYear']) {
+        echo 'The endYear should be greater than or equal to startYear' . PHP_EOL;
+        exit(6);
+    }
+}
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 // Get application instance so I can make DB queries
 $application = \App\System\Application::getInstance();
 
 $carsCollection = new \App\Model\Collections\CarsCollection();
-
 $carsRegisteredBetween = $carsCollection->getCarsRegisteredBetween($passedParams['startYear'], $passedParams['endYear']);
-print_r($carsRegisteredBetween);
+if (isset($passedParams['sendEmailToUserId'])) {
+    $userEmail = $carsCollection->getEmailByUserId($passedParams['sendEmailToUserId']);
+}
 
-// TODO print those as a table
+//print command line params as a table
+$table = "|%10s |%10s |%20s |". PHP_EOL;
+printf($table, 'Start Year', 'End Year', 'Send Email To User');
+printf($table, $passedParams['startYear'], $passedParams['endYear'], $passedParams['sendEmailToUserId'] ? 'Yes' : 'No');
+
+$tableRows = [];
+foreach ($carsCollection as $index => $item) {
+    $tableRows[] = $item;
+}
+
+var_dump($tableRows);
+
+//$resultsTable = "|%20s |%20s |%20s |%20s |%20s |%20s |%20s";
+//printf($resultsTable, 'ID', 'MAKE', 'MODEL', 'REGISTRATION YEAR', 'TRANSMISSION', 'CREATED AT', 'UPDATED AT');
+//printf($resultsTable, )
+//var_dump($carsRegisteredBetween);
