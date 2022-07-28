@@ -1,5 +1,5 @@
 <?php
-
+$startTime = microtime(true);
 $requiredParams = [
     'startYear:', // start date - required
     'endYear:', // end date - required
@@ -49,3 +49,20 @@ $carsRegisteredBetween = $carsCollection->getCarsRegisteredBetween($passedParams
 print_r($carsRegisteredBetween);
 
 // TODO print those as a table
+
+$email = new \App\System\Notifications\Email\Email();
+
+$email->to = 'fake@mail.vc';
+$email->subject = 'Nice cars on sale (if you can fix them!)';
+$email->body = var_export($carsRegisteredBetween, true);
+
+echo 'Execution time: ' . (microtime(true) - $startTime). PHP_EOL;
+
+$emailNotification = new \App\System\Notifications\Email\EmailNotification($email);
+
+for ($i = 0; $i < 1000; $i++) {
+    $emailNotification->postToQueue();
+}
+
+
+echo 'Execution time: ' . (microtime(true) - $startTime). PHP_EOL;

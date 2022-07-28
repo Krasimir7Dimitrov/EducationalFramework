@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$email = new \App\System\Notifications\EmailNotification();
+$email = new \App\System\Notifications\Email\EmailNotification();
 var_dump($email);
 $email->printInstanceNumber();
 
