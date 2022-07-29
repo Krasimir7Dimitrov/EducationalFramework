@@ -29,9 +29,7 @@ class PDO implements DbAdapterInterface
     public function fetchOne($sql, $data = [])
     {
         $stm = $this->connection->prepare($sql);
-        foreach ($data as $key => $value) {
-            $stm->bindParam(':'.$key, $data[$key]);
-        }
+        $this->paramsBindingHelper($data, $stm);
         $stm->execute();
 
         return $stm->fetch(\PDO::FETCH_ASSOC);
@@ -41,9 +39,7 @@ class PDO implements DbAdapterInterface
     public function fetchAll($sql, $data = [])
     {
         $stm = $this->connection->prepare($sql);
-        foreach ($data as $key => $value) {
-            $stm->bindParam(':'.$key, $data[$key]);
-        }
+        $this->paramsBindingHelper($data, $stm);
         $stm->execute();
 
         return $stm->fetchAll(\PDO::FETCH_ASSOC);
@@ -91,9 +87,7 @@ class PDO implements DbAdapterInterface
         $statement = 'INSERT INTO ' . $table . '(' . implode(", ", $arrayKeys) . ') VALUES (:'. implode(", :", $arrayKeys) .')';
         $query = $this->connection->prepare($statement);
 
-        foreach ($data as $key => $value) {
-            $query->bindParam(':'.$key, $data[$key]);
-        }
+        $this->paramsBindingHelper($data, $query);
 
         $result = $query->execute();
 
@@ -129,16 +123,17 @@ class PDO implements DbAdapterInterface
             $addAnd = ' AND ';
         }
 
-        $statement = 'UPDATE ' . $table . ' SET '. implode(', ', $set) .' WHERE 1'. $addAnd .implode(' AND ', $whereArray);
+        $statement = 'UPDATE ' . $table . ' SET '. implode(', ', $set) .' WHERE 1 '. $addAnd .implode(' AND ', $whereArray);
         $query = $this->connection->prepare($statement);
 
-        foreach ($data as $key => $value) {
-            $query->bindParam(':'. $key, $value);
-        }
+        $this->paramsBindingHelper($data, $query);
 
         foreach ($where as $key => $value) {
-            $query->bindParam(':w'. $key, $value);
+            $paramTypeForBinding = self::getParamTypeForBinding($value);
+            $query->bindParam(':w'. $key, $value, $paramTypeForBinding);
         }
+
+        $query->execute();
 
         return $query->rowCount();
     }
@@ -189,4 +184,35 @@ class PDO implements DbAdapterInterface
         self::$instance = null;
     }
 
+    /**
+     * @param $value
+     * @return int|null
+     * @author Hristo Stoyanov <hstoyanov@advisebrokers.com>
+     */
+    private static function getParamTypeForBinding($value)
+    : ?int
+    {
+        switch (gettype($value)) {
+            case 'integer':
+                return \PDO::PARAM_INT;
+            case 'string':
+                return \PDO::PARAM_STR;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * @param $data
+     * @param $query
+     * @author Hristo Stoyanov <hstoyanov@advisebrokers.com>
+     */
+    private function paramsBindingHelper($data, $query)
+    : void
+    {
+        foreach ($data as $key => $value) {
+            $paramTypeForBinding = self::getParamTypeForBinding($value);
+            $query->bindParam(':' . $key, $value, $paramTypeForBinding);
+        }
+    }
 }

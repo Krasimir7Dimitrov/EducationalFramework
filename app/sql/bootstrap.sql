@@ -55,6 +55,17 @@ CREATE TABLE `users` (
 INSERT INTO `db`.`users` (`username`, `password`, `email`, `first_name`, `last_name`) VALUES ('pancho', 'daec07001638deb433e786c59e5dcfd9b084e987', 'psabev@parachut.com', 'Pancho', 'Sabev');
 
 
+CREATE TABLE `notifications` (
+                                 `notification_id` INT(11) NOT NULL AUTO_INCREMENT,
+                                 `notification_state` LONGTEXT NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+                                 `is_send` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+                                 PRIMARY KEY (`notification_id`) USING BTREE
+)
+    COLLATE='utf8mb4_general_ci'
+    ENGINE=InnoDB
+;
+
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
