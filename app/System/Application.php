@@ -45,4 +45,8 @@ class Application
         return (new \App\System\FrontController())->run();
     }
 
+    public function __destruct()
+    {
+
+    }
 }

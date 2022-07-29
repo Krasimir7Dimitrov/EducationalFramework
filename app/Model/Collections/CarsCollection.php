@@ -25,4 +25,10 @@ class CarsCollection extends \App\System\BaseCollection
 
         return $this->db->fetchAll($query, compact('startYear', 'endYear'));
     }
+
+    public function getClientEmail(int $id)
+    {
+        $query = "SELECT email FROM users AS c WHERE c.id = :id";
+        return $this->db->fetchOne($query, compact('id'));
+    }
 }

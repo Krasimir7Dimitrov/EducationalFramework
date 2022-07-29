@@ -13,8 +13,8 @@
         }
     ],
     "require": {
-        "ext-mysqli": "*",
-        "ext-readline": "*"
+        "ext-readline": "*",
+        "phpmailer/phpmailer": "^6.6"
     },
     "autoload": {
         "psr-4": {
