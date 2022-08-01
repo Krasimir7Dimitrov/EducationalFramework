@@ -105,6 +105,7 @@ class PDO implements DbAdapterInterface
      * @param $data
      * @return false|int
      */
+
     public function update($table, $where, $data)
     {
         if (empty($data)) {

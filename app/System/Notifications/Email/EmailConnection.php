@@ -3,6 +3,7 @@
 namespace App\System\Notifications\Email;
 use App\System\Registry;
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 class EmailConnection
 {
@@ -34,23 +35,26 @@ class EmailConnection
         return self::$instance;
     }
 
+
     private function getConnection()
     {
-        $this->mail->isSMTP();
-        $this->mail->Host       = $this->emailConfig['connection']['smtp']['host'];
-        $this->mail->Username   = $this->emailConfig['connection']['smtp']['user'];
-        $this->mail->Password   = $this->emailConfig['connection']['smtp']['password'];
-        $this->mail->Port       = $this->emailConfig['connection']['smtp']['port'];
-        $this->mail->SMTPKeepAlive = true;
-        $this->mail->getSMTPInstance();
 
-        $this->mail->SMTPOptions = [
+        $var = [
             'ssl' => [
                 'verify_peer' => false,
                 'verify_peer_name' => false,
                 'allow_self_signed' => true
             ]
         ];
+
+        $this->mail->isSMTP();
+        $this->mail->Host       = $this->emailConfig['connection']['smtp']['host'];
+        $this->mail->Username   = $this->emailConfig['connection']['smtp']['user'];
+        $this->mail->Password   = $this->emailConfig['connection']['smtp']['password'];
+        $this->mail->Port       = $this->emailConfig['connection']['smtp']['port'];
+        $this->mail->SMTPKeepAlive = true;
+        $this->mail->SMTPOptions = $var;
+
         return $this->mail;
     }
 }

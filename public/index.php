@@ -1,14 +1,14 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$email = new \App\System\Notifications\Email\EmailNotification();
-var_dump($email);
-$email->printInstanceNumber();
+//$email = new \App\System\Notifications\Email\EmailNotification();
+//var_dump($email);
+//$email->printInstanceNumber();
 
-$cloneOfEmail = clone $email;
-var_dump($cloneOfEmail);
+//$cloneOfEmail = clone $email;
+//var_dump($cloneOfEmail);
 
-$cloneOfEmail->printInstanceNumber();
+//$cloneOfEmail->printInstanceNumber();
 
 
 //echo $email->test;

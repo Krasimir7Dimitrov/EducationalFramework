@@ -38,28 +38,26 @@ class EmailNotification implements NotificationInterface
     {
 
         //Create an instance; passing `true` enables exceptions
-        //$mail = new PHPMailer(true);
 
         $startTime = Registry::get('startTime');
         try {
             $inst = EmailConnection::getInstance();
-            var_dump((microtime(true) - $startTime), 'after get instance');
             $mail = $inst->connection;
-            var_dump((microtime(true) - $startTime), 'after connection');
 
             //Recipients
             $mail->setFrom($this->emailConfig['from'], 'System');
             $mail->addAddress($this->email->to);                  //Add a recipient
-            var_dump((microtime(true) - $startTime), 'after set address');
 
             //Content
             $mail->isHTML(true);                                  //Set email format to HTML
             $mail->Subject = $this->email->subject;
             $mail->Body    = $this->email->body;
-            $mail->AltBody = $this->email->body;
-            var_dump((microtime(true) - $startTime), 'after subject and body');
+            //$mail->AltBody = $this->email->body;
 
             return $mail->send();
+
+            //$mail->smtpClose();
+
         } catch (\Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
