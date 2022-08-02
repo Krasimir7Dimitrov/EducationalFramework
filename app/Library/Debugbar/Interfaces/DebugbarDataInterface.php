@@ -1,6 +1,6 @@
 <?php
 
-namespace App\System\Debugbar;
+namespace App\Library\Debugbar\Interfaces;
 
 interface DebugbarDataInterface
 {

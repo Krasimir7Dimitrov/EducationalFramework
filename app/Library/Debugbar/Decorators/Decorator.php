@@ -1,8 +1,9 @@
 <?php
 
-namespace App\System;
+namespace App\Library\Debugbar\Decorators;
 
-use App\System\Debugbar\DebugbarDataInterface;
+use App\Library\Debugbar\Enums\DecorationTypes;
+use App\Library\Debugbar\Interfaces\DebugbarDataInterface;
 
 class Decorator
 {
@@ -11,10 +12,9 @@ class Decorator
     public function __construct(DebugbarDataInterface $debugbarData)
     {
         $this->data = $debugbarData->getDebugData();
-        $this->htmlAndJson();
     }
 
-    public function htmlAndJson()
+    private function html()
     {
         $html = '<table>';
         $html .= '<tr>';
@@ -33,15 +33,23 @@ class Decorator
         $html .= '</tr>';
         $html .= '</table>';
 
-        $jsonResult = json_encode($this->data, JSON_PRETTY_PRINT);
-
-        $this->render($html, $jsonResult);
+        return $this->renderOld($html, $this->json());
     }
 
-    public function csv($data)
+    private function json()
+    {
+        return json_encode($this->data, JSON_PRETTY_PRINT);
+    }
+
+    private function renderAsArray()
+    {
+        return $this->data;
+    }
+
+    private function csv()
     {
         $data1 = [];
-        foreach ($data as $key => $value) {
+        foreach ($this->data as $key => $value) {
             $data2 = [];
             if (is_array($value)) {
                 $counter = 0;
@@ -68,7 +76,7 @@ class Decorator
         fclose($file);
     }
 
-    public function render($htmlResult = '', $jsonResult = '')
+    public function renderOld($htmlResult = '', $jsonResult = '')
     {
         $html = '<h5>Debug bar</h5>';
         $html .= '<a href="Debug Data Exported.csv">Download Debug information as CSV</a>';
@@ -88,5 +96,21 @@ class Decorator
             </div>';
 
         echo $html;
+    }
+
+    public function render(DecorationTypes $type)
+    {
+        switch ($type->getValue()) {
+            case DecorationTypes::HTML:
+                return $this->html();
+            case DecorationTypes::JSON:
+                return $this->json();
+            case DecorationTypes::CSV:
+                return $this->csv();
+            case DecorationTypes::ARRAY:
+                return $this->renderAsArray();
+            default:
+                return $this->html();
+        }
     }
 }

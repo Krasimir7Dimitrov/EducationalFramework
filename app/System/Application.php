@@ -2,10 +2,9 @@
 
 namespace App\System;
 
+use App\Library\Debugbar\DebugData;
+use App\Library\Debugbar\Interfaces\DebugDataInterface;
 use App\System\Database\DbAdapter;
-use App\System\Debugbar\Debugbar;
-use App\System\Debugbar\DebugData;
-use App\System\Debugbar\DebugDataInterface;
 
 class Application
 {

@@ -10,7 +10,8 @@
     ],
     "require": {
         "ext-mysqli": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "myclabs/php-enum" : "^1.8"
     },
     "autoload": {
         "psr-4": {

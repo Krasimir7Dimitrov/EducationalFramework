@@ -1,8 +1,11 @@
 <?php
 
-namespace App\System\Debugbar;
+namespace App\Library\Debugbar;
 
-use App\System\Registry;
+use App\Library\Debugbar\Decorators\Decorator;
+use App\Library\Debugbar\Enums\DecorationTypes;
+use App\Library\Debugbar\Interfaces\DebugbarDataInterface;
+use App\Library\Debugbar\Interfaces\DebugDataInterface;
 
 class Debugbar implements DebugbarDataInterface
 {
@@ -106,5 +109,14 @@ class Debugbar implements DebugbarDataInterface
 
         return $this->data;
     }
+
+    public function render(DecorationTypes $type)
+    {
+        $decorator = new Decorator($this);
+
+        $decorator->render($type);
+
+    }
+
 
 }

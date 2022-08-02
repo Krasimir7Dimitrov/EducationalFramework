@@ -11,5 +11,9 @@ $application->run();
 
 $debugData = $application->getDebugData();
 
-$debugBar = new \App\System\Debugbar\Debugbar($debugData);
-$decorator = new \App\System\Decorator($debugBar);
+$debugBar = new \App\Library\Debugbar\Debugbar($debugData);
+$debugBar->render(\App\Library\Debugbar\Enums\DecorationTypes::HTML());
+
+
+$decorator = new \App\Library\Debugbar\Decorators\Decorator($debugBar);
+
