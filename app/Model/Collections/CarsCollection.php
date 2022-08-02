@@ -25,4 +25,18 @@ class CarsCollection extends \App\System\BaseCollection
 
         return $this->db->fetchAll($query, compact('startYear', 'endYear'));
     }
+
+    public function getCarsPagination($limit, $offset)
+    {
+        $sth = "SELECT * FROM cars c  LIMIT {$limit} OFFSET {$offset}";
+
+        return $this->db->fetchAll($sth);
+    }
+
+    public function getCarsCount($where = [])
+    {
+        $sth = "SELECT count(id) AS count FROM cars";
+
+        return $this->db->fetchOne($sth)['count'];
+    }
 }

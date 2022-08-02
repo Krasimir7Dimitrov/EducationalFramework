@@ -1,0 +1,35 @@
+<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+
+var_dump($carsPagination);
+?>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cars Listing</title>
+    <h1>Cars Listing</h1>
+
+</head>
+<body>
+    <div>
+
+    </div>
+    <div>
+        <ul>
+            <?php for ($page = 1;$page <= $totalPages;$page++) { ?>
+                    <li><a href="<?= 'listing?page='. $page?>"><?=$page ?></a></li>
+            <?php } ?>
+        </ul>
+    </div>
+</body>
+</html>
+
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>

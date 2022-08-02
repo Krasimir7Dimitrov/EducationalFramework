@@ -34,7 +34,7 @@ class AuthController extends AbstractController
             }
 
             $errors = [
-                'authError' => 'incorect login data',
+                'authError' => 'incorrect login data',
             ];
 
         }
