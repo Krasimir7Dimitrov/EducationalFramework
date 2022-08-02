@@ -9,7 +9,7 @@ class CarsController extends AbstractController
 
     public function index()
     {
-       $this->renderView('cars/index', []);
+        $this->renderView('cars/index', []);
     }
 
     public function create()
@@ -29,6 +29,19 @@ class CarsController extends AbstractController
     public function delete()
     {
         var_dump('This is the delete method of the CarsController');
+    }
+
+    public function listing()
+    {
+        $limit          = 5;
+        $page           = $_GET['page'] ?? 1;
+        $offset         = ($page - 1) * $limit;
+        $cars           = new \App\Model\Collections\CarsCollection();
+        $carsPagination = $cars->getCarsPagination($limit, $offset);
+        $carsCount      = $cars->getCarsCount();
+        $totalPages          = (int) ceil($carsCount/$limit);
+
+        $this->renderView('cars/listing', ['totalPages' => $totalPages, 'carsPagination' => $carsPagination]);
     }
 
 

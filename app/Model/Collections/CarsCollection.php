@@ -19,11 +19,18 @@ class CarsCollection extends \App\System\BaseCollection
         return $this->db->fetchOne($sth, ['id' => $id]);
     }
 
-    public function __destruct()
+    public function getCarsPagination($limit, $offset)
     {
-        parent::__destruct();
+        $sth = "SELECT * FROM cars c  LIMIT {$limit} OFFSET {$offset}";
 
-        echo "Heere we are in cars collection destructor <hr/>";
+        return $this->db->fetchAll($sth);
+    }
+
+    public function getCarsCount($where = [])
+    {
+        $sth = "SELECT count(id) AS count FROM cars";
+
+        return $this->db->fetchOne($sth)['count'];
     }
 
 }
