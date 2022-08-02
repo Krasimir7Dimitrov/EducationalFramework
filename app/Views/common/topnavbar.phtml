@@ -10,9 +10,11 @@
                 <li><a href="/auth/login">Login</a></li>
             <?php endif;  ?>
             <?php if ($this->isLoggedIn()):  ?>
-                <form action="/auth/logout" method="post">
-                    <input type="submit" value="Logout"/>
-                </form>
+                <li>
+                    <form action="/auth/logout" method="post">
+                        <input type="submit" value="Logout"/>
+                    </form>
+                </li>
             <?php endif;  ?>
         </ul>
         <?php if ($this->isLoggedIn()): ?>
