@@ -46,14 +46,14 @@ class CarsController extends AbstractController
         var_dump('This is the delete method of the CarsController');
     }
 
-    public function getBaseUrl(): string
+    private function getBaseUrl(): string
     {
         $protocol = $_SERVER['HTTPS'] ?? 'http';
         $host = $_SERVER['HTTP_HOST'];
         return $protocol . '://' . $host . '/';
     }
 
-    public function numberOfPages(): float
+    private function numberOfPages(): float
     {
         $allCars = $this->collectionInst->getNumberOfAllCars();
         return ceil($allCars / $this->numberOfRowsInAPage);

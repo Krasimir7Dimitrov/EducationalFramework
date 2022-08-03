@@ -2,13 +2,15 @@
 
 namespace App\System\Debugbar;
 
+use App\System\Debugbar\Enums\DecorationTypes;
+
 class Decorator
 {
     private $data;
 
-    public function __construct(DebugBarDataInterface $debugBar)
+    public function __construct(array $debugBar)
     {
-        $this->data = $debugBar->getDebugData();
+        $this->data = $debugBar;
     }
 
     public function returnJson()
@@ -16,7 +18,7 @@ class Decorator
         return json_encode($this->data, JSON_PRETTY_PRINT);
     }
 
-    public function returnCsv()
+    private function returnCsv()
     {
         $allArrays = [];
         foreach ($this->data as $key => $value) {
@@ -65,7 +67,7 @@ class Decorator
         fclose($fp);
     }
 
-    public function downloadFile()
+    private function downloadFile()
     {
         $filename = "persons.csv";
         header("Content-Type: text/csv; charset=UTF-16LE");
@@ -75,7 +77,7 @@ class Decorator
         exit();
     }
 
-    public function returnHtml()
+    private function returnHtml()
     {
         $html = '<style>
                 table, th, td {
@@ -122,5 +124,22 @@ class Decorator
         $html .= '<table/>';
 
         echo $html;
+    }
+
+    public function render(DecorationTypes $type)
+    {
+        switch ($type) {
+            case DecorationTypes::HTML:
+                $this->returnHtml();
+            break;
+
+            case DecorationTypes::CSV:
+                $this->returnCsv();
+            break;
+
+            case DecorationTypes::MYJSON:
+                $this->returnJson();
+            break;
+        }
     }
 }

@@ -8,8 +8,7 @@ $application->run();
 $debugData = $application->getDebugData();
 
 $debugData = new \App\System\Debugbar\Debugbar($debugData);
-$decorator = new \App\System\Debugbar\Decorator($debugData);
-$decorator->returnCsv();
+$debugData->render(\App\System\Debugbar\Enums\DecorationTypes::HTML());
 
 
 //var_dump($_SESSION);

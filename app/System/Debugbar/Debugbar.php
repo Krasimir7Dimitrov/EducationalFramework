@@ -2,6 +2,8 @@
 
 namespace App\System\Debugbar;
 
+use App\System\Debugbar\Enums\DecorationTypes;
+
 class Debugbar implements DebugBarDataInterface
 {
     private $data;
@@ -40,6 +42,12 @@ class Debugbar implements DebugBarDataInterface
         $this->setRequestData($debugData->getRequestData());
         $this->setExecutionTime($debugData->getExecutionTime());
         $this->uniteAllValuesInArray();
+    }
+
+    public function render(DecorationTypes $type)
+    {
+        $decorator = new \App\System\Debugbar\Decorator($this->getDebugData());
+        $decorator->render($type);
     }
 
     public function getDebugData(): array
