@@ -15,8 +15,10 @@
     "require": {
         "ext-mysqli": "*",
         "ext-readline": "*",
-        "phpmailer/phpmailer": "^6.6"
+        "phpmailer/phpmailer": "^6.6",
+        "panchosabev/debugbar": "^1.0"
     },
+    "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
             "App\\": "app/"

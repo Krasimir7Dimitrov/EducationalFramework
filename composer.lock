@@ -4,8 +4,109 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f08db0b6f7a17aa9343273b9f1e2cc1",
+    "content-hash": "92941972bcc42940a81c87983f16aba9",
     "packages": [
+        {
+            "name": "myclabs/php-enum",
+            "version": "1.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/myclabs/php-enum.git",
+                "reference": "b942d263c641ddb5190929ff840c68f78713e937"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/myclabs/php-enum/zipball/b942d263c641ddb5190929ff840c68f78713e937",
+                "reference": "b942d263c641ddb5190929ff840c68f78713e937",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "squizlabs/php_codesniffer": "1.*",
+                "vimeo/psalm": "^4.6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MyCLabs\\Enum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP Enum contributors",
+                    "homepage": "https://github.com/myclabs/php-enum/graphs/contributors"
+                }
+            ],
+            "description": "PHP Enum implementation",
+            "homepage": "http://github.com/myclabs/php-enum",
+            "keywords": [
+                "enum"
+            ],
+            "support": {
+                "issues": "https://github.com/myclabs/php-enum/issues",
+                "source": "https://github.com/myclabs/php-enum/tree/1.8.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/mnapoli",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/myclabs/php-enum",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-07-05T08:18:36+00:00"
+        },
+        {
+            "name": "panchosabev/debugbar",
+            "version": "v1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/panchosabev/debugbar.git",
+                "reference": "a327e96cff6af101c3edf78c2d3bcc7eb28a6b73"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/panchosabev/debugbar/zipball/a327e96cff6af101c3edf78c2d3bcc7eb28a6b73",
+                "reference": "a327e96cff6af101c3edf78c2d3bcc7eb28a6b73",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "myclabs/php-enum": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Debugbar\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "panchosabev",
+                    "email": "pancho.sabev@gmail.com"
+                }
+            ],
+            "description": "description",
+            "support": {
+                "issues": "https://github.com/panchosabev/debugbar/issues",
+                "source": "https://github.com/panchosabev/debugbar/tree/v1.0.9"
+            },
+            "time": "2022-08-03T14:21:27+00:00"
+        },
         {
             "name": "phpmailer/phpmailer",
             "version": "v6.6.3",
@@ -96,5 +197,5 @@
         "ext-readline": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }

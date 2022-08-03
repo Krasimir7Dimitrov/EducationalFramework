@@ -2,8 +2,8 @@
 
 namespace App\System;
 
-use App\Library\Debugbar\DebugData;
-use App\Library\Debugbar\Interfaces\DebugDataInterface;
+use Debugbar\DebugData;
+use Debugbar\Interfaces\DebugDataInterface;
 use App\System\Database\DbAdapter;
 
 class Application
