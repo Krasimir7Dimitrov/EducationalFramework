@@ -1,0 +1,13 @@
+<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+?>
+
+    <h1>This is listing</h1>
+    <?php for ($x = 1; $x <= $pages; $x++) {?>
+            <a href="<?=$baseUrl?>cars/listing?page=<?=$x?>"><?=$x?><a/>
+    <?php } ?>
+    <?php var_dump($data); ?>
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>

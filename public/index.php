@@ -11,4 +11,5 @@ $debugData = new \App\System\Debugbar\Debugbar($debugData);
 $decorator = new \App\System\Debugbar\Decorator($debugData);
 $decorator->returnCsv();
 
+
 //var_dump($_SESSION);
