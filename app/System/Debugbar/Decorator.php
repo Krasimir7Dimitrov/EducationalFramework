@@ -26,29 +26,33 @@ class Decorator
             if (is_array($value)) {
                 $counter = 0;
                 foreach ($value as $secondKey => $val) {
+                    $singleSecondArray = [];
                     if (is_array($val)) {
                         $secondCounter = 0;
-                        foreach ($val as $thirdKey => $val2) {
+                        foreach ($val as $thirdKey => $secondVal) {
                             if ($secondCounter === 0) {
-                                array_push($singleArray, $key, $secondKey, $thirdKey, $val2);
+                                array_push($singleArray, '', $secondKey, $thirdKey, $secondVal);
                             }
                             if ($secondCounter !== 0) {
-                                array_push($singleArray, '', '', $thirdKey, $val2);
+                                array_push($singleArray, '', '', $thirdKey, $secondVal);
                             }
                             $secondCounter++;
+                            array_push($allArrays, $singleArray);
                             $singleArray = [];
                         }
                     }
 
-                    if ($counter === 0) {
+                    if ($counter === 0 && !empty($val) && !is_array($val)) {
                         array_push($singleArray, $key, $secondKey, $val);
                     }
-                    if ($counter !== 0) {
+                    if ($counter !== 0 && !empty($val) && !is_array($val)) {
                         array_push($singleArray, '', $secondKey, $val);
                     }
+
                     $counter++;
-                    if (!is_array($val))
-                    array_push($allArrays, $singleArray);
+                    if ($val !== "" && !is_array($val)) {
+                        array_push($allArrays, $singleArray);
+                    }
                     $singleArray = [];
                 }
             }
@@ -100,13 +104,32 @@ class Decorator
             if (is_array($value)) {
                 $counter = 0;
                 foreach ($value as $secondKey => $val) {
+                    if (is_array($val)) {
+                        $secondCounter = 0;
+                        foreach ($val as $thirdKey => $secondVal) {
+                            $html .= '<tr>';
+                            if ($secondCounter === 0) {
+                                $html .= '<th><th/>';
+                                $html .= '<th>' . $secondKey . '<th/>';
+                                $html .= '<td>' . $thirdKey . '<td/>';
+                                $html .= '<td>' . $secondVal . '<td/>';
+                            }
+                            if ($secondCounter !== 0) {
+                                $html .= '<th><th/>';
+                                $html .= '<th><th/>';
+                                $html .= '<td>' . $thirdKey . '<td/>';
+                                $html .= '<td>' . $secondVal . '<td/>';
+                            }
+                            $secondCounter++;
+                        }
+                    }
                     $html .= '<tr>';
-                    if ($counter === 0) {
+                    if ($counter === 0 && !is_array($val)) {
                         $html .= '<th>' . $key . '<th/>';
                         $html .= '<th>' . $secondKey . '<th/>';
                         $html .= '<td>' . $val . '<td/>';
                     }
-                    if ($counter !== 0) {
+                    if ($counter !== 0 && !is_array($val)) {
                         $html .= '<th><th/>';
                         $html .= '<th>' . $secondKey . '<th/>';
                         $html .= '<td>' . $val . '<td/>';
@@ -129,16 +152,16 @@ class Decorator
     public function render(DecorationTypes $type)
     {
         switch ($type) {
-            case DecorationTypes::HTML:
+            case DecorationTypes::HTML():
                 $this->returnHtml();
             break;
 
-            case DecorationTypes::CSV:
+            case DecorationTypes::CSV():
                 $this->returnCsv();
             break;
 
-            case DecorationTypes::MYJSON:
-                $this->returnJson();
+            case DecorationTypes::MYJSON():
+                echo $this->returnJson();
             break;
         }
     }
