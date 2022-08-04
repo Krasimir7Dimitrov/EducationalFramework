@@ -39,4 +39,17 @@ class CarsCollection extends \App\System\BaseCollection
 
         return $this->db->fetchOne($sth)['count'];
     }
+
+    public function insertCar($data)
+    {
+        return $this->db->insert($this->table, $data);
+    }
+
+    public function getCarBySearchCriteria($where, $data)
+    {
+        $sql = "SELECT * FROM cars AS c";
+        $sql .= " WHERE 1" . implode(' AND ', $where);
+
+        return $this->db->fetchAll($sql, $data);
+    }
 }

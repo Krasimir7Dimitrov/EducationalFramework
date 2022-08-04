@@ -2,7 +2,99 @@
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
-    <h1>This is default index</h1>
+    <h1>Search for a car</h1>
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Home</title>
+    </head>
+    <body>
+        <form method="post" action="/default/index">
+            <div class="input-field col s12">
+                <select class="browser-default" name="make">
+                    <option value="" disabled selected>Select Make</option>
+                    <?php  foreach ($makeArray as $make) { ?>
+                        <option value="<?= $make ?>"><?= $make ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="input-field col s12">
+                <select class="browser-default" name="model">
+                    <option value="" disabled selected>Select Model</option>
+                    <?php  foreach ($modelArray as $model) { ?>
+                        <option value="<?= $model ?>"><?= $model ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="input-field col s12">
+                <select class="browser-default" name="first_registration">
+                    <option value="" disabled selected>Select First Registration</option>
+                    <?php  foreach ($firstRegistrationArray as $firstRegistration) { ?>
+                        <option value="<?= $firstRegistration ?>"><?= $firstRegistration ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="input-field col s12">
+                <select class="browser-default" name="transmission">
+                    <option value="" disabled selected>Select Transmission</option>
+                    <?php  foreach ($transmissionArray as $transmission) { ?>
+                        <option value="<?= $transmission ?>"><?= $transmission ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="input-field col s12">
+                <button class="btn btn-primary">Search</button>
+            </div>
+        </form>
+
+
+        <div class="col s12 m7">
+            <h2 class="header">Results</h2>
+            <div class="card horizontal">
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <p>Make - Opel</p>
+                    </div>
+                    <div class="card-content">
+                        <p>Model - Corsa</p>
+                    </div>
+                    <div class="card-content">
+                        <p>First Registration - 2022</p>
+                    </div>
+                    <div class="card-content">
+                        <p>Transmission - Manual</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">This is a link to the car</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card horizontal">
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <p>Make - Opel</p>
+                    </div>
+                    <div class="card-content">
+                        <p>Model - Corsa</p>
+                    </div>
+                    <div class="card-content">
+                        <p>First Registration - 2022</p>
+                    </div>
+                    <div class="card-content">
+                        <p>Transmission - Manual</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="#">This is a link to the car</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
 
 <?php
 require __DIR__.'/../common/footer.phtml';

@@ -18,12 +18,39 @@ class CarsController extends AbstractController
         {
             header("Location: {$this->config['baseUrl']}"); die();
         }
-        $this->renderView('cars/create', []);
+
+        $data = [];
+        $data['make']               = $_POST['make'] ?? 'Nqma marka';
+        $data['model']              = $_POST['model'] ?? 'Nqma model';
+        $data['first_registration'] = $_POST['first_registration'] ?? 'Nqma registration';
+        $data['transmission']       = $_POST['transmission'] ?? 'Nqma transmission';
+        $data['created_at']         = date('Y-m-d H:s:i');
+
+        $cars = new CarsCollection();
+        $dataToBeInserted = $cars->insertCar($data);
+
+        $this->renderView('cars/create', ['dataToBeInserted' => $dataToBeInserted]);
     }
 
     public function update()
     {
-        var_dump('This is the update method of the CarsController');
+        $car = [];
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'GET'){
+            $carId = $_GET['id'];
+            $car = (new CarsCollection())->getCarById($carId);
+        } else {
+            $car['id']                 = $_POST['id'] ?? 'Nqma id';
+            $car['make']               = $_POST['make'] ?? 'Nqma marka';
+            $car['model']              = $_POST['model'] ?? 'Nqma model';
+            $car['first_registration'] = $_POST['first_registration'] ?? 'Nqma registration';
+            $car['transmission']       = $_POST['transmission'] ?? 'Nqma transmission';
+            $car['updated_at']         = date('Y-m-d H:s:i');
+        }
+
+        $carsCollection = (new CarsCollection())->update(['id' => $car['id']], $car);
+
+        $this->renderView('cars/edit', ['car' => $car]);
     }
 
     public function delete()
@@ -37,11 +64,11 @@ class CarsController extends AbstractController
         $page           = $_GET['page'] ?? 1;
         $offset         = ($page - 1) * $limit;
         $cars           = new \App\Model\Collections\CarsCollection();
-        $carsPagination = $cars->getCarsPagination($limit, $offset);
+        $carResults     = $cars->getCarsPagination($limit, $offset);
         $carsCount      = $cars->getCarsCount();
         $totalPages          = (int) ceil($carsCount/$limit);
 
-        $this->renderView('cars/listing', ['totalPages' => $totalPages, 'carsPagination' => $carsPagination]);
+        $this->renderView('cars/listing', ['totalPages' => $totalPages, 'carResults' => $carResults]);
     }
 
 

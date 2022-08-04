@@ -5,6 +5,22 @@ require __DIR__.'/../common/topnavbar.phtml';
 
 <h2>Create car</h2>
 
+<form action="/cars/create" class="col" method="POST">
+    <label for="make">Make</label>
+    <input id="make" type="text" class="validate" name="make">
+
+    <label for="model">Model</label>
+    <input id="model" type="text" class="validate" name="model">
+
+    <label for="first_registration">First Registration</label>
+    <input id="first_registration" type="text" class="validate" name="first_registration">
+
+    <label for="transmission">Transmission</label>
+    <input id="transmission" type="text" class="validate" name="transmission">
+
+    <input type="submit" value="Create">
+</form>
+
 <?php
 require __DIR__.'/../common/footer.phtml';
 ?>

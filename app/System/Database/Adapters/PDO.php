@@ -86,7 +86,7 @@ class PDO implements DbAdapterInterface
         $arrayKeys = array_keys($data);
         $statement = 'INSERT INTO ' . $table . '(' . implode(", ", $arrayKeys) . ') VALUES (:'. implode(", :", $arrayKeys) .')';
         $query = $this->connection->prepare($statement);
-
+        
         $this->paramsBindingHelper($data, $query);
 
         $result = $query->execute();
@@ -213,7 +213,7 @@ class PDO implements DbAdapterInterface
     {
         foreach ($data as $key => $value) {
             $paramTypeForBinding = self::getParamTypeForBinding($value);
-            $query->bindParam(':' . $key, $value, $paramTypeForBinding);
+            $query->bindParam(':' . $key, $data[$key], $paramTypeForBinding);
         }
     }
 }

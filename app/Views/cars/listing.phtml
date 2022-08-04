@@ -2,7 +2,16 @@
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 
-var_dump($carsPagination);
+//var_dump($carsPagination);
+
+$tableHeaders = [];
+foreach ($carResults as $tableHeader) {
+    foreach ($tableHeader as $key => $value) {
+        if (!array_key_exists($key, $tableHeaders)) $tableHeaders[] = $key;
+    }
+}
+
+$uniqueTableHeaders = array_unique($tableHeaders);
 ?>
 
 <!doctype html>
@@ -18,15 +27,45 @@ var_dump($carsPagination);
 </head>
 <body>
     <div>
+        <?php
+            $html_table = '<table class="responsive-table"><thead>';
 
+            foreach ($uniqueTableHeaders as $key => $value) {
+                $html_table .= '<th>' . $value . '</th>';
+            }
+
+            $html_table .= '<th>Actions</th>';
+            $html_table .= '</thead><tr>';
+
+            $i = 0;
+            $numberOfColumns = 7;
+
+            foreach ($carResults as $results) {
+                foreach ($results AS $key => $value) {
+                    if ($key == 'id') $id = $value;
+                    $html_table .= '<td>' . $value . '</td>';
+                    $i++;
+                    $columnsToAdd = $i % $numberOfColumns;
+                    if ($columnsToAdd == 0) {
+                        $html_table .= '<td><a href="update?id= '. $id. '">Edit</a></td></tr><tr>';
+                    }
+                }
+            }
+
+            if ($columnsToAdd != 0) {
+                $html_table .= '<td>&nbsp;</td>';
+            }
+
+            $html_table .= '</tr></table>';
+
+            echo $html_table;
+        ?>
     </div>
-    <div>
-        <ul>
-            <?php for ($page = 1;$page <= $totalPages;$page++) { ?>
-                    <li><a href="<?= 'listing?page='. $page?>"><?=$page ?></a></li>
-            <?php } ?>
-        </ul>
-    </div>
+    <ul class="pagination">
+        <?php for ($page = 1;$page <= $totalPages;$page++) { ?>
+                <li><a href="<?= 'listing?page='. $page?>"><?=$page ?></a></li>
+        <?php } ?>
+    </ul>
 </body>
 </html>
 

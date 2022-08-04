@@ -18,7 +18,7 @@ label {
 }
 
 label:hover {
-    background: #4E8774;
+    /*background: #4E8774;*/
 }
 
 .content {
@@ -36,4 +36,3 @@ input + label + .content {
 input:checked + label + .content {
     display: block;
 }
-
