@@ -17,37 +17,22 @@ class DefaultController extends AbstractController
         $firstRegistrationArray = [];
         $transmissionArray = [];
         $otherFieldsArray = [];
+
         foreach ($carResults as $results) {
-            foreach ($results as $key => $value) {
-                switch ($key) {
-                    case 'make':
-                        $makeArray[] = $value;
-                        break;
-                    case 'model':
-                        $modelArray[] = $value;
-                        break;
-                    case 'first_registration':
-                        $firstRegistrationArray[] = $value;
-                        break;
-                    case 'transmission':
-                        $transmissionArray[] = $value;
-                        break;
-                    default:
-                        $otherFieldsArray[] = $value;
-                        break;
-                }
-            }
+            $makeArray[]              = strtolower(ucfirst($results['makename']));
+            $modelArray[]             = strtolower(ucfirst($results['modelname']));
+            $firstRegistrationArray[] = strtolower(ucfirst($results['first_registration']));
+            $transmissionArray[]      = strtolower(ucfirst($results['transmission']));
         }
 
         $results                       = [];
-        $results['make']               = $_POST['make'];
-        $results['model']              = $_POST['model'];
-        $results['first_registration'] = $_POST['first_registration'];
-        $results['transmission']       = $_POST['transmission'];
+        $results[]  = 'make = ' . $_POST['make'];
+        $results[]  = 'model = ' . $_POST['model'];
+        $results[]  = 'first_registration = ' . $_POST['first_registration'];
+        $results[]  = 'transmission = ' . $_POST['transmission'];
 
-        var_dump($results);
 
-//        $searchResult = $cars->getCarBySearchCriteria($results);
+//        $searchResult = $cars->getCarBySearchCriteria($data, $results);
 
         $this->renderView('default/index', [
             'carResults' => $carResults,

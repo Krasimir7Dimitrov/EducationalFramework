@@ -7,7 +7,12 @@ class CarsCollection extends \App\System\BaseCollection
 
     public function getAllCars()
     {
-        $sql = "SELECT * FROM cars";
+        $sql = "SELECT md.name as modelname, mk.name as makename, c.first_registration, c.transmission
+                  FROM cars AS c
+                  INNER JOIN make AS mk
+                      ON mk.id=c.make_id
+                  INNER JOIN models AS md
+                      ON md.id=c.model_id";
 
         return $this->db->fetchAll($sql);
     }
@@ -45,7 +50,7 @@ class CarsCollection extends \App\System\BaseCollection
         return $this->db->insert($this->table, $data);
     }
 
-    public function getCarBySearchCriteria($where, $data)
+    public function getCarBySearchCriteria($data, $where = [])
     {
         $sql = "SELECT * FROM cars AS c";
         $sql .= " WHERE 1" . implode(' AND ', $where);

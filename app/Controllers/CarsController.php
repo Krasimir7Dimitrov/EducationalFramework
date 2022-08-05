@@ -20,16 +20,44 @@ class CarsController extends AbstractController
         }
 
         $data = [];
-        $data['make']               = $_POST['make'] ?? 'Nqma marka';
-        $data['model']              = $_POST['model'] ?? 'Nqma model';
-        $data['first_registration'] = $_POST['first_registration'] ?? 'Nqma registration';
+        $data['make_id']            = $_POST['make'] ?? 0;
+        $data['model_id']           = $_POST['model'] ?? 0;
+        $data['first_registration'] = $_POST['first_registration'] ?? 2000;
         $data['transmission']       = $_POST['transmission'] ?? 'Nqma transmission';
         $data['created_at']         = date('Y-m-d H:s:i');
 
         $cars = new CarsCollection();
-        $dataToBeInserted = $cars->insertCar($data);
+        $carResults = $cars->getAllCars();
 
-        $this->renderView('cars/create', ['dataToBeInserted' => $dataToBeInserted]);
+        $makeArray = [];
+        $modelArray = [];
+        $firstRegistrationArray = [];
+        $transmissionArray = [];
+        $messageArray = [];
+
+        foreach ($carResults as $results) {
+            $makeArray[]              = strtolower(ucfirst($results['makename']));
+            $modelArray[]             = strtolower(ucfirst($results['modelname']));
+            $firstRegistrationArray[] = strtolower(ucfirst($results['first_registration']));
+            $transmissionArray[]      = strtolower(ucfirst($results['transmission']));
+        }
+
+        $insert = $cars->insertCar($data);
+
+        if ($insert) {
+            $messageArray[] = 'Successfully created record in database';
+        } else {
+            $messageArray[] = 'Something wend wrong';
+        }
+
+        $this->renderView('cars/create', [
+            'carResults' => $carResults,
+            'makeArray'  => array_unique($makeArray),
+            'modelArray' => array_unique($modelArray),
+            'firstRegistrationArray' => array_unique($firstRegistrationArray),
+            'transmissionArray'      => array_unique($transmissionArray),
+            'messageArray' => $messageArray
+        ]);
     }
 
     public function update()

@@ -5,18 +5,53 @@ require __DIR__.'/../common/topnavbar.phtml';
 
 <h2>Create car</h2>
 
+
+<?php
+    if (!empty($messageArray)) {
+        foreach ($messageArray as $message) {
+            ?>
+            <p><?= $message ?></p>
+            <?php
+        }
+}
+?>
+
+
 <form action="/cars/create" class="col" method="POST">
-    <label for="make">Make</label>
-    <input id="make" type="text" class="validate" name="make">
+    <div class="input-field col s12">
+        <select class="browser-default" name="make">
+            <option value="" disabled selected>Select Make</option>
+            <?php  foreach ($makeArray as $make) { ?>
+                    //here the received makeArray should be with different structure to include the actual id of the certain make,because of the integer type of make_id, now we are trying to insert string instead of integer, the same as the other fields
+                <option value="<?= $make ?>"><?= $make ?></option>
+            <?php } ?>
+        </select>
+    </div>
 
-    <label for="model">Model</label>
-    <input id="model" type="text" class="validate" name="model">
-
-    <label for="first_registration">First Registration</label>
-    <input id="first_registration" type="text" class="validate" name="first_registration">
-
-    <label for="transmission">Transmission</label>
-    <input id="transmission" type="text" class="validate" name="transmission">
+    <div class="input-field col s12">
+        <select class="browser-default" name="model">
+            <option value="" disabled selected>Select Model</option>
+            <?php  foreach ($modelArray as $model) { ?>
+                <option value="<?= $model ?>"><?= $model ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="input-field col s12">
+        <select class="browser-default" name="first_registration">
+            <option value="" disabled selected>Select First Registration</option>
+            <?php  foreach ($firstRegistrationArray as $firstRegistration) { ?>
+                <option value="<?= $firstRegistration ?>"><?= $firstRegistration ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="input-field col s12">
+        <select class="browser-default" name="transmission">
+            <option value="" disabled selected>Select Transmission</option>
+            <?php  foreach ($transmissionArray as $transmission) { ?>
+                <option value="<?= $transmission ?>"><?= $transmission ?></option>
+            <?php } ?>
+        </select>
+    </div>
 
     <input type="submit" value="Create">
 </form>
