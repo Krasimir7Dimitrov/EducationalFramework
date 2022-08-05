@@ -66,6 +66,41 @@ CREATE TABLE `notifications` (
 ;
 
 
+CREATE TABLE `make` (
+                        `id` INT NOT NULL AUTO_INCREMENT,
+                        `name` VARCHAR(100) NULL DEFAULT NULL,
+                        PRIMARY KEY (`id`)
+)
+    COLLATE='utf8mb4_general_ci'
+;
+
+CREATE TABLE `models` (
+                          `id` INT NOT NULL AUTO_INCREMENT,
+                          `make_id` INT NULL,
+                          `name` VARCHAR(250) NULL DEFAULT NULL,
+                          PRIMARY KEY (`id`)
+)
+    COLLATE='utf8mb4_general_ci'
+;
+
+
+INSERT INTO `db`.`make` (`name`) VALUES ('Opel');
+INSERT INTO `db`.`make` (`name`) VALUES ('Mazda');
+INSERT INTO `db`.`make` (`name`) VALUES ('Subaru');
+
+
+INSERT INTO `db`.`models` (`make_id`, `name`) VALUES ('1', 'Corsa');
+INSERT INTO `db`.`models` (`make_id`, `name`) VALUES ('1', 'Astra');
+INSERT INTO `db`.`models` (`make_id`, `name`) VALUES ('1', 'Omega');
+INSERT INTO `db`.`models` (`make_id`, `name`) VALUES ('2', 'MX5');
+INSERT INTO `db`.`models` (`make_id`) VALUES ('2');
+INSERT INTO `db`.`models` (`make_id`, `name`) VALUES ('2', 'RX7');
+INSERT INTO `db`.`models` (`make_id`, `name`) VALUES ('3', 'Forester');
+INSERT INTO `db`.`models` (`make_id`, `name`) VALUES ('3', 'Legacy');
+INSERT INTO `db`.`models` (`make_id`, `name`) VALUES ('3', 'Impreza');
+
+
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
