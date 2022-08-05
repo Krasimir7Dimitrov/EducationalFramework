@@ -4,6 +4,8 @@
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
+      <path value="$PROJECT_DIR$/vendor/panchosabev/debugbar" />
+      <path value="$PROJECT_DIR$/vendor/myclabs/php-enum" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

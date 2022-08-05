@@ -9,5 +9,5 @@ $application->run();
 
 $debugData = $application->getDebugData();
 
-$debugBar = new \App\Library\Debugbar\Debugbar($debugData);
-$debugBar->render(\App\Library\Debugbar\Enums\DecorationTypes::HTML());
+$debugBar1 = new \Debugbar\Debugbar($debugData);
+$debugBar1->render(\Debugbar\Enums\DecorationTypes::HTML());
