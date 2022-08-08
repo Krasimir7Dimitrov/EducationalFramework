@@ -19,16 +19,45 @@ class CarsCollection extends \App\System\BaseCollection
         return $this->db->fetchOne($sth, ['id' => $id]);
     }
 
-    public function getNumberOfAllCars()
+    public function getNumberOfCars($where)
     {
-        $sql = "SELECT COUNT(id) cnt FROM $this->table";
+        $sql = "SELECT COUNT(id) AS cnt FROM cars AS c WHERE 1";
+        foreach ($where as $key => $value) {
+            if (!empty($value)) {
+                $sql .= " AND c.{$key} = '{$value}'";
+            }
+        }
+
         return $this->db->fetchOne($sql)['cnt'];
     }
 
-    public function getRowsForAPageFromCars(int $numberOfRowsInAPage, int $rowsOffset)
+    public function getRowsForAPageFromCars(int $numberOfRowsInAPage, int $rowsOffset, array $where = [], $order = '')
     {
-        $sql = "SELECT * FROM $this->table LIMIT $numberOfRowsInAPage OFFSET $rowsOffset";
+        $sql = "SELECT mk.name AS make, mo.name AS model, c.first_registration, c.transmission, c.image";
+        $sql .= " FROM $this->table AS c";
+        $sql .= " INNER JOIN make AS mk ON mk.id = c.make_id INNER JOIN models AS mo ON mo.id = c.model_id";
+        $sql .= " WHERE 1";
+        foreach ($where as $key => $value) {
+            if (!empty($value)) {
+                $sql .= " AND c.{$key} = '{$value}'";
+            }
+        }
+        $sql .= " ORDER BY $order";
+        $sql .= " LIMIT $numberOfRowsInAPage OFFSET $rowsOffset";
         return $this->db->fetchAll($sql);
     }
+
+    public function getAllMakes()
+    {
+        $sql = "SELECT DISTINCT make FROM $this->table";
+        return $this->db->fetchAll($sql);
+    }
+
+    public function getModels($make, $transmission)
+    {
+        $sql = "SELECT DISTINCT model FROM $this->table WHERE make = $make AND transmission = $transmission";
+        return $this->db->fetchAll($sql);
+    }
+
 
 }

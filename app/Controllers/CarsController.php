@@ -2,8 +2,12 @@
 namespace App\Controllers;
 
 use App\Model\Collections\CarsCollection;
+use App\Model\Collections\MakeCollection;
+use App\Model\Collections\ModelCollection;
 use App\System\AbstractController;
+use App\System\Registry;
 use phpDocumentor\Reflection\Types\This;
+use function PHPUnit\Framework\isEmpty;
 
 class CarsController extends AbstractController
 {
@@ -13,13 +17,19 @@ class CarsController extends AbstractController
      */
 
     private $collectionInst;
+    private $makeInst;
+    private $modelInst;
 
-    private $numberOfRowsInAPage = 5;
+    private $numberOfRowsInAPage = 10;
+    private $offset;
+    private $params;
 
     public function __construct()
     {
         parent::__construct();
         $this->collectionInst = new CarsCollection();
+        $this->makeInst = new MakeCollection();
+        $this->modelInst = new ModelCollection();
     }
 
     public function index()
@@ -48,30 +58,92 @@ class CarsController extends AbstractController
 
     private function getBaseUrl(): string
     {
-        $protocol = $_SERVER['HTTPS'] ?? 'http';
-        $host = $_SERVER['HTTP_HOST'];
-        return $protocol . '://' . $host . '/';
+        return Registry::get('config')['baseUrl'] . '/';
     }
 
-    private function numberOfPages(): float
+    private function numberOfPages($number): float
     {
-        $allCars = $this->collectionInst->getNumberOfAllCars();
-        return ceil($allCars / $this->numberOfRowsInAPage);
+        return ceil($number / $this->numberOfRowsInAPage);
     }
 
-    private function getRowsFromDb(): array
+
+    private function convertOrderForDb($param)
     {
-        $page = $_GET['page'] ?? 1;
-        $offset = ($page - 1) * $this->numberOfRowsInAPage;
-        $data = $this->collectionInst->getRowsForAPageFromCars($this->numberOfRowsInAPage, $offset);
-        return $data;
+        switch ($param) {
+            case 1:
+                $option = 'mk.name';
+                break;
+            case 2:
+                $option = 'mk.name DESC';
+                break;
+            case 3:
+                $option = 'c.first_registration';
+                break;
+            case 4:
+                $option = 'c.first_registration DESC';
+                break;
+            default:
+                $option = 'c.created_at';
+                break;
+        }
+        return $option;
     }
+
+
+    private function buildQueryString($req): string
+    {
+        unset($req['page']);
+        if (!empty($req)) {
+            return http_build_query($req);
+        }
+        return '';
+    }
+
+
+    private function getMakes()
+    {
+        return $this->makeInst->getAllMakes();
+    }
+
 
     public function listing()
     {
-        $pages = $this->numberOfPages();
+        $getParams = $_GET;
+        $filters = [
+            'make_id' => $getParams['make_id'] ?? null,
+            'model_id' => $getParams['model_id'] ?? null,
+            'transmission' => $getParams['transmission'] ?? null,
+        ];
+
+        $orderBy = $getParams['order'] ?? null;
+        $page = $getParams['page'] ?? 1;
+        $offset = ($page - 1) * $this->numberOfRowsInAPage;
+        $order = $this->convertOrderForDb($orderBy);
+        $data = $this->collectionInst->getRowsForAPageFromCars($this->numberOfRowsInAPage, $offset, $filters, $order);
+        $query = $this->buildQueryString($getParams);
+        $number = $this->collectionInst->getNumberOfCars($filters);
+        $pages = $this->numberOfPages($number);
         $baseUrl = $this->getBaseUrl();
-        $data = $this->getRowsFromDb();
-        $this->renderView('cars/listing', ['pages' => $pages, 'baseUrl' => $baseUrl, 'data' => $data]);
+        $makes = $this->getMakes();
+        $models = $this->getModels();
+
+        $filters['order'] = $orderBy;
+        $viewData = [
+            'filters' => $filters,
+            'order' => $order,
+            'query' => $query,
+            'pages' => $pages,
+            'baseUrl' => $baseUrl,
+            'data' => $data,
+            'makes' => $makes,
+            'models' => $models
+        ];
+
+        $this->renderView('cars/listing', $viewData);
+    }
+
+    private function getModels()
+    {
+        return $this->modelInst->getAllModels();
     }
 }
