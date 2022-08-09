@@ -35,11 +35,20 @@ require __DIR__.'/../common/topnavbar.phtml';
 
         <label for="cars">Order by:</label>
         <select name="order" id="order">
-            <option <?= (isset($filters['order']) && $filters['order'] == 0) ? 'selected' : '' ; ?> value="0"></option>
+            <option <?= (isset($filters['order']) && $filters['order'] == 0) ? 'selected' : '' ; ?> value="0">Added to the site</option>
             <option <?= (isset($filters['order']) && $filters['order'] == 1) ? 'selected' : '' ; ?> value="1">Sort alphabetically</option>
             <option <?= (isset($filters['order']) && $filters['order'] == 2) ? 'selected' : '' ; ?> value="2">Sort reverse alphabetically</option>
             <option <?= (isset($filters['order']) && $filters['order'] == 3) ? 'selected' : '' ; ?> value="3">Sort by oldest</option>
             <option <?= (isset($filters['order']) && $filters['order'] == 4) ? 'selected' : '' ; ?> value="4">Sort by newest</option>
+        </select>
+
+        <label for="cars">Number of cars in a page:</label>
+        <select name="carsNum" id="carsNum">
+            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 5) ? 'selected' : '' ; ?> value="5">5</option>
+            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 10) ? 'selected' : '' ; ?> value="10">10</option>
+            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 15) ? 'selected' : '' ; ?> value="15">15</option>
+            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 20) ? 'selected' : '' ; ?> value="20">20</option>
+            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 25) ? 'selected' : '' ; ?> value="25">25</option>
         </select>
 
         <button type="submit">Get</button>
@@ -48,17 +57,19 @@ require __DIR__.'/../common/topnavbar.phtml';
 
     <div class="all-cars">
         <?php foreach ($data as $item) { ?>
-        <div class="one-car">
-            <img src=<?=$item['image']?> alt="Cool car" width="500" height="300" border-radius: 25px>
-            <p>Make: <?= $item['make']?></p>
-            <p>Model: <?= $item['model']?></p>
-            <p>First registration: <?= $item['first_registration']?></p>
-            <?php if ($item['transmission'] == 1) { ?>
-                <p>Transmission: automatic</p>
-            <?php } elseif ($item['transmission'] == 2) { ?>
-                <p>Transmission: manual</p>
-            <?php } ?>
-        </div>
+            <a href="http://localhost:8080/cars/listing?carsNum=5">
+                <div class="one-car">
+                    <img src=<?=$item['image']?> alt="Cool car" width="500" height="300" border-radius: 25px>
+                    <p>Make: <?= $item['make']?></p>
+                    <p>Model: <?= $item['model']?></p>
+                    <p>First registration: <?= $item['first_registration']?></p>
+                    <?php if ($item['transmission'] == 1) { ?>
+                        <p>Transmission: automatic</p>
+                    <?php } elseif ($item['transmission'] == 2) { ?>
+                        <p>Transmission: manual</p>
+                    <?php } ?>
+                </div>
+            </a>
         <?php } ?>
     </div>
 

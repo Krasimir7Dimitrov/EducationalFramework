@@ -30,6 +30,7 @@ class CarsController extends AbstractController
         $this->collectionInst = new CarsCollection();
         $this->makeInst = new MakeCollection();
         $this->modelInst = new ModelCollection();
+        $this->setNumberOfRowsInAPage();
     }
 
     public function index()
@@ -54,6 +55,17 @@ class CarsController extends AbstractController
     public function delete()
     {
         var_dump('This is the delete method of the CarsController');
+    }
+
+    private function getRequest(): array
+    {
+        return $_GET;
+    }
+
+    private function setNumberOfRowsInAPage()
+    {
+        $numCars = $this->getRequest();
+        $this->numberOfRowsInAPage = $numCars['carsNum'];
     }
 
     private function getBaseUrl(): string
@@ -108,7 +120,7 @@ class CarsController extends AbstractController
 
     public function listing()
     {
-        $getParams = $_GET;
+        $getParams = $this->getRequest();
         $filters = [
             'make_id' => $getParams['make_id'] ?? null,
             'model_id' => $getParams['model_id'] ?? null,
@@ -116,6 +128,7 @@ class CarsController extends AbstractController
         ];
 
         $orderBy = $getParams['order'] ?? null;
+        $numCarsInAPage = $getParams['carsNum'] ?? null;
         $page = $getParams['page'] ?? 1;
         $offset = ($page - 1) * $this->numberOfRowsInAPage;
         $order = $this->convertOrderForDb($orderBy);
@@ -126,8 +139,9 @@ class CarsController extends AbstractController
         $baseUrl = $this->getBaseUrl();
         $makes = $this->getMakes();
         $models = $this->getModels();
-
+        $filters['carsNum'] = $numCarsInAPage;
         $filters['order'] = $orderBy;
+
         $viewData = [
             'filters' => $filters,
             'order' => $order,
