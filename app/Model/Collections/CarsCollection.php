@@ -31,9 +31,32 @@ class CarsCollection extends \App\System\BaseCollection
         return $this->db->fetchOne($sql)['cnt'];
     }
 
+    public function updateCar($data, $where)
+    {
+        $this->update($data, $where);
+    }
+
+    public function createCar($data)
+    {
+        $this->db->insert($this->table, $data);
+    }
+
+    public function deleteCar($where)
+    {
+        $this->db->delete($this->table, $where);
+    }
+    public function getSingleCar($id)
+    {
+        $sql = "SELECT c.id, mk.name AS make, mo.name AS model, c.first_registration, c.transmission, c.image, c.make_id, c.model_id";
+        $sql .= " FROM $this->table AS c";
+        $sql .= " INNER JOIN make AS mk ON mk.id = c.make_id INNER JOIN models AS mo ON mo.id = c.model_id";
+        $sql .= " WHERE c.id = $id";
+        return $this->db->fetchOne($sql);
+    }
+
     public function getRowsForAPageFromCars(int $numberOfRowsInAPage, int $rowsOffset, array $where = [], $order = '')
     {
-        $sql = "SELECT mk.name AS make, mo.name AS model, c.first_registration, c.transmission, c.image";
+        $sql = "SELECT c.id, mk.name AS make, mo.name AS model, c.first_registration, c.transmission, c.image";
         $sql .= " FROM $this->table AS c";
         $sql .= " INNER JOIN make AS mk ON mk.id = c.make_id INNER JOIN models AS mo ON mo.id = c.model_id";
         $sql .= " WHERE 1";

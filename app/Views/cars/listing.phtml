@@ -3,84 +3,141 @@ require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
 
-    <h1>This is cars listing</h1>
+<div class="container">
+    <div>
+        <img style="display: block; height: 450px; width: 100%" class="img-fluid" src="https://i2-prod.mirror.co.uk/incoming/article27449988.ece/ALTERNATES/s1200d/0_PAY-h_MDRUM_Jaguar_Car_Graveyard__Scotland_-12.jpg" alt="">
+    </div>
+            <div class="mt-5 mb-5 px-5 border rounded-lg" style="margin: 0 100px; z-index: 1; background-color: white">
+                <form action="" method="get">
+                    <div class="row mb-4 mt-3">
+                        <div class="col">
+                            <label class="form-label" for="cars">Choose a make:</label>
+                            <select class="form-control" name="make_id" id="make">
+                                <option <?= ($filters['make_id'] == '') ? 'selected' : '' ; ?> value="">All makes</option>
+                                <?php foreach ($makes as $item) { ?>
+                                    <option <?= (isset($filters['make_id']) && $filters['make_id'] == $item['id']) ? 'selected' : '' ; ?> value="<?=$item['id']?>">
+                                        <?=$item['name']?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="cars">Choose a model:</label>
+                            <select class="form-control" name="model_id" id="model">
+                                <option <?= ($filters['model_id'] == '') ? 'selected' : '' ; ?>  value="">All models</option>
+                                <?php foreach ($models as $item) { ?>
+                                    <option <?= (isset($filters['model_id']) && $filters['model_id'] == $item['id']) ? 'selected' : '' ; ?> value="<?=$item['id']?>">
+                                        <?=$item['name']?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="cars">Choose a transmission:</label>
+                            <select class="form-control" name="transmission" id="transmission">
+                                <option <?= (isset($filters['transmission']) && $filters['transmission'] == '') ? 'selected' : '' ; ?> value="">All transmissions</option>
+                                <option <?= (isset($filters['transmission']) && $filters['transmission'] == 2) ? 'selected' : '' ; ?> value="2">manual</option>
+                                <option <?= (isset($filters['transmission']) && $filters['transmission'] == 1) ? 'selected' : '' ; ?> value="1">automation</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="cars">Order by:</label>
+                            <select class="form-control" name="order" id="order">
+                                <option <?= (isset($filters['order']) && $filters['order'] == 0) ? 'selected' : '' ; ?> value="0">Added to the site</option>
+                                <option <?= (isset($filters['order']) && $filters['order'] == 1) ? 'selected' : '' ; ?> value="1">Sort alphabetically</option>
+                                <option <?= (isset($filters['order']) && $filters['order'] == 2) ? 'selected' : '' ; ?> value="2">Sort reverse alphabetically</option>
+                                <option <?= (isset($filters['order']) && $filters['order'] == 3) ? 'selected' : '' ; ?> value="3">Sort by oldest</option>
+                                <option <?= (isset($filters['order']) && $filters['order'] == 4) ? 'selected' : '' ; ?> value="4">Sort by newest</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row align-items-end mb-5">
+                        <div class="col-6">
+                            <label for="cars">Number of cars in a page:</label>
+                            <select class="form-control" name="carsNum" id="carsNum">
+                                <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 5) ? 'selected' : '' ; ?> value="5">5</option>
+                                <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 10) ? 'selected' : '' ; ?> value="10">10</option>
+                                <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 15) ? 'selected' : '' ; ?> value="15">15</option>
+                                <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 20) ? 'selected' : '' ; ?> value="20">20</option>
+                                <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 25) ? 'selected' : '' ; ?> value="25">25</option>
+                            </select>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button class="btn btn-info px-4 align-items-end" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
-    <form action="" method="get">
-        <label for="cars">Choose a make:</label>
-        <select name="make_id" id="make">
-            <option <?= ($filters['make_id'] == '') ? 'selected' : '' ; ?> value="">All makes</option>
-            <?php foreach ($makes as $item) { ?>
-                <option <?= (isset($filters['make_id']) && $filters['make_id'] == $item['id']) ? 'selected' : '' ; ?> value="<?=$item['id']?>">
-                    <?=$item['name']?>
-                </option>
-            <?php } ?>
-        </select>
+    <div>
+        <?php $counter = 0;
+        foreach ($data as $item) {
+            if ($counter % 2 == 0) { ?>
+                <div class="row justify-content-between mt-3">
+                <div class="col-6">
+            <?php } if ($counter & 1) { ?>
+            <div class="col-6">
+        <?php } ?>
+            <div class="border rounded-lg">
+                <a class="text-decoration-none text-info" href="<?=$baseUrl?>cars/update/<?=$item['id']?>">
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="ml-2">
+                            <img class="mb-3" src=<?=$item['image']?> alt="Cool car" width="300" height="200" border-radius: 25px>
+                        </div>
+                        <div class="ml-3">
+                            <p>Make: <span class="font-weight-bold"><?= $item['make']?></span></p>
+                            <p>Model: <span class="font-weight-bold"><?= $item['model']?></span></p>
+                            <p>First registration: <span class="font-weight-bold"><?= $item['first_registration']?></span></p>
+                            <?php if ($item['transmission'] == 1) { ?>
+                                <p>Transmission: <span class="font-weight-bold">automatic</span></p>
+                            <?php } elseif ($item['transmission'] == 2) { ?>
+                                <p>Transmission: <span class="font-weight-bold">manual</span></p>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <?php if ($counter & 1) { ?>
+            </div>
+            </div>
+        <?php } ?>
 
-        <label for="cars">Choose a model:</label>
-        <select name="model_id" id="model">
-            <option <?= ($filters['model_id'] == '') ? 'selected' : '' ; ?>  value="">All models</option>
-            <?php foreach ($models as $item) { ?>
-                <option <?= (isset($filters['model_id']) && $filters['model_id'] == $item['id']) ? 'selected' : '' ; ?> value="<?=$item['id']?>">
-                    <?=$item['name']?>
-                </option>
-            <?php } ?>
-        </select>
-
-        <label for="cars">Choose a transmission:</label>
-        <select name="transmission" id="transmission">
-                <option <?= (isset($filters['transmission']) && $filters['transmission'] == '') ? 'selected' : '' ; ?> value="">All transmissions</option>
-                <option <?= (isset($filters['transmission']) && $filters['transmission'] == 2) ? 'selected' : '' ; ?> value="2">manual</option>
-                <option <?= (isset($filters['transmission']) && $filters['transmission'] == 1) ? 'selected' : '' ; ?> value="1">automation</option>
-        </select>
-
-        <label for="cars">Order by:</label>
-        <select name="order" id="order">
-            <option <?= (isset($filters['order']) && $filters['order'] == 0) ? 'selected' : '' ; ?> value="0">Added to the site</option>
-            <option <?= (isset($filters['order']) && $filters['order'] == 1) ? 'selected' : '' ; ?> value="1">Sort alphabetically</option>
-            <option <?= (isset($filters['order']) && $filters['order'] == 2) ? 'selected' : '' ; ?> value="2">Sort reverse alphabetically</option>
-            <option <?= (isset($filters['order']) && $filters['order'] == 3) ? 'selected' : '' ; ?> value="3">Sort by oldest</option>
-            <option <?= (isset($filters['order']) && $filters['order'] == 4) ? 'selected' : '' ; ?> value="4">Sort by newest</option>
-        </select>
-
-        <label for="cars">Number of cars in a page:</label>
-        <select name="carsNum" id="carsNum">
-            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 5) ? 'selected' : '' ; ?> value="5">5</option>
-            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 10) ? 'selected' : '' ; ?> value="10">10</option>
-            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 15) ? 'selected' : '' ; ?> value="15">15</option>
-            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 20) ? 'selected' : '' ; ?> value="20">20</option>
-            <option <?= (isset($filters['carsNum']) && $filters['carsNum'] == 25) ? 'selected' : '' ; ?> value="25">25</option>
-        </select>
-
-        <button type="submit">Get</button>
-    </form>
-
-
-    <div class="all-cars">
-        <?php foreach ($data as $item) { ?>
-            <a href="http://localhost:8080/cars/listing?carsNum=5">
-                <div class="one-car">
-                    <img src=<?=$item['image']?> alt="Cool car" width="500" height="300" border-radius: 25px>
-                    <p>Make: <?= $item['make']?></p>
-                    <p>Model: <?= $item['model']?></p>
-                    <p>First registration: <?= $item['first_registration']?></p>
-                    <?php if ($item['transmission'] == 1) { ?>
-                        <p>Transmission: automatic</p>
-                    <?php } elseif ($item['transmission'] == 2) { ?>
-                        <p>Transmission: manual</p>
-                    <?php } ?>
+            <?php if ($counter % 2 == 0) {?>
                 </div>
-            </a>
-        <?php } ?>
+            <?php }  $counter++; }?>
     </div>
 
-
-    <div class="pagination">
-        <?php for ($x = 1; $x <= $pages; $x++) {?>
-        <ldiv class="page">
-            <a href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$x?>"><?=$x?></a>
-        </ldiv>
-        <?php } ?>
+    <div class="d-flex justify-content-center mt-5">
+        <ul class="pagination">
+            <?php if ($page !== "1") {?>
+            <li class="page-item">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <?php }
+             if ($page === "1") {?>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+            <?php } ?>
+            <?php for ($x = 1; $x <= $pages; $x++) {
+                if ($x == $page) {?>
+                <li class="page-item active">
+                    <a class="page-link" href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$x?>"><?=$x?></a>
+                </li>
+            <?php continue; } ?>
+                <li class="page-item">
+                    <a class="page-link" href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$x?>"><?=$x?></a>
+                </li>
+            <?php } ?>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
     </div>
+</div>
+</div>
 
 <?php
 require __DIR__.'/../common/footer.phtml';

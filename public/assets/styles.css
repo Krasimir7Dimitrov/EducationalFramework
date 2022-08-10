@@ -2,32 +2,11 @@ body {
     box-sizing: border-box;
 }
 
-.all-cars {
-    display: flex;
-    flex-wrap: wrap;
+.search-bar {
+    padding: 0 50px 0 50px;
+    z-index: 300;
 }
 
-.one-car {
-    margin: 10px;
-}
-
-.page {
+.hello {
     border: 1px solid red;
-    padding: 10px 2px;
-    margin: 5px;
-    border-radius: 5px;
-}
-
-.page a{
-    padding: 10px 15px;
-    text-decoration: none;
-    color: black;
-}
-
-.pagination {
-    margin-bottom: 50px;
-}
-
-p {
-    color: black;
 }

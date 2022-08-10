@@ -25,7 +25,7 @@ abstract class AbstractController
         require_once $viewDir.$viewName.'.phtml';
     }
 
-    protected function redirect($controller = '', $method = '')
+    protected function redirect($controller = '', $method = '', array $params = [])
     {
         $url = $this->config['baseUrl'];
         if (!empty($controller)) {
@@ -33,6 +33,9 @@ abstract class AbstractController
         }
         if (!empty($method)) {
             $url.= '/'.$method;
+        }
+        foreach ($params as $param) {
+            $url .= '/' . $param;
         }
 
         header("Location: {$url}"); die;

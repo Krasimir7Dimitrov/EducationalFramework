@@ -1,0 +1,69 @@
+<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+?>
+
+    <div class="container">
+        <h2 class="text-center text-info" style="margin-top: 100px">Update data for the car</h2>
+            <div class="row" style="margin: 100px 0 240px 0">
+                <div class="col-6">
+                    <img src=<?=$data['image']?> alt="Cool car" width="500" height="300" border-radius: 25px>
+                </div>
+                    <div class="col-6">
+                        <form action="" method="post">
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Make</label>
+                            </div>
+                            <select class="form-control" name="make_id" id="make">
+                                <?php foreach ($makes as $val) { ?>
+                                    <option <?= (isset($data['make_id']) && $data['make_id'] == $val['id']) ? 'selected' : '' ; ?> value="<?=$val['id']?>">
+                                        <?=$val['name']?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Model</label>
+                            </div>
+                            <select class="form-control" name="model_id" id="model">
+                                <?php foreach ($models as $val) { ?>
+                                    <option <?= (isset($data['model_id']) && $data['model_id'] == $val['id']) ? 'selected' : '' ; ?> value="<?=$val['id']?>">
+                                        <?=$val['name']?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">First registration</span>
+                            </div>
+                            <input class="form-control" type="date" id="first_registration" name="first_registration" value="<?= $data['first_registration']?>">
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Transmission</label>
+                            </div>
+                            <select name="transmission" class="custom-select" id="inputGroupSelect01">
+                                <option <?= (isset($data['transmission']) && $data['transmission'] == 2) ? 'selected' : '' ; ?> value="2">manual</option>
+                                <option <?= (isset($data['transmission']) && $data['transmission'] == 1) ? 'selected' : '' ; ?> value="1">automation</option>
+                            </select>
+                        </div>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <button type="submit" class="btn btn-info px-4">Update</button>
+                                </div>
+                                <div>
+                                    <a href="http://localhost:8080/cars/delete/<?= $data['id'] ?>" class="btn btn-info px-4 ml-3" type="submit">Delete</a>
+                                </div>
+                            </div>
+                    </form>
+
+                </div>
+            </div>
+    </div>
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>

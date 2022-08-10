@@ -1,14 +1,35 @@
-<a href="/">Home</a>
-<a href="/cars">Cars Listing</a>
-<?php if ($this->isLoggedIn()):  ?>
-    <a href="/cars/create">Create Car</a>
-<?php endif;  ?>
-<?php if (!$this->isLoggedIn()):  ?>
-    <a href="/auth/login">Login</a>
-<?php endif;  ?>
-<?php if ($this->isLoggedIn()):  ?>
-    <form action="/auth/logout" method="post">
-        <input type="submit" value="Logout"/>
-    </form>
-<?php endif;  ?>
+<div>
+    <div class="shadow">
+        <div class="container">
+            <div class="row d-flex align-items-center">
+                <div class="col-4">
+                    <img class="w-50 h-100" src="https://dynamic.brandcrowd.com/asset/logo/0834b208-ad89-49ed-8fbc-f8cc20a650ee/logo-search-grid-1x?v=637692013813600000" alt="">
+                </div>
+                <div class="col-4 d-flex justify-content-center">
+                    <a class="mx-3 text-decoration-none text-info" href="/">Home</a>
+                    <a class="mx-3 text-decoration-none text-info" href="/cars/listing">Cars Listing</a>
+                    <?php if ($this->isLoggedIn()):  ?>
+                        <a class="mx-3 text-decoration-none text-info" href="/cars/create">Create Car</a>
+                    <?php endif;  ?>
+                </div>
+                <div class="col-4 d-flex justify-content-end">
+                    <?php if (!$this->isLoggedIn()):  ?>
+                    <div class="btn btn-info px-4">
+                        <a class="text-white text-decoration-none" href="/auth/login">Login</a>
+                    </div>
+                    <?php endif;  ?>
+                    <?php if ($this->isLoggedIn()):  ?>
+                        <form action="/auth/logout" method="post">
+                            <button class="btn btn-info px-4" type="submit">Logout</button>
+                        </form>
+                    <?php endif;  ?>
+                </div
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
 

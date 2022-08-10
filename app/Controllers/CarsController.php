@@ -21,8 +21,7 @@ class CarsController extends AbstractController
     private $modelInst;
 
     private $numberOfRowsInAPage = 10;
-    private $offset;
-    private $params;
+    public $urlSegments;
 
     public function __construct()
     {
@@ -31,6 +30,7 @@ class CarsController extends AbstractController
         $this->makeInst = new MakeCollection();
         $this->modelInst = new ModelCollection();
         $this->setNumberOfRowsInAPage();
+        $this->getUrlSegments();
     }
 
     public function index()
@@ -44,17 +44,57 @@ class CarsController extends AbstractController
         {
             header("Location: {$this->config['baseUrl']}"); die();
         }
+        $makes = $this->getMakes();
+        $models = $this->getModels();
+        $this->renderView('cars/create', ['makes' => $makes, 'models' => $models]);
+
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'POST') {
+            $create = $this->postRequest();
+            $dateTime = date("Y-m-d H:i:s");
+            $create['created_at'] = $dateTime;
+            $this->collectionInst->createCar($create);
+        }
         var_dump('This is the create method of the CarsController');
     }
 
     public function update()
     {
-        var_dump('This is the update method of the CarsController');
+        if (!$this->isLoggedIn())
+        {
+            header("Location: {$this->config['baseUrl']}"); die();
+        }
+        $segment = $this->urlSegments[3];
+        $data = $this->collectionInst->getSingleCar($segment);
+        $makes = $this->getMakes();
+        $models = $this->getModels();
+
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'POST') {
+            $update = $this->postRequest();
+            $where = [
+                'id' => $this->urlSegments[3]
+            ];
+            $this->collectionInst->updateCar($update, $where);
+            $this->redirect('cars', 'update', ['id' => $segment]);
+        }
+        $this->renderView('cars/update', ['data' => $data, 'makes' => $makes, 'models' => $models]);
     }
 
     public function delete()
     {
-        var_dump('This is the delete method of the CarsController');
+        $where = [
+            'id' => $this->urlSegments[3]
+        ];
+        $this->collectionInst->deleteCar($where);
+        $this->redirect('cars', 'listing');
+    }
+
+    private function getUrlSegments(): void
+    {
+        $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uriSegments = explode('/', $uriPath);
+        $this->urlSegments = $uriSegments;
     }
 
     private function getRequest(): array
@@ -62,10 +102,17 @@ class CarsController extends AbstractController
         return $_GET;
     }
 
+    private function postRequest(): array
+    {
+        return $_POST;
+    }
+
     private function setNumberOfRowsInAPage()
     {
         $numCars = $this->getRequest();
-        $this->numberOfRowsInAPage = $numCars['carsNum'];
+        if (!empty($numCars['carsNum'])) {
+            $this->numberOfRowsInAPage = $numCars['carsNum'];
+        }
     }
 
     private function getBaseUrl(): string
@@ -139,7 +186,10 @@ class CarsController extends AbstractController
         $baseUrl = $this->getBaseUrl();
         $makes = $this->getMakes();
         $models = $this->getModels();
-        $filters['carsNum'] = $numCarsInAPage;
+        if (!empty($numCarsInAPage)) {
+            $filters['carsNum'] = $numCarsInAPage;
+        }
+        $filters['carsNum'] = $this->numberOfRowsInAPage;
         $filters['order'] = $orderBy;
 
         $viewData = [
@@ -150,7 +200,8 @@ class CarsController extends AbstractController
             'baseUrl' => $baseUrl,
             'data' => $data,
             'makes' => $makes,
-            'models' => $models
+            'models' => $models,
+            'page' => $page
         ];
 
         $this->renderView('cars/listing', $viewData);

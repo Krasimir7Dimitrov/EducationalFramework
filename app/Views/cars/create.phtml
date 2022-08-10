@@ -1,0 +1,63 @@
+<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+?>
+
+    <div class="container">
+        <h2 class="text-center text-info" style="margin-top: 100px">Update data for the car</h2>
+        <div class="row" style="margin: 100px 0 240px 0">
+            <div class="col-12">
+                <form action="" method="post">
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Make</label>
+                        </div>
+                        <select class="form-control" name="make_id" id="make">
+                            <?php foreach ($makes as $val) { ?>
+                                <option <?= (isset($data[0]['make_id']) && $data[0]['make_id'] == $val['id']) ? 'selected' : '' ; ?> value="<?=$val['id']?>">
+                                    <?=$val['name']?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Model</label>
+                        </div>
+                        <select class="form-control" name="model_id" id="model">
+                            <?php foreach ($models as $val) { ?>
+                                <option <?= (isset($data[0]['model_id']) && $data[0]['model_id'] == $val['id']) ? 'selected' : '' ; ?> value="<?=$val['id']?>">
+                                    <?=$val['name']?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">First registration</span>
+                        </div>
+                        <input class="form-control" type="date" id="first_registration" name="first_registration" value="<?= $data[0]['first_registration']?>">
+                    </div>
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Transmission</label>
+                        </div>
+                        <select name="transmission" class="custom-select" id="inputGroupSelect01">
+                            <option <?= (isset($data[0]['transmission']) && $data[0]['transmission'] == 2) ? 'selected' : '' ; ?> value="2">manual</option>
+                            <option <?= (isset($data[0]['transmission']) && $data[0]['transmission'] == 1) ? 'selected' : '' ; ?> value="1">automation</option>
+                        </select>
+                    </div>
+                    <div class="">
+                        <div>
+                            <button type="submit" class="btn btn-info px-4">Create</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>

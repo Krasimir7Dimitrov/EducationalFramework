@@ -11,7 +11,7 @@ interface DbAdapterInterface
 
     public function insert($table, $data);
 
-    public function update($table, $where, $data);
+    public function update($table, array $data, $where);
 
     public function delete($table, $where);
 

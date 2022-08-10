@@ -111,36 +111,42 @@ class PDO implements DbAdapterInterface
      * @param $data
      * @return false|int
      */
-    public function update($table, $where, $data)
+    public function update($table, array $data, $where): int
     {
-        if (empty($data)) {
-            return false;
+        $query = "";
+        if (!empty($where) and is_array($where)) {
+            $whereVals = [];
+            foreach($where as $key => $val) {
+                $whereVals[] = "$key = :w$key";
+                $query = implode(" AND " ,$whereVals);
+            }
+        } elseif (!empty($data) and is_integer($where)) {
+            $query = "id = :id";
+        } else {
+            throw new \Exception('There is empty value or too many values');
         }
 
-        $set = $this->makeCondition($data);
-
-        $whereArray = [];
-        foreach ($where as $key => $value) {
-            $whereArray[] = "$key = :w$key";
+        $vals = [];
+        foreach($data as $key => $val) {
+            $vals[] = "$key = :$key";
         }
 
-        $addAnd = '';
-        if (!empty($where)) {
-            $addAnd = ' AND ';
+        $sql = "UPDATE " . $table . " c SET " . implode(", ", $vals) .  " WHERE 1 AND " . $query;
+        $sth = $this->connection->prepare($sql);
+
+        if (is_array($where)) {
+            foreach ($where as $key => $value) {
+                $sth->bindParam(':w' . $key, $where[$key]);
+            }
+        } else {
+            $sth->bindParam(':id', $where);
         }
-
-        $statement = 'UPDATE ' . $table . ' SET '. implode(', ', $set) .' WHERE 1'. $addAnd .implode(' AND ', $whereArray);
-        $query = $this->connection->prepare($statement);
-
         foreach ($data as $key => $value) {
-            $query->bindParam(':'. $key, $value);
+            $sth->bindParam(':' . $key, $data[$key]);
         }
+        $sth->execute();
 
-        foreach ($where as $key => $value) {
-            $query->bindParam(':w'. $key, $value);
-        }
-
-        return $query->rowCount();
+        return (int)$sth->rowCount();
     }
 
     /**
@@ -148,7 +154,7 @@ class PDO implements DbAdapterInterface
      * @param $where
      * @return false
      */
-    public function delete($table, $where): bool
+    public function delete($table, $where)
     {
         $addAnd = '';
         if (empty($where)) {
@@ -160,7 +166,7 @@ class PDO implements DbAdapterInterface
         $whereCondition = $this->makeCondition($where);
 
         $statement = 'DELETE FROM ' . $table . ' WHERE 1'. $addAnd . implode(' AND ', $whereCondition);
-        $query = $this->db->prepare($statement);
+        $query = $this->connection->prepare($statement);
 
         foreach ($where as $key => $value) {
             $query->bindParam(':'. $key, $value);
