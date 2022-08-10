@@ -10,9 +10,32 @@ abstract class AbstractController
 
     protected $config;
 
+    protected $flashMessages;
+
     public function __construct()
     {
         $this->config = Registry::get('config');
+        $this->flashMessages = $_SESSION['flashMessages'];
+    }
+
+    public function getFlashMessages()
+    {
+        $flashMessages = $this->flashMessages ?? [];
+        $this->consumeFlashMassages();
+
+        return $flashMessages;
+    }
+
+    public function consumeFlashMassages()
+    {
+        $this->flashMessages = [];
+        $_SESSION['flashMessages'] = [];
+    }
+
+    public function setFlashMessage($message)
+    {
+        $_SESSION['flashMessages'][] = $message;
+        $this->flashMessages = $_SESSION['flashMessages'];
     }
 
     abstract public function index();

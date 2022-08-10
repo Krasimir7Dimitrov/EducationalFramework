@@ -21,7 +21,10 @@ class CarsCollection extends \App\System\BaseCollection
 
     public function getNumberOfCars($where)
     {
-        $sql = "SELECT COUNT(id) AS cnt FROM cars AS c WHERE 1";
+        $sql = "SELECT COUNT(c.id) AS cnt FROM cars AS c";
+        $sql .= " INNER JOIN make AS mk ON mk.id = c.make_id";
+        $sql .= " INNER JOIN models AS mo ON mo.id = c.model_id";
+        $sql .= " WHERE 1 ";
         foreach ($where as $key => $value) {
             if (!empty($value)) {
                 $sql .= " AND c.{$key} = '{$value}'";
@@ -33,17 +36,17 @@ class CarsCollection extends \App\System\BaseCollection
 
     public function updateCar($data, $where)
     {
-        $this->update($data, $where);
+        return $this->update($data, $where);
     }
 
     public function createCar($data)
     {
-        $this->db->insert($this->table, $data);
+        return $this->db->insert($this->table, $data);
     }
 
     public function deleteCar($where)
     {
-        $this->db->delete($this->table, $where);
+        return $this->db->delete($this->table, $where);
     }
     public function getSingleCar($id)
     {

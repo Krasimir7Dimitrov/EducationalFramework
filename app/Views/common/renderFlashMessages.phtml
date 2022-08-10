@@ -1,0 +1,9 @@
+<?php
+foreach ($this->getFlashMessages() as $flashMessage) :
+    ?>
+    <div class="alert alert-info" role="alert">
+        <?= $flashMessage ?>
+    </div>
+<?php
+endforeach
+?>

@@ -53,16 +53,22 @@ class CarsController extends AbstractController
             $create = $this->postRequest();
             $dateTime = date("Y-m-d H:i:s");
             $create['created_at'] = $dateTime;
-            $this->collectionInst->createCar($create);
+            $id = $this->collectionInst->createCar($create);
+
+            $this->setFlashMessage("Record with Id {$id} was created successfully");
+            $this->redirect('cars', 'listing');
+
         }
-        var_dump('This is the create method of the CarsController');
+
     }
 
     public function update()
     {
         if (!$this->isLoggedIn())
         {
-            header("Location: {$this->config['baseUrl']}"); die();
+            $this->setFlashMessage('You need to be logged user');
+
+            $this->redirect('default', 'index');
         }
         $segment = $this->urlSegments[3];
         $data = $this->collectionInst->getSingleCar($segment);
@@ -73,20 +79,37 @@ class CarsController extends AbstractController
         if ($method == 'POST') {
             $update = $this->postRequest();
             $where = [
-                'id' => $this->urlSegments[3]
+                'id' => $segment
             ];
             $this->collectionInst->updateCar($update, $where);
+
+            $this->setFlashMessage("Record with Id {$segment} was created successfully");
             $this->redirect('cars', 'update', ['id' => $segment]);
         }
         $this->renderView('cars/update', ['data' => $data, 'makes' => $makes, 'models' => $models]);
     }
 
+    public function car()
+    {
+
+    }
+
     public function delete()
     {
+        $id = (int) $this->urlSegments[3] ?? 0;
         $where = [
-            'id' => $this->urlSegments[3]
+            'id' => $id
         ];
-        $this->collectionInst->deleteCar($where);
+
+        $result = $this->collectionInst->deleteCar($where);
+
+        $message = "Record with Id {$id} was not deleted successfully.
+         There are some problem with the delete operation.";
+        if (!empty($result)) {
+            $message = "Record with Id {$id} was deleted successfully";
+        }
+
+        $this->setFlashMessage($message);
         $this->redirect('cars', 'listing');
     }
 

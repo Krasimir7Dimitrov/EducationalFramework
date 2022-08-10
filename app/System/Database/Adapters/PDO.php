@@ -156,7 +156,6 @@ class PDO implements DbAdapterInterface
      */
     public function delete($table, $where)
     {
-        $addAnd = '';
         if (empty($where)) {
             return false;
         } else {
