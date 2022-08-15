@@ -1,0 +1,67 @@
+`<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+?>
+
+<div class="container">
+    <h2 class="text-center text-info" style="margin-top: 100px">Car view</h2>
+    <div class="row border p-3 rounded" style="margin: 100px 0 240px 0">
+        <div class="col-6">
+            <img src=<?=$data['image']?> alt="Cool car" width="500" height="300" border-radius: 25px>
+        </div>
+        <div class="col-6">
+            <div class="d-flex justify-content-between mt-5">
+                <div>
+                    <p class="mb-4">Make: <span class="font-weight-bold"><?= $data['make']?></span></p>
+                    <p class="mb-4">Model: <span class="font-weight-bold"><?= $data['model']?></span></p>
+                </div>
+                <div>
+                    <p class="mb-4">First registration: <span class="font-weight-bold"><?= $data['first_registration']?></span></p>
+                    <?php if ($data['transmission'] == 1) { ?>
+                        <p class="mb-3">Transmission: <span class="font-weight-bold">automatic</span></p>
+                    <?php } elseif ($data['transmission'] == 2) { ?>
+                        <p class="mb-3">Transmission: <span class="font-weight-bold">manual</span></p>
+                    <?php } ?>
+                </div>
+            </div>
+            <?php if ($this->isLoggedIn()) : ?>
+            <div class="d-flex justify-content-between mt-5">
+                <div>
+                    <a href="http://localhost:8080/cars/update/<?= $data['id'] ?>" class="btn btn-info px-4" type="submit">Update</a>
+                </div>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#staticBackdrop">
+                    Delete
+                </button>
+
+                <!-- Modal -->
+                <div style="margin-top: 300px" class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Delete</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you shure you want to delete this?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <form action="<?=$baseUrl?>cars/delete/<?= $data['id'] ?>" name="delete" method="POST" >
+                                    <button type="submit" class="btn btn-info">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>
+
+`

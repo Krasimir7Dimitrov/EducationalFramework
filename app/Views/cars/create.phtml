@@ -2,51 +2,99 @@
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
-
+<?php require __DIR__.'/../common/renderFlashMessages.phtml'; ?>
     <div class="container">
-        <h2 class="text-center text-info" style="margin-top: 100px">Update data for the car</h2>
-        <div class="row" style="margin: 100px 0 240px 0">
+        <h2 class="text-center text-info" style="margin-top: 100px">Create a car</h2>
+        <div class="row" style="margin: 20px 0 240px 0">
             <div class="col-12">
                 <form action="" method="post">
                     <div class="input-group mb-4">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">Make</label>
                         </div>
+                    <?php if (!empty($errors['makeErr'])) : ?>
+                        <select class="form-control is-invalid" name="make_id" id="make">
+                    <?php endif; ?>
+                    <?php if (empty($errors['makeErr'])) : ?>
                         <select class="form-control" name="make_id" id="make">
+                    <?php endif; ?>
+                            <option value=""></option>
                             <?php foreach ($makes as $val) { ?>
-                                <option <?= (isset($data[0]['make_id']) && $data[0]['make_id'] == $val['id']) ? 'selected' : '' ; ?> value="<?=$val['id']?>">
+                                <option <?= (isset($data['make_id']) && $data['make_id'] == $val['id']) ? 'selected' : '' ; ?> value="<?=$val['id']?>">
                                     <?=$val['name']?>
                                 </option>
                             <?php } ?>
                         </select>
+                        <?php if (!empty($errors['makeErr'])) : ?>
+                            <div class="invalid-feedback">
+                                <?=$errors['makeErr']?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="input-group mb-4">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">Model</label>
                         </div>
-                        <select class="form-control" name="model_id" id="model">
+                        <?php if (!empty($errors['modelErr'])) : ?>
+                            <select class="form-control is-invalid" name="model_id" id="model">
+                        <?php endif; ?>
+                        <?php if (empty($errors['modelErr'])) : ?>
+                            <select class="form-control" name="model_id" id="model">
+                        <?php endif; ?>
+                            <option value=""></option>
                             <?php foreach ($models as $val) { ?>
-                                <option <?= (isset($data[0]['model_id']) && $data[0]['model_id'] == $val['id']) ? 'selected' : '' ; ?> value="<?=$val['id']?>">
+                                <option <?= (isset($data['model_id']) && $data['model_id'] == $val['id']) ? 'selected' : '' ; ?> value="<?=$val['id']?>">
                                     <?=$val['name']?>
                                 </option>
                             <?php } ?>
                         </select>
+                        <?php if (!empty($errors['modelErr'])) : ?>
+                            <div class="invalid-feedback">
+                                <?=$errors['modelErr']?>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="input-group mb-4">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">First registration</span>
                         </div>
-                        <input class="form-control" type="date" id="first_registration" name="first_registration" value="<?= $data[0]['first_registration']?>">
+                        <?php if (!empty($errors['firstRegErr'])) : ?>
+                            <input class="form-control is-invalid" type="date" id="first_registration" name="first_registration" value="<?= $data['first_registration']?>">
+                        <?php endif; ?>
+                        <?php if (empty($errors['firstRegErr'])) : ?>
+                            <input class="form-control" type="date" id="first_registration" name="first_registration" value="<?= $data['first_registration']?>">
+                        <?php endif; ?>
+                        <?php if (!empty($errors['firstRegErr'])) : ?>
+                            <div class="invalid-feedback">
+                                <?=$errors['firstRegErr']?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="input-group mb-4">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">Transmission</label>
                         </div>
                         <select name="transmission" class="custom-select" id="inputGroupSelect01">
-                            <option <?= (isset($data[0]['transmission']) && $data[0]['transmission'] == 2) ? 'selected' : '' ; ?> value="2">manual</option>
-                            <option <?= (isset($data[0]['transmission']) && $data[0]['transmission'] == 1) ? 'selected' : '' ; ?> value="1">automation</option>
+                            <option <?= (isset($data['transmission']) && $data['transmission'] == 2) ? 'selected' : '' ; ?> value="2">manual</option>
+                            <option <?= (isset($data['transmission']) && $data['transmission'] == 1) ? 'selected' : '' ; ?> value="1">automation</option>
                         </select>
+                    </div>
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Image</span>
+                        </div>
+                        <?php if (!empty($errors['imageErr'])) : ?>
+                            <input name="image" type="text" class="form-control is-invalid" placeholder="Image link" aria-label="Username" aria-describedby="basic-addon1">
+                        <?php endif; ?>
+                        <?php if (empty($errors['imageErr'])) : ?>
+                            <input value="<?= $data['image'] ?>" name="image" type="text" class="form-control" placeholder="Image link" aria-label="Username" aria-describedby="basic-addon1">
+                        <?php endif; ?>
+                        <?php if (!empty($errors['imageErr'])) : ?>
+                            <div class="invalid-feedback">
+                                <?=$errors['imageErr']?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <div class="">
                         <div>
@@ -54,7 +102,6 @@ require __DIR__.'/../common/topnavbar.phtml';
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

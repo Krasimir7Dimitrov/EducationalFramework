@@ -4,12 +4,11 @@ require __DIR__.'/../common/topnavbar.phtml';
 ?>
 <?php require __DIR__.'/../common/renderFlashMessages.phtml'; ?>
 
-
 <div class="container">
     <div>
         <img style="display: block; height: 450px; width: 100%" class="img-fluid" src="https://i2-prod.mirror.co.uk/incoming/article27449988.ece/ALTERNATES/s1200d/0_PAY-h_MDRUM_Jaguar_Car_Graveyard__Scotland_-12.jpg" alt="">
     </div>
-            <div class="mt-5 mb-5 px-5 border rounded-lg" style="margin: 0 100px; z-index: 1; background-color: white">
+            <div class="my-5 px-5 border rounded-lg" style="margin: 0 100px; z-index: 1; background-color: white">
                 <form action="" method="get">
                     <div class="row mb-4 mt-3">
                         <div class="col">
@@ -83,7 +82,7 @@ require __DIR__.'/../common/topnavbar.phtml';
             <div class="col-6">
         <?php } ?>
             <div class="border rounded-lg">
-                <a class="text-decoration-none text-info" href="<?=$baseUrl?>cars/update/<?=$item['id']?>">
+                <a class="text-decoration-none text-info" href="<?=$baseUrl?>cars/car/<?=$item['id']?>">
                     <div class="d-flex justify-content-center mt-3">
                         <div class="ml-2">
                             <img class="mb-3" src=<?=$item['image']?> alt="Cool car" width="300" height="200" border-radius: 25px>
@@ -102,9 +101,9 @@ require __DIR__.'/../common/topnavbar.phtml';
                 </a>
             </div>
             <?php if ($counter & 1) { ?>
-            </div>
-            </div>
-        <?php } ?>
+                </div>
+                </div>
+            <?php } ?>
 
             <?php if ($counter % 2 == 0) {?>
                 </div>
@@ -113,29 +112,36 @@ require __DIR__.'/../common/topnavbar.phtml';
 
     <div class="d-flex justify-content-center mt-5">
         <ul class="pagination">
-            <?php if ($page !== "1") {?>
+            <?php if ($page != "1") { ?>
             <li class="page-item">
-                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                <a class="page-link text-info" href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$page - 1?>" tabindex="-1">Previous</a>
             </li>
             <?php }
-             if ($page === "1") {?>
+             if ($page == "1" ) {?>
                 <li class="page-item disabled">
                     <a class="page-link" href="#" tabindex="-1">Previous</a>
                 </li>
             <?php } ?>
             <?php for ($x = 1; $x <= $pages; $x++) {
                 if ($x == $page) {?>
-                <li class="page-item active">
-                    <a class="page-link" href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$x?>"><?=$x?></a>
+                <li class="page-item active bg-info text-white">
+                    <a class="page-link bg-info text-white border" href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$x?>"><?=$x?></a>
                 </li>
             <?php continue; } ?>
                 <li class="page-item">
-                    <a class="page-link" href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$x?>"><?=$x?></a>
+                    <a class="page-link text-info border" href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$x?>"><?=$x?></a>
                 </li>
-            <?php } ?>
+            <?php }
+            if ($page == $pages) : ?>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            <?php endif; ?>
+            <?php if ($page < $pages) : ?>
             <li class="page-item">
-                <a class="page-link" href="#">Next</a>
+                <a class="page-link text-info" href="<?=$baseUrl?>cars/listing?<?=$query?>&page=<?=$page + 1?>">Next</a>
             </li>
+            <?php endif; ?>
         </ul>
     </div>
 </div>

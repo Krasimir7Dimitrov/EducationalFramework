@@ -2,7 +2,7 @@
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
-
+<?php require __DIR__.'/../common/renderFlashMessages.phtml'; ?>
     <div class="container">
         <h2 class="text-center text-info" style="margin-top: 100px">Update data for the car</h2>
             <div class="row" style="margin: 100px 0 240px 0">
@@ -40,7 +40,17 @@ require __DIR__.'/../common/topnavbar.phtml';
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">First registration</span>
                             </div>
-                            <input class="form-control" type="date" id="first_registration" name="first_registration" value="<?= $data['first_registration']?>">
+                            <?php if (!empty($error['yearErr'])) : ?>
+                                <input class="form-control is-invalid" type="date" id="first_registration" name="first_registration" value="<?= $data['first_registration']?>">
+                            <?php endif; ?>
+                            <?php if (empty($error['yearErr'])) : ?>
+                                <input class="form-control" type="date" id="first_registration" name="first_registration" value="<?= $data['first_registration']?>">
+                            <?php endif; ?>
+                            <?php if (!empty($error['yearErr'])) : ?>
+                                <div class="invalid-feedback">
+                                    <?=$error['yearErr']?>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
@@ -51,16 +61,10 @@ require __DIR__.'/../common/topnavbar.phtml';
                                 <option <?= (isset($data['transmission']) && $data['transmission'] == 1) ? 'selected' : '' ; ?> value="1">automation</option>
                             </select>
                         </div>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <button type="submit" class="btn btn-info px-4">Update</button>
-                                </div>
-                                <div>
-                                    <a href="http://localhost:8080/cars/delete/<?= $data['id'] ?>" class="btn btn-info px-4 ml-3" type="submit">Delete</a>
-                                </div>
-                            </div>
+                        <div>
+                            <button type="submit" class="btn btn-info px-4">Update</button>
+                        </div>
                     </form>
-
                 </div>
             </div>
     </div>

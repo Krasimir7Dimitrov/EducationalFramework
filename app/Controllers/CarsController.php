@@ -11,7 +11,6 @@ use function PHPUnit\Framework\isEmpty;
 
 class CarsController extends AbstractController
 {
-
     /**
      * @var string
      */
@@ -35,31 +34,47 @@ class CarsController extends AbstractController
 
     public function index()
     {
-       $this->renderView('cars/index', []);
+        $this->renderView('cars/index', []);
     }
 
     public function create()
     {
         if (!$this->isLoggedIn())
         {
-            header("Location: {$this->config['baseUrl']}"); die();
+            $this->setFlashMessage('You need to be logged user');
+            $this->redirect('default', 'index');
         }
+
         $makes = $this->getMakes();
         $models = $this->getModels();
-        $this->renderView('cars/create', ['makes' => $makes, 'models' => $models]);
+        $errors = [];
 
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'POST') {
             $create = $this->postRequest();
             $dateTime = date("Y-m-d H:i:s");
             $create['created_at'] = $dateTime;
-            $id = $this->collectionInst->createCar($create);
+            if (empty($create['make_id'])) {
+                $errors['makeErr'] = 'Make is required';
+            }
+            if (empty($create['model_id'])) {
+                $errors['modelErr'] = 'Model is required';
+            }
+            if (empty($create['first_registration'])) {
+                $errors['firstRegErr'] = 'First registration is required';
+            }
+            if (empty($create['image'])) {
+                $errors['imageErr'] = 'Image is required';
+            }
 
-            $this->setFlashMessage("Record with Id {$id} was created successfully");
-            $this->redirect('cars', 'listing');
+            if (empty($errors)) {
+                $id = $this->collectionInst->createCar($create);
 
+                $this->setFlashMessage("Record with Id {$id} was created successfully");
+                $this->redirect('cars', 'listing');
+            }
         }
-
+        $this->renderView('cars/create', ['data' => $create, 'makes' => $makes, 'models' => $models, 'errors' => $errors]);
     }
 
     public function update()
@@ -67,10 +82,13 @@ class CarsController extends AbstractController
         if (!$this->isLoggedIn())
         {
             $this->setFlashMessage('You need to be logged user');
-
             $this->redirect('default', 'index');
         }
         $segment = $this->urlSegments[3];
+        if((int)$segment == 0) {
+            $this->setFlashMessage('Invalid data');
+            $this->redirect('cars', 'listing');
+        }
         $data = $this->collectionInst->getSingleCar($segment);
         $makes = $this->getMakes();
         $models = $this->getModels();
@@ -81,38 +99,61 @@ class CarsController extends AbstractController
             $where = [
                 'id' => $segment
             ];
-            $this->collectionInst->updateCar($update, $where);
+            $date = $update['first_registration'];
+            if ($date > date('Y-m-d') ) {
+                $error['yearErr'] = 'The date is not correct';
+                $update['image'] = $data['image'];
+                $this->renderView('cars/update', ['error' => $error, 'data' => $update, 'makes' => $makes, 'models' => $models]);
+            }
+            if ($date <= date('Y-m-d')) {
+                $this->collectionInst->updateCar($update, $where);
 
-            $this->setFlashMessage("Record with Id {$segment} was created successfully");
-            $this->redirect('cars', 'update', ['id' => $segment]);
+                $this->setFlashMessage("Record with Id {$segment} was updated successfully");
+                $this->redirect('cars', 'listing');
+            }
         }
         $this->renderView('cars/update', ['data' => $data, 'makes' => $makes, 'models' => $models]);
     }
 
     public function car()
     {
+        $segment = $this->urlSegments[3];
+        $data = $this->collectionInst->getSingleCar($segment);
+        $makes = $this->getMakes();
+        $models = $this->getModels();
+        $baseUrl = $this->getBaseUrl();
 
+        $this->renderView('cars/car', ['data' => $data, 'makes' => $makes, 'models' => $models, 'baseUrl' => $baseUrl]);
     }
+
 
     public function delete()
     {
-        $id = (int) $this->urlSegments[3] ?? 0;
-        $where = [
-            'id' => $id
-        ];
+        if (!$this->isLoggedIn()) {
+            $this->setFlashMessage('You need to be logged user');
 
-        $result = $this->collectionInst->deleteCar($where);
-
-        $message = "Record with Id {$id} was not deleted successfully.
-         There are some problem with the delete operation.";
-        if (!empty($result)) {
-            $message = "Record with Id {$id} was deleted successfully";
+            $this->redirect('default', 'index');
         }
 
-        $this->setFlashMessage($message);
-        $this->redirect('cars', 'listing');
-    }
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'POST') {
+            $id = (int)$this->urlSegments[3] ?? 0;
+            $where = [
+                'id' => $id
+            ];
 
+            $result = $this->collectionInst->deleteCar($where);
+
+            $message = "Record with Id {$id} was not deleted successfully.
+                        There are some problem with the delete operation.";
+            if (!empty($result)) {
+                $message = "Record with Id {$id} was deleted successfully";
+            }
+
+            $this->setFlashMessage($message);
+            $this->redirect('cars', 'listing');
+        }
+    }
     private function getUrlSegments(): void
     {
         $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -148,7 +189,6 @@ class CarsController extends AbstractController
         return ceil($number / $this->numberOfRowsInAPage);
     }
 
-
     private function convertOrderForDb($param)
     {
         switch ($param) {
@@ -171,7 +211,6 @@ class CarsController extends AbstractController
         return $option;
     }
 
-
     private function buildQueryString($req): string
     {
         unset($req['page']);
@@ -181,12 +220,10 @@ class CarsController extends AbstractController
         return '';
     }
 
-
     private function getMakes()
     {
         return $this->makeInst->getAllMakes();
     }
-
 
     public function listing()
     {

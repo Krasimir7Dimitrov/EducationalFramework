@@ -61,7 +61,7 @@ abstract class AbstractController
             $url .= '/' . $param;
         }
 
-        header("Location: {$url}"); die;
+        header("Location: {$url}", "Content-Type: text/plain"); die;
     }
 
 }
