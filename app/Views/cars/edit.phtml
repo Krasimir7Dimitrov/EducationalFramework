@@ -3,24 +3,44 @@ require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
 
-<h2>Edit car</h2>
-
-<form action="/cars/update" class="col" method="POST">
+<form action="/cars/update" method="POST" class="col-lg-6 offset-lg-3">
+    <h2>Edit car</h2>
     <input type="text" hidden id="id" name="id" value="<?= $car['id'] ?? '' ?>">
 
-    <label for="make">Make</label>
-    <input id="make" type="text" class="validate" name="make" value="<?= $car['make'] ?? ''?>">
+    <div class="input-field col s6">
+        <select class="browser-default" name="make">
+            <option value="" disabled>Select Make</option>
+            <?php  foreach ($allMakes as $make) { ?>
+                <option value="<?= $make['id'] ?>" <?= ($car['make_id'] == $make['id']) ? 'selected' : ''?>><?= $make['name'] ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="input-field col s12">
+        <select class="browser-default" name="model" id="model">
+            <option value="" disabled>Select Model</option>
+            <?php  foreach ($allModels as $model) { ?>
+                <option value="<?= $model['id'] ?>" <?= $car['model_id'] == $model['id'] ? 'selected' : '' ?>><?= $model['name'] ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="input-field col s12">
+        <select class="browser-default" name="first_registration">
+            <option value="" disabled>Select First Registration</option>
+            <?php  foreach ($firstRegistrationArray as $firstRegistration) { ?>
+                <option value="<?= $firstRegistration ?>" <?= ($car['first_registration'] == $firstRegistration) ? 'selected' : '' ?>><?= $firstRegistration ?></option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="input-field col s12">
+        <select class="browser-default" name="transmission">
+            <option value="" disabled>Select Transmission</option>
+            <?php  foreach ($transmissionArray as $transmission) { ?>
+                <option value="<?= $transmission ?>" <?= ($car['transmission'] == $transmission) ? 'selected' : '' ?>><?= $transmission ?></option>
+            <?php } ?>
+        </select>
+    </div>
 
-    <label for="model">Model</label>
-    <input id="model" type="text" class="validate" name="model" value="<?= $car['model'] ?? ''?>">
-
-    <label for="first_registration">First Registration</label>
-    <input id="first_registration" type="text" class="validate" name="first_registration" value="<?= $car['first_registration'] ?? ''?>">
-
-    <label for="transmission">Transmission</label>
-    <input id="transmission" type="text" class="validate" name="transmission" value="<?= $car['transmission'] ?? ''?>">
-
-    <input type="submit" value="Update" class="btn">
+    <input type="submit" value="Update" class="btn btn-primary">
 </form>
 
 <?php

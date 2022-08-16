@@ -3,41 +3,39 @@ require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
 
-<h2>Create car</h2>
 
 
 <?php
-    if (!empty($messageArray)) {
-        foreach ($messageArray as $message) {
-            ?>
-            <p><?= $message ?></p>
-            <?php
-        }
-}
-?>
+//    if (!empty($messageArray)) {
+//        foreach ($messageArray as $message) {
+//            ?>
+<!--            <p>--><?//= $message ?><!--</p>-->
+<!--            --><?php
+//        }
+//    }
+//?>
 
-
-<form action="/cars/create" class="col" method="POST">
-    <div class="input-field col s12">
-        <select class="browser-default" name="make">
+<form action="/cars/create" class="col-lg-6 offset-lg-3" method="POST">
+    <h2>Create car</h2>
+    <div class="input-field col s6">
+        <select class="browser-default" name="make" required>
             <option value="" disabled selected>Select Make</option>
-            <?php  foreach ($makeArray as $make) { ?>
-                    //here the received makeArray should be with different structure to include the actual id of the certain make,because of the integer type of make_id, now we are trying to insert string instead of integer, the same as the other fields
-                <option value="<?= $make ?>"><?= $make ?></option>
+            <?php  foreach ($allMakes as $make) { ?>
+                <option value="<?= $make['id'] ?>"><?= $make['name'] ?></option>
             <?php } ?>
         </select>
     </div>
 
     <div class="input-field col s12">
-        <select class="browser-default" name="model">
+        <select class="browser-default" name="model" required>
             <option value="" disabled selected>Select Model</option>
-            <?php  foreach ($modelArray as $model) { ?>
-                <option value="<?= $model ?>"><?= $model ?></option>
+            <?php  foreach ($allModels as $model) { ?>
+                <option value="<?= $model['id'] ?>"><?= $model['name'] ?></option>
             <?php } ?>
         </select>
     </div>
     <div class="input-field col s12">
-        <select class="browser-default" name="first_registration">
+        <select class="browser-default" name="first_registration" required>
             <option value="" disabled selected>Select First Registration</option>
             <?php  foreach ($firstRegistrationArray as $firstRegistration) { ?>
                 <option value="<?= $firstRegistration ?>"><?= $firstRegistration ?></option>
@@ -45,7 +43,7 @@ require __DIR__.'/../common/topnavbar.phtml';
         </select>
     </div>
     <div class="input-field col s12">
-        <select class="browser-default" name="transmission">
+        <select class="browser-default" name="transmission" required>
             <option value="" disabled selected>Select Transmission</option>
             <?php  foreach ($transmissionArray as $transmission) { ?>
                 <option value="<?= $transmission ?>"><?= $transmission ?></option>
@@ -53,7 +51,7 @@ require __DIR__.'/../common/topnavbar.phtml';
         </select>
     </div>
 
-    <input type="submit" value="Create">
+    <input type="submit" value="Create" class="btn btn-primary">
 </form>
 
 <?php

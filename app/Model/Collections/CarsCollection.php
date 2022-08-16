@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Collections;
 
 class CarsCollection extends \App\System\BaseCollection
@@ -7,7 +8,7 @@ class CarsCollection extends \App\System\BaseCollection
 
     public function getAllCars()
     {
-        $sql = "SELECT md.name as modelname, mk.name as makename, c.first_registration, c.transmission
+        $sql = "SELECT mk.name as makename, md.name as modelname, c.first_registration, c.transmission, c.make_id, c.model_id
                   FROM cars AS c
                   INNER JOIN make AS mk
                       ON mk.id=c.make_id
@@ -19,7 +20,13 @@ class CarsCollection extends \App\System\BaseCollection
 
     public function getCarById($id)
     {
-        $sth = "SELECT * FROM cars c  WHERE c.id = :id";
+        $sth = "SELECT c.id, md.name as modelname, mk.name as makename, c.first_registration, c.transmission, c.make_id, c.model_id
+                  FROM cars AS c
+                  INNER JOIN make AS mk
+                      ON mk.id=c.make_id
+                  INNER JOIN models AS md
+                      ON md.id=c.model_id 
+                  WHERE c.id = :id";
 
         return $this->db->fetchOne($sth, ['id' => $id]);
     }
@@ -33,7 +40,14 @@ class CarsCollection extends \App\System\BaseCollection
 
     public function getCarsPagination($limit, $offset)
     {
-        $sth = "SELECT * FROM cars c  LIMIT {$limit} OFFSET {$offset}";
+        $sth = "SELECT c.id, md.name as modelname, mk.name as makename, c.first_registration, c.transmission, c.created_at, c.updated_at
+                  FROM cars AS c
+                  INNER JOIN make AS mk
+                      ON mk.id=c.make_id
+                  INNER JOIN models AS md
+                      ON md.id=c.model_id  
+                  LIMIT {$limit} 
+                  OFFSET {$offset}";
 
         return $this->db->fetchAll($sth);
     }
@@ -50,11 +64,16 @@ class CarsCollection extends \App\System\BaseCollection
         return $this->db->insert($this->table, $data);
     }
 
-    public function getCarBySearchCriteria($data, $where = [])
+    public function getCarBySearchCriteria($where = [])
     {
-        $sql = "SELECT * FROM cars AS c";
-        $sql .= " WHERE 1" . implode(' AND ', $where);
+        $sql = "SELECT c.id, md.name as modelname, mk.name as makename, c.first_registration, c.transmission
+                FROM cars AS c
+                INNER JOIN make AS mk
+                  ON mk.id=c.make_id
+                INNER JOIN models AS md
+                  ON md.id=c.model_id";
+        $sql .= " WHERE 1 " . implode(' AND ', $where);
 
-        return $this->db->fetchAll($sql, $data);
+        return $this->db->fetchAll($sql);
     }
 }

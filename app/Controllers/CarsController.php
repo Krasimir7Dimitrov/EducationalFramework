@@ -2,6 +2,8 @@
 namespace App\Controllers;
 
 use App\Model\Collections\CarsCollection;
+use App\Model\Collections\MakesCollection;
+use App\Model\Collections\ModelsCollection;
 use App\System\AbstractController;
 
 class CarsController extends AbstractController
@@ -19,6 +21,8 @@ class CarsController extends AbstractController
             header("Location: {$this->config['baseUrl']}"); die();
         }
 
+        $messageArray           = [];
+
         $data = [];
         $data['make_id']            = $_POST['make'] ?? 0;
         $data['model_id']           = $_POST['model'] ?? 0;
@@ -29,17 +33,18 @@ class CarsController extends AbstractController
         $cars = new CarsCollection();
         $carResults = $cars->getAllCars();
 
-        $makeArray = [];
-        $modelArray = [];
-        $firstRegistrationArray = [];
-        $transmissionArray = [];
-        $messageArray = [];
+        $makes = new MakesCollection();
+        $allMakes = $makes->getAllMakes();
 
-        foreach ($carResults as $results) {
-            $makeArray[]              = strtolower(ucfirst($results['makename']));
-            $modelArray[]             = strtolower(ucfirst($results['modelname']));
-            $firstRegistrationArray[] = strtolower(ucfirst($results['first_registration']));
-            $transmissionArray[]      = strtolower(ucfirst($results['transmission']));
+        $models = new ModelsCollection();
+        $allModels = $models->getAllModels();
+
+        $firstRegistrationArray = [];
+        $transmissionArray      = [];
+
+        foreach ($carResults as $result) {
+            $firstRegistrationArray[]  = strtolower(ucfirst($result['first_registration']));
+            $transmissionArray[]       = strtolower(ucfirst($result['transmission']));
         }
 
         $insert = $cars->insertCar($data);
@@ -51,12 +56,12 @@ class CarsController extends AbstractController
         }
 
         $this->renderView('cars/create', [
-            'carResults' => $carResults,
-            'makeArray'  => array_unique($makeArray),
-            'modelArray' => array_unique($modelArray),
+            'carResults'             => $carResults,
+            'allMakes'               => $allMakes,
+            'allModels'              => $allModels,
             'firstRegistrationArray' => array_unique($firstRegistrationArray),
             'transmissionArray'      => array_unique($transmissionArray),
-            'messageArray' => $messageArray
+            'messageArray'           => $messageArray
         ]);
     }
 
@@ -69,16 +74,40 @@ class CarsController extends AbstractController
             $car = (new CarsCollection())->getCarById($carId);
         } else {
             $car['id']                 = $_POST['id'] ?? 'Nqma id';
-            $car['make']               = $_POST['make'] ?? 'Nqma marka';
-            $car['model']              = $_POST['model'] ?? 'Nqma model';
+            $car['make_id']            = $_POST['make'] ?? 'Nqma marka';
+            $car['model_id']           = $_POST['model'] ?? 'Nqma model';
             $car['first_registration'] = $_POST['first_registration'] ?? 'Nqma registration';
             $car['transmission']       = $_POST['transmission'] ?? 'Nqma transmission';
             $car['updated_at']         = date('Y-m-d H:s:i');
+
+            $carsCollection = new CarsCollection();
+            $carsCollection->update(['id' => $car['id']], $car);
         }
 
-        $carsCollection = (new CarsCollection())->update(['id' => $car['id']], $car);
+        $cars = new CarsCollection();
+        $carResults = $cars->getAllCars();
 
-        $this->renderView('cars/edit', ['car' => $car]);
+        $makes = new MakesCollection();
+        $allMakes = $makes->getAllMakes();
+
+        $models = new ModelsCollection();
+        $allModels = $models->getAllModels();
+
+        $firstRegistrationArray = [];
+        $transmissionArray      = [];
+
+        foreach ($carResults as $result) {
+            $firstRegistrationArray[]  = strtolower(ucfirst($result['first_registration']));
+            $transmissionArray[]       = strtolower(ucfirst($result['transmission']));
+        }
+
+        $this->renderView('cars/edit', [
+            'car' => $car,
+            'allMakes' => $allMakes,
+            'allModels' => $allModels,
+            'firstRegistrationArray' => array_unique($firstRegistrationArray),
+            'transmissionArray' => array_unique($transmissionArray)
+        ]);
     }
 
     public function delete()

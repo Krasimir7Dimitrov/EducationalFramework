@@ -2,7 +2,6 @@
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
-    <h1>Search for a car</h1>
     <!doctype html>
     <html lang="en">
     <head>
@@ -13,25 +12,26 @@ require __DIR__.'/../common/topnavbar.phtml';
         <title>Home</title>
     </head>
     <body>
-        <form method="get" action="/default/index">
+        <form method="post" action="/default/index"  class="col-lg-6 offset-lg-3">
+            <h1>Search for a car</h1>
             <div class="input-field col s12">
-                <select class="browser-default" name="make">
+                <select class="browser-default" name="make" required>
                     <option value="" disabled selected>Select Make</option>
-                    <?php  foreach ($makeArray as $make) { ?>
-                        <option value="<?= $make ?>"><?= $make ?></option>
+                    <?php  foreach ($allMakes as $make) { ?>
+                        <option value="<?= $make['id'] ?>"><?= $make['name'] ?></option>
                     <?php } ?>
                 </select>
             </div>
             <div class="input-field col s12">
-                <select class="browser-default" name="model">
+                <select class="browser-default" name="model" required>
                     <option value="" disabled selected>Select Model</option>
-                    <?php  foreach ($modelArray as $model) { ?>
-                        <option value="<?= $model ?>"><?= $model ?></option>
+                    <?php  foreach ($allModels as $model) { ?>
+                        <option value="<?= $model['id'] ?>"><?= $model['name'] ?></option>
                     <?php } ?>
                 </select>
             </div>
             <div class="input-field col s12">
-                <select class="browser-default" name="first_registration">
+                <select class="browser-default" name="first_registration" required>
                     <option value="" disabled selected>Select First Registration</option>
                     <?php  foreach ($firstRegistrationArray as $firstRegistration) { ?>
                         <option value="<?= $firstRegistration ?>"><?= $firstRegistration ?></option>
@@ -39,7 +39,7 @@ require __DIR__.'/../common/topnavbar.phtml';
                 </select>
             </div>
             <div class="input-field col s12">
-                <select class="browser-default" name="transmission">
+                <select class="browser-default" name="transmission" required>
                     <option value="" disabled selected>Select Transmission</option>
                     <?php  foreach ($transmissionArray as $transmission) { ?>
                         <option value="<?= $transmission ?>"><?= $transmission ?></option>
@@ -54,44 +54,27 @@ require __DIR__.'/../common/topnavbar.phtml';
 
         <div class="col s12 m7">
             <h2 class="header">Results</h2>
-            <div class="card horizontal">
-                <div class="card-stacked">
-                    <div class="card-content">
-                        <p>Make - Opel</p>
+                <?php foreach ($searchResult as $result) { ?>
+                    <div class="card horizontal">
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <p>Make - <?= $result['makename'] ?></p>
+                            </div>
+                            <div class="card-content">
+                                <p>Model - <?= $result['modelname'] ?></p>
+                            </div>
+                            <div class="card-content">
+                                <p>First Registration - <?= $result['first_registration'] ?></p>
+                            </div>
+                            <div class="card-content">
+                                <p>Transmission - <?= $result['transmission'] ?></p>
+                            </div>
+                            <div class="card-action">
+                                <a href="/cars/update?id=<?= $result['id']?>">This is a link to the car</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-content">
-                        <p>Model - Corsa</p>
-                    </div>
-                    <div class="card-content">
-                        <p>First Registration - 2022</p>
-                    </div>
-                    <div class="card-content">
-                        <p>Transmission - Manual</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="#">This is a link to the car</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card horizontal">
-                <div class="card-stacked">
-                    <div class="card-content">
-                        <p>Make - Opel</p>
-                    </div>
-                    <div class="card-content">
-                        <p>Model - Corsa</p>
-                    </div>
-                    <div class="card-content">
-                        <p>First Registration - 2022</p>
-                    </div>
-                    <div class="card-content">
-                        <p>Transmission - Manual</p>
-                    </div>
-                    <div class="card-action">
-                        <a href="#">This is a link to the car</a>
-                    </div>
-                </div>
-            </div>
+                <?php } ?>
         </div>
     </body>
     </html>

@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Model\Collections\CarsCollection;
+use App\Model\Collections\MakesCollection;
+use App\Model\Collections\ModelsCollection;
 use App\System\AbstractController;
 
 class DefaultController extends AbstractController
@@ -12,35 +14,38 @@ class DefaultController extends AbstractController
         $cars = new CarsCollection();
         $carResults = $cars->getAllCars();
 
-        $makeArray = [];
-        $modelArray = [];
-        $firstRegistrationArray = [];
-        $transmissionArray = [];
-        $otherFieldsArray = [];
+        $makes = new MakesCollection();
+        $allMakes = $makes->getAllMakes();
 
-        foreach ($carResults as $results) {
-            $makeArray[]              = strtolower(ucfirst($results['makename']));
-            $modelArray[]             = strtolower(ucfirst($results['modelname']));
-            $firstRegistrationArray[] = strtolower(ucfirst($results['first_registration']));
-            $transmissionArray[]      = strtolower(ucfirst($results['transmission']));
+        $models = new ModelsCollection();
+        $allModels = $models->getAllModels();
+
+        $firstRegistrationArray = [];
+        $transmissionArray      = [];
+
+        foreach ($carResults as $result) {
+            $firstRegistrationArray[]  = strtolower(ucfirst($result['first_registration']));
+            $transmissionArray[]       = strtolower(ucfirst($result['transmission']));
         }
 
-        $results                       = [];
-        $results[]  = 'make = ' . $_POST['make'];
-        $results[]  = 'model = ' . $_POST['model'];
-        $results[]  = 'first_registration = ' . $_POST['first_registration'];
-        $results[]  = 'transmission = ' . $_POST['transmission'];
+        $searchResult = [];
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'POST'){
+            $where   = [];
+            $where[] = 'AND c.`make_id` = ' . $_POST['make'];
+            $where[] = 'c.`model_id` = ' . $_POST['model'];
+            $where[] = '`first_registration` = ' . $_POST['first_registration'];
+            $where[] = '`transmission` = ' . '\'' . $_POST['transmission'] . '\'';
 
-
-//        $searchResult = $cars->getCarBySearchCriteria($data, $results);
+            $searchResult = $cars->getCarBySearchCriteria($where);
+        }
 
         $this->renderView('default/index', [
-            'carResults' => $carResults,
-            'makeArray'  => array_unique($makeArray),
-            'modelArray' => array_unique($modelArray),
+            'searchResult'           => $searchResult,
+            'allMakes'               => $allMakes,
+            'allModels'              => $allModels,
             'firstRegistrationArray' => array_unique($firstRegistrationArray),
             'transmissionArray'      => array_unique($transmissionArray),
-            'results'                => $results
         ]);
     }
 }
