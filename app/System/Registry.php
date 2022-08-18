@@ -16,7 +16,6 @@ final class Registry
         if (empty(self::$storage[$key])) {
             return null;
         }
-
         return self::$storage[$key];
     }
 

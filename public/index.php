@@ -10,5 +10,3 @@ $debugData = $application->getDebugData();
 $debugData = new \App\System\Debugbar\Debugbar($debugData);
 $debugData->render(\App\System\Debugbar\Enums\DecorationTypes::HTML());
 
-
-//var_dump($_SESSION);

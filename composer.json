@@ -14,7 +14,7 @@
     ],
     "require": {
         "ext-json": "*",
-        "myclabs/php-enum": "^1.8"
+        "myclabs/php-enum": "^1.8",
         "ext-readline": "*",
         "phpmailer/phpmailer": "^6.6"
     },
