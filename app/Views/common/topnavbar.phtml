@@ -10,9 +10,15 @@
                 <li><a href="/auth/login">Login</a></li>
             <?php endif;  ?>
             <?php if ($this->isLoggedIn()):  ?>
+                <li><a href="/users/create">Create User</a></li>
+            <?php endif;  ?>
+            <?php if ($this->isLoggedIn()):  ?>
+                <li><a href="/users/getAllUsers">Users Listing</a></li>
+            <?php endif;  ?>
+            <?php if ($this->isLoggedIn()):  ?>
                 <li>
                     <form action="/auth/logout" method="post">
-                        <input type="submit" value="Logout"/>
+                        <input type="submit" value="Logout" class="btn btn-primary"/>
                     </form>
                 </li>
             <?php endif;  ?>

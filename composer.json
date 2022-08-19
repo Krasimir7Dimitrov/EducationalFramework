@@ -17,7 +17,10 @@
         "ext-readline": "*",
         "phpmailer/phpmailer": "^6.6",
         "panchosabev/debugbar": "^1.0",
-      "ext-pdo": "*"
+      "ext-pdo": "*",
+      "ext-curl": "*",
+        "guzzlehttp/guzzle": "^7.0",
+        "ext-json": "*"
     },
     "minimum-stability": "stable",
     "autoload": {
