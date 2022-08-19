@@ -25,8 +25,6 @@ class UsersController extends AbstractController
 
         $users = json_decode($response->getBody());
 
-        var_dump($response->getStatusCode());
-
         $this->renderView('/users/list', ['users' => $users->data]);
     }
 
@@ -42,8 +40,6 @@ class UsersController extends AbstractController
         }
 
         $users = json_decode($response->getBody());
-
-        var_dump($response->getStatusCode());
 
         $this->renderView('/users/single', ['users' => $users->data]);
     }
@@ -65,9 +61,6 @@ class UsersController extends AbstractController
         }
 
         $users = json_decode($response->getBody());
-
-        var_dump($users);
-        var_dump($response->getStatusCode());
 
         $this->renderView('/users/create', ['users' => $users->data]);
     }
@@ -93,9 +86,6 @@ class UsersController extends AbstractController
 
         $users = json_decode($response->getBody());
 
-        var_dump($response->getStatusCode());
-
-
         $this->renderView('/users/single', ['users' => $users]);
     }
 
@@ -112,11 +102,6 @@ class UsersController extends AbstractController
         }
 
         $users = json_decode($usersList->getBody());
-        $deleteResponse = json_decode($response->getBody());
-
-        var_dump($deleteResponse);
-        var_dump($response->getStatusCode());
-
 
         $this->renderView('/users/list', ['users' => $users->data]);
     }
