@@ -16,7 +16,9 @@
         "ext-json": "*",
         "myclabs/php-enum": "^1.8",
         "ext-readline": "*",
-        "phpmailer/phpmailer": "^6.6"
+        "phpmailer/phpmailer": "^6.6",
+        "guzzlehttp/guzzle": "^7.0",
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {

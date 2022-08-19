@@ -1,0 +1,34 @@
+<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+?>
+<?php require __DIR__.'/../common/renderFlashMessages.phtml'; ?>
+
+
+<div class="container">
+    <h1>Persons listing</h1>
+    <?php foreach ($persons['data'] as $key => $value) : ?>
+    <div class="d-flex mb-4 justify-content-between align-items-center border rounded">
+        <div class="d-flex align-items-center">
+            <div>
+                <img src="<?= $value['avatar'] ?>" alt="image">
+            </div>
+            <div class="ml-3">
+                <p><?= $value['email'] ?></p>
+                <p><?= $value['first_name'] . ' ' . $value['last_name'] ?></p>
+            </div>
+        </div>
+        <?php if ($this->isLoggedIn()) : ?>
+        <div class="mr-3">
+            <form action="../../Controllers/PersonController.php" method="get">
+                <a href="<?= $url ?>/person/getperson/<?= $value['id'] ?>" class="btn btn-info mr-3">View</a>
+            </form>
+        </div>
+        <?php endif; ?>
+    </div>
+    <?php endforeach; ?>
+</div>
+
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>

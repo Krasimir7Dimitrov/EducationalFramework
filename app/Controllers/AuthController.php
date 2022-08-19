@@ -21,7 +21,6 @@ class AuthController extends AbstractController
         }
 
         $method = $_SERVER['REQUEST_METHOD'];
-        //var_dump($method);
         if ($method == 'POST'){
             $username = $_POST['username'] ?? '' ;
             $password = $_POST['password'] ?? '' ;
@@ -35,7 +34,7 @@ class AuthController extends AbstractController
             }
 
             $errors = [
-                'authError' => 'incorect login data',
+                'authError' => 'incorrect login data',
             ];
 
         }
