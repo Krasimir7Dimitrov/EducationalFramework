@@ -15,7 +15,7 @@ class UsersCollection extends \App\System\BaseCollection
 
     public function create($data)
     {
-        return $this->db->insert($this->table, [$data]);
+        return $this->db->insert($this->table, $data);
     }
 
     public function update($data, $where)

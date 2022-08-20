@@ -165,6 +165,9 @@ class AuthController extends AbstractController
 
     public function reset()
     {
+        if ($this->isLoggedIn()) {
+            $this->redirect();
+        }
         $regData = $_POST;
         $errors = [];
         $data = [];
@@ -202,6 +205,9 @@ class AuthController extends AbstractController
 
     public function change()
     {
+        if ($this->isLoggedIn()) {
+            $this->redirect();
+        }
         $query = $_GET;
         $token = $this->usersCollection->getDataFromPassReset($query);
         if (empty($token)) {
