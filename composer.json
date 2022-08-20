@@ -4,10 +4,6 @@
     "type": "project",
     "authors": [
         {
-            "name": "Sabev",
-            "email": "psabev@parachut.com"
-        },
-        {
             "name": "Krasimir Dimitrov",
             "email": "kdimitrov@parachut.com"
         }
@@ -18,7 +14,8 @@
         "ext-readline": "*",
         "phpmailer/phpmailer": "^6.6",
         "guzzlehttp/guzzle": "^7.0",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-ctype": "*"
     },
     "autoload": {
         "psr-4": {

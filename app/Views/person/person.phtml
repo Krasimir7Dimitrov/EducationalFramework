@@ -1,25 +1,25 @@
 <?php
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
-var_dump($person['data']);
 ?>
 
-<div class="container">
-    <div>
+<div class="container" style="padding: 0 250px">
+    <div class="border rounded d-flex justify-content-center" style="margin: 170px 0">
         <div>
-            <img src="<?= $person['data']['avatar'] ?>" alt="">
-        </div>
-        <div>
-            <p><?= $person['data']['email'] ?></p>
-            <p><?= $person['data']['first_name'] . ' ' . $person['data']['last_name'] ?></p>
+            <div class="mt-5 mb-3 text-center">
+                <img src="<?= $person['data']['avatar'] ?>" alt="">
+            </div>
+            <div class="text-center" style="margin-bottom: 50px">
+                <p><?= $person['data']['email'] ?></p>
+                <p><?= $person['data']['first_name'] . ' ' . $person['data']['last_name'] ?></p>
+            </div>
+            <div class="text-center" style="margin-bottom: 50px">
+                <a href="<?= $url ?>/person/update/<?= $person['data']['id'] ?>" class="btn btn-info mr-4">Update</a>
+                <button type="button" class="btn btn-info ml-4" data-toggle="modal" data-target="#staticBackdrop">Delete</button>
+            </div>
         </div>
     </div>
-    <div class="mr-3">
-        <form action="../../Controllers/PersonController.php" method="get">
-            <a href="<?= $url ?>/person/getperson/<?= $value['id'] ?>" class="btn btn-info mr-3">View</a>
-        </form>
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#staticBackdrop">Delete</button>
-    </div>
+
     <div style="margin-top: 300px" class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -34,7 +34,7 @@ var_dump($person['data']);
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <form action="<?=$baseUrl?>person/delete/<?= $data['id'] ?>" name="delete" method="POST" >
+                    <form action="<?=$url?>/person/delete/<?= $person['data']['id'] ?>" name="delete" method="POST" >
                         <button type="submit" class="btn btn-info">Delete</button>
                     </form>
                 </div>
@@ -42,7 +42,6 @@ var_dump($person['data']);
         </div>
     </div>
 </div>
-
 <?php
 require __DIR__.'/../common/footer.phtml';
 ?>

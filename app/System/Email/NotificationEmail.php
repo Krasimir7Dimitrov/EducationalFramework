@@ -7,7 +7,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class NotificationEmail implements NotificationInterface
 {
-
     /**
      * @var Email
      */
@@ -58,7 +57,6 @@ class NotificationEmail implements NotificationInterface
             $mail->Body    = $this->email->body;
             //$mail->AltBody = $this->email->body;
 
-            var_dump('hhhhhhhhhhhhhhhhhhhhhhhhh');
             return $mail->send();
         } catch (\Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

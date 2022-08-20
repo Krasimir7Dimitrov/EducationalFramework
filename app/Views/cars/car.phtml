@@ -27,7 +27,7 @@ require __DIR__.'/../common/topnavbar.phtml';
             <?php if ($this->isLoggedIn()) : ?>
             <div class="d-flex justify-content-between mt-5">
                 <div>
-                    <a href="http://localhost:8080/cars/update/<?= $data['id'] ?>" class="btn btn-info px-4" type="submit">Update</a>
+                    <a href="<?=$baseUrl?>cars/update/<?= $data['id'] ?>" class="btn btn-info px-4" type="submit">Update</a>
                 </div>
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#staticBackdrop">
                     Delete

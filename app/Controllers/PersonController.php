@@ -11,12 +11,14 @@ class PersonController extends AbstractController
 {
     private $client;
     private $url;
+    private $segments;
 
     public function __construct()
     {
         parent::__construct();
         $this->client = new Client();
         $this->url = Registry::get('config')['baseUrl'];
+        $this->segments = new CarsController();
     }
 
     /**
@@ -32,14 +34,48 @@ class PersonController extends AbstractController
 
     public function getPerson()
     {
-        $segments = new CarsController();
-        $id = $segments->urlSegments[3];
+        $id = $this->segments->urlSegments[3];
         $res = $this->client->request('GET', "https://reqres.in/api/users/{$id}");
         $person = json_decode($res->getBody(), true);
 
         $this->renderView("person/person", ['person' => $person, 'url' => $this->url]);
     }
 
+    public function update()
+    {
+        if (!$this->isLoggedIn()) {
+            $this->setFlashMessage('You need to be logged user');
+
+            $this->redirect('default', 'index');
+        }
+
+        $id = $this->segments->urlSegments[3];
+        $res = $this->client->request('GET', "https://reqres.in/api/users/{$id}");
+        $person = json_decode($res->getBody(), true);
+        $this->renderView("person/update", ['person' => $person, 'url' => $this->url]);
+    }
+
+    public function delete()
+    {
+        if (!$this->isLoggedIn()) {
+            $this->setFlashMessage('You need to be logged user');
+
+            $this->redirect('default', 'index');
+        }
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'POST') {
+            $id = $this->segments->urlSegments[3];
+            $res = $this->client->request('DELETE', "https://reqres.in/api/users/{$id}");
+
+            $message = "Record with Id {$id} was not deleted successfully.
+                        There are some problem with the delete operation.";
+            if ($res->getStatusCode() == 204) {
+                $message = "Record with Id {$id} was deleted successfully";
+            }
+            $this->setFlashMessage($message);
+            $this->redirect('person', 'listing');
+        }
+    }
     /**
      * @return void
      */

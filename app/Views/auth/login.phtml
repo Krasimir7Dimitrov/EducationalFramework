@@ -2,9 +2,9 @@
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
-
+<?php require __DIR__.'/../common/renderFlashMessages.phtml'; ?>
 <form action="" method="post">
-    <div class="container">
+    <div class="container" style="padding: 0 300px">
         <?php   if (!empty($errors)) {
             foreach ($errors as $error) {
                 ?>
@@ -12,25 +12,41 @@ require __DIR__.'/../common/topnavbar.phtml';
                 <?php
             }
         } ?>
-        <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
-
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" required>
-
-        <button type="submit">Login</button>
-        <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-        </label>
-    </div>
-
-    <div class="container" style="background-color:#f1f1f1">
-        <button type="button" class="cancelbtn">Cancel</button>
-        <span class="psw">Forgot <a href="#">password?</a></span>
+        <div class="shadow px-5 rounded bg-transparent" style="margin: 150px 0 225px 0">
+            <h2 class="py-4">Sign In</h2>
+            <div class="input-group form-group mb-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-warning"><i class="fas fa-user"></i></span>
+                </div>
+                <input class="form-control" type="text" placeholder="Enter Username" name="username" required>
+                <div class="invalid-feedback">
+                    Please choose a username.
+                </div>
+            </div>
+            <div class="input-group form-group mb-5">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-warning"><i class="fas fa-key"></i></span>
+                </div>
+                <input class="form-control" type="password" placeholder="Enter Password" name="password" required>
+            </div>
+            <div class="d-flex justify-content-between mb-4">
+                <div>
+                    <button class="btn btn-info px-4" type="submit">Login</button>
+                </div>
+                <div class="custom-control custom-checkbox mr-sm-2">
+                    <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
+                    <label class="custom-control-label" for="customControlAutosizing">Remember me</label>
+                </div>
+            </div>
+            <div class="text-center">
+                <span>Don't have an account? <a class="text-info text-decoration-none" href="<?= $url ?>auth/registration">Sign Up</a></span>
+            </div>
+            <div class="text-center pb-4">
+                <span class="">Forgot <a class="text-info text-decoration-none" href="#">password?</a></span>
+            </div>
+        </div>
     </div>
 </form>
-
-
 <?php
 require __DIR__.'/../common/footer.phtml';
 ?>

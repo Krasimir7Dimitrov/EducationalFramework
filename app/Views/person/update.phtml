@@ -1,0 +1,26 @@
+<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+?>
+
+<div class="container" style="padding: 0 250px">
+    <div class="border rounded d-flex justify-content-center" style="margin: 170px 0">
+        <div>
+            <div class="mt-5 mb-3 text-center">
+                <img src="<?= $person['data']['avatar'] ?>" alt="">
+            </div>
+            <div class="text-center" style="margin-bottom: 50px">
+                <p><?= $person['data']['email'] ?></p>
+                <p><?= $person['data']['first_name'] . ' ' . $person['data']['last_name'] ?></p>
+            </div>
+            <div class="text-center" style="margin-bottom: 50px">
+                <a href="<?= $url ?>/person/update" class="btn btn-info mr-4">Update</a>
+                <button type="button" class="btn btn-info ml-4" data-toggle="modal" data-target="#staticBackdrop">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>
