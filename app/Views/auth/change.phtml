@@ -1,0 +1,57 @@
+<?php
+require __DIR__.'/../common/header.phtml';
+require __DIR__.'/../common/topnavbar.phtml';
+?>
+    <form action="" method="post">
+        <div class="container" style="padding: 0 300px">
+            <div class="shadow px-5 rounded bg-transparent" style="margin: 180px 0 280px 0">
+
+                <h2 class="py-4">New Password</h2>
+
+                <div class="input-group form-group mb-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-warning"><i class="fas fa-lock"></i></span>
+                    </div>
+                    <?php if (!empty($errors['password'])) : ?>
+                        <input class="form-control is-invalid" type="password" placeholder="Enter Password" name="password" required>
+                    <?php endif; ?>
+                    <?php if (empty($errors['password'])) : ?>
+                        <input class="form-control" type="password" placeholder="Enter Password" name="password" required>
+                    <?php endif;
+                    if (!empty($errors['password'])) : ?>
+                        <div class="invalid-feedback">
+                            <?=$errors['password']?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="input-group form-group mb-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-warning"><i class="fas fa-key"></i></span>
+                    </div>
+                    <?php if (!empty($errors['repeatPass'])) : ?>
+                        <input class="form-control is-invalid" type="password" placeholder="Repeat your password" name="repeat_password" required>
+                    <?php endif; ?>
+                    <?php if (empty($errors['repeatPass'])) : ?>
+                        <input class="form-control" type="password" placeholder="Repeat your password" name="repeat_password" required>
+                    <?php endif;
+                    if (!empty($errors['repeatPass'])) : ?>
+                        <div class="invalid-feedback">
+                            <?=$errors['repeatPass']?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="d-flex justify-content-between pb-4">
+                    <div>
+                        <button class="btn btn-info px-4" type="submit">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+<?php
+require __DIR__.'/../common/footer.phtml';
+?>
