@@ -48,8 +48,19 @@ class PersonController extends AbstractController
 
             $this->redirect('default', 'index');
         }
-
         $id = $this->segments->urlSegments[3];
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'POST') {
+            $data = $_POST;
+            $res = $this->client->request('GET', "https://reqres.in/api/users/{$id}", $data);
+            if ($res->getStatusCode() != 200) {
+                $this->setFlashMessage('Something went wrong.');
+                $this->redirect('person', 'listing');
+            }
+            $this->setFlashMessage("Person with id {$id} was updated successfully");
+            $this->redirect('person', 'listing');
+        }
+
         $res = $this->client->request('GET', "https://reqres.in/api/users/{$id}");
         $person = json_decode($res->getBody(), true);
         $this->renderView("person/update", ['person' => $person, 'url' => $this->url]);

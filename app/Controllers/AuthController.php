@@ -88,7 +88,10 @@ class AuthController extends AbstractController
             }
             $data['username'] = $regData['username'];
 
-            if (!filter_var($regData['email'], FILTER_VALIDATE_EMAIL)) {
+            if (empty($regData['email'])) {
+                $errors['email'] = 'Email field is required';
+            }
+            elseif (!filter_var($regData['email'], FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'It is not valid email';
             }
             elseif (!empty($this->usersCollection->checkEmailExist($regData['email']))) {
@@ -96,23 +99,9 @@ class AuthController extends AbstractController
             }
             $data['email'] = $regData['email'];
 
-            if (empty($regData['password'])) {
-                $errors['password'] = 'Password field is required';
-            }
-            elseif (strlen($regData['password']) < 8) {
-                $errors['password'] = 'Your Password Must Contain At Least 8 Characters!';
-            }
-            elseif (strlen($regData['password']) > 30) {
-                $errors['password'] = 'Your Password Must Contain not more than 30 Characters!';
-            }
-            elseif(!preg_match("#[0-9]+#",$regData['password'])) {
-                $errors['password'] = "Your Password Must Contain At Least 1 Number!";
-            }
-            elseif(!preg_match("#[A-Z]+#",$regData['password'])) {
-                $errors['password'] = "Your Password Must Contain At Least 1 Capital Letter!";
-            }
-            elseif(!preg_match("#[a-z]+#",$regData['password'])) {
-                $errors['password'] = "Your Password Must Contain At Least 1 Lowercase Letter!";
+            $passErr = $this->validatePassword($regData['password']);
+            if (!empty($passErr)) {
+                $errors['password'] = $passErr['password'];
             }
 
             if ($regData['password'] !== $regData['repeat_password']) {
@@ -225,25 +214,10 @@ class AuthController extends AbstractController
         $regData = $_POST;
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'POST') {
-            if (empty($regData['password'])) {
-                $errors['password'] = 'Password field is required';
+            $passErr = $this->validatePassword($regData['password']);
+            if (!empty($passErr)) {
+                $errors['password'] = $passErr['password'];
             }
-            elseif (strlen($regData['password']) < 8) {
-                $errors['password'] = 'Your Password Must Contain At Least 8 Characters!';
-            }
-            elseif (strlen($regData['password']) > 30) {
-                $errors['password'] = 'Your Password Must Contain not more than 30 Characters!';
-            }
-            elseif(!preg_match("#[0-9]+#",$regData['password'])) {
-                $errors['password'] = "Your Password Must Contain At Least 1 Number!";
-            }
-            elseif(!preg_match("#[A-Z]+#",$regData['password'])) {
-                $errors['password'] = "Your Password Must Contain At Least 1 Capital Letter!";
-            }
-            elseif(!preg_match("#[a-z]+#",$regData['password'])) {
-                $errors['password'] = "Your Password Must Contain At Least 1 Lowercase Letter!";
-            }
-
             if ($regData['password'] !== $regData['repeat_password']) {
                 $errors['repeatPass'] = "Password and Confirm Password must be same!";
             }
@@ -283,5 +257,29 @@ class AuthController extends AbstractController
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    private function validatePassword($password): array
+    {
+        $errors = [];
+        if (empty($password)) {
+            $errors['password'] = 'Password field is required';
+        }
+        elseif (strlen($password) < 8) {
+            $errors['password'] = 'Your Password Must Contain At Least 8 Characters!';
+        }
+        elseif (strlen($password) > 30) {
+            $errors['password'] = 'Your Password Must Contain not more than 30 Characters!';
+        }
+        elseif(!preg_match("#[0-9]+#",$password)) {
+            $errors['password'] = "Your Password Must Contain At Least 1 Number!";
+        }
+        elseif(!preg_match("#[A-Z]+#",$password)) {
+            $errors['password'] = "Your Password Must Contain At Least 1 Capital Letter!";
+        }
+        elseif(!preg_match("#[a-z]+#",$password)) {
+            $errors['password'] = "Your Password Must Contain At Least 1 Lowercase Letter!";
+        }
+        return $errors;
     }
 }

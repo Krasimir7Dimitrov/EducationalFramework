@@ -3,7 +3,20 @@ require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
 <?php require __DIR__.'/../common/renderFlashMessages.phtml'; ?>
-    <h1>This is default index</h1>
+    <div class="text-center" style="background-image: url(https://wallpaperaccess.com/full/6463301.jpg); background-repeat: no-repeat; background-position: center; background-size: cover; height: 100%; padding: 155px 0; margin: 0">
+        <a href="<?= $url ?>cars/listing" class="btn btn-light shadow">See all cars!</a>
+        <div style="margin-top: 100px" class="d-flex justify-content-around">
+            <div class="bg-light rounded-circle d-flex justify-content-center align-items-center" style="width: 300px; height: 300px">
+                <a href="<?= $url ?>cars/car/211"</a><img class="rounded-circle" style="width: 200px; height: 200px" src="https://media.istockphoto.com/photos/front-of-old-rusty-classic-car-isolated-on-white-background-old-rusty-picture-id1068230014?k=20&m=1068230014&s=612x612&w=0&h=3dkt0q4yF8tDO9tvw--CXjAmtEs1dWlcDoVPgPcNZ_4=" alt=""></a>
+            </div>
+            <div class="bg-light rounded-circle d-flex justify-content-center align-items-center" style="width: 300px; height: 300px">
+                <a href="<?= $url ?>cars/car/212"><img class="rounded-circle" style="width: 200px; height: 200px" src="https://www.kindpng.com/picc/m/5-57337_old-rusty-car-png-junk-cars-transparent-png.png" alt=""></a>
+            </div>
+            <div class="bg-light rounded-circle d-flex justify-content-center align-items-center" style="width: 300px; height: 300px">
+                <a href="<?= $url ?>cars/car/210"><img class="rounded-circle" style="width: 200px; height: 200px" src="https://media.istockphoto.com/id/466065561/photo/old-burned-car-isolated-on-white-background.webp?s=612x612&w=is&k=20&c=HMk5qA2ZhatLYzRfyhZzm_sWfcZXhCbdRfxu4oWFX84=" alt=""></a>
+            </div>
+        </div>
+    </div>
 
 <?php
 require __DIR__.'/../common/footer.phtml';

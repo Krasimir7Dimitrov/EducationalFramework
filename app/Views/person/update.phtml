@@ -4,21 +4,38 @@ require __DIR__.'/../common/topnavbar.phtml';
 ?>
 
 <div class="container" style="padding: 0 250px">
-    <div class="border rounded d-flex justify-content-center" style="margin: 170px 0">
-        <div>
-            <div class="mt-5 mb-3 text-center">
-                <img src="<?= $person['data']['avatar'] ?>" alt="">
-            </div>
-            <div class="text-center" style="margin-bottom: 50px">
-                <p><?= $person['data']['email'] ?></p>
-                <p><?= $person['data']['first_name'] . ' ' . $person['data']['last_name'] ?></p>
-            </div>
-            <div class="text-center" style="margin-bottom: 50px">
-                <a href="<?= $url ?>/person/update" class="btn btn-info mr-4">Update</a>
-                <button type="button" class="btn btn-info ml-4" data-toggle="modal" data-target="#staticBackdrop">Delete</button>
+    <form method="post">
+        <div class="border rounded d-flex justify-content-center" style="margin: 120px 0">
+            <div>
+                <div class="mt-5 mb-3 text-center">
+                    <img src="<?= $person['data']['avatar'] ?>" alt="">
+                </div>
+                <div class="text-center" style="margin-bottom: 50px">
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Email</label>
+                        </div>
+                        <input name="email" type="email" class="form-control" id="inlineFormInputGroupEmail" placeholder="Email" value="<?= $person['data']['email'] ?>">
+                    </div>
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect02">First name</label>
+                        </div>
+                        <input name="first_name" type="text" class="form-control" id="inlineFormInputGroupFirstName" placeholder="First name" value="<?= $person['data']['first_name'] ?>">
+                    </div>
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect02">Last name</label>
+                        </div>
+                        <input name="last_name" type="text" class="form-control" id="inlineFormInputGroupFirstName" placeholder="Last name" value="<?= $person['data']['last_name'] ?>">
+                    </div>
+                </div>
+                <div class="text-center" style="margin-bottom: 50px">
+                    <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#staticBackdrop">Update</button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <?php
