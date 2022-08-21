@@ -1,11 +1,11 @@
-`<?php
+<?php
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
 
 <div class="container">
     <h2 class="text-center text-info" style="margin-top: 100px">Car view</h2>
-    <div class="row border p-3 rounded" style="margin: 100px 0 240px 0">
+    <div class="row border p-3 rounded" style="margin: 72px 0 180px 0">
         <div class="col-6">
             <img src=<?=$data['image']?> alt="Cool car" width="500" height="300" border-radius: 25px>
         </div>
@@ -24,7 +24,7 @@ require __DIR__.'/../common/topnavbar.phtml';
                     <?php } ?>
                 </div>
             </div>
-            <?php if ($this->isLoggedIn()) : ?>
+            <?php if ($this->isLoggedIn() && ($data['user_id'] == $_SESSION['user']['id'] || $_SESSION['user']['id'] == \App\System\Debugbar\Enums\SuperAdmin::ADMIN())) : ?>
             <div class="d-flex justify-content-between mt-5">
                 <div>
                     <a href="<?=$baseUrl?>cars/update/<?= $data['id'] ?>" class="btn btn-info px-4" type="submit">Update</a>
@@ -63,5 +63,3 @@ require __DIR__.'/../common/topnavbar.phtml';
 <?php
 require __DIR__.'/../common/footer.phtml';
 ?>
-
-`

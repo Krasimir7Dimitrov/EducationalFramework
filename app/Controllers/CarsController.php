@@ -5,9 +5,11 @@ use App\Model\Collections\CarsCollection;
 use App\Model\Collections\MakeCollection;
 use App\Model\Collections\ModelCollection;
 use App\System\AbstractController;
+use App\System\Debugbar\Enums\SuperAdmin;
 use App\System\Registry;
 use phpDocumentor\Reflection\Types\This;
 use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\stringContains;
 
 class CarsController extends AbstractController
 {
@@ -52,8 +54,7 @@ class CarsController extends AbstractController
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'POST') {
             $create = $this->postRequest();
-            $dateTime = date("Y-m-d H:i:s");
-            $create['created_at'] = $dateTime;
+            $create['user_id'] = $_SESSION['user']['id'];
             if (empty($create['make_id'])) {
                 $errors['makeErr'] = 'Make is required';
             }
@@ -85,6 +86,10 @@ class CarsController extends AbstractController
             $this->redirect('default', 'index');
         }
         $segment = $this->urlSegments[3];
+        $userId = $this->collectionInst->checkInCarUserId($segment);
+        if ($userId['user_id'] !== $_SESSION['user']['id'] && $_SESSION['user']['id'] !== json_encode(SuperAdmin::ADMIN(), true)) {
+            $this->redirect('default', 'index');
+        }
         if((int)$segment == 0) {
             $this->setFlashMessage('Invalid data');
             $this->redirect('cars', 'listing');
@@ -204,6 +209,9 @@ class CarsController extends AbstractController
             case 4:
                 $option = 'c.first_registration DESC';
                 break;
+            case 5:
+                $option = "c.user_id = {$_SESSION['user']['id']}";
+                break;
             default:
                 $option = 'c.created_at';
                 break;
@@ -239,6 +247,10 @@ class CarsController extends AbstractController
         $page = $getParams['page'] ?? 1;
         $offset = ($page - 1) * $this->numberOfRowsInAPage;
         $order = $this->convertOrderForDb($orderBy);
+        if (strpos($order, "user_id")) {
+            $filters['user_id'] = $_SESSION['user']['id'];
+            $order = "c.created_at";
+        }
         $data = $this->collectionInst->getRowsForAPageFromCars($this->numberOfRowsInAPage, $offset, $filters, $order);
         $query = $this->buildQueryString($getParams);
         $number = $this->collectionInst->getNumberOfCars($filters);

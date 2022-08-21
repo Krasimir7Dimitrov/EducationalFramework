@@ -2,7 +2,8 @@
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
-<?php require __DIR__.'/../common/renderFlashMessages.phtml'; ?>
+<?php
+require __DIR__.'/../common/renderFlashMessages.phtml'; ?>
 
 <div class="container">
     <div>
@@ -51,6 +52,9 @@ require __DIR__.'/../common/topnavbar.phtml';
                                 <option <?= (isset($filters['order']) && $filters['order'] == 2) ? 'selected' : '' ; ?> value="2">Sort reverse alphabetically</option>
                                 <option <?= (isset($filters['order']) && $filters['order'] == 3) ? 'selected' : '' ; ?> value="3">Sort by oldest</option>
                                 <option <?= (isset($filters['order']) && $filters['order'] == 4) ? 'selected' : '' ; ?> value="4">Sort by newest</option>
+                                <?php if ($this->isLoggedIn()) :?>
+                                    <option <?= (isset($filters['order']) && $filters['order'] == 5) ? 'selected' : '' ; ?> value="5">Only my cars</option>
+                                <?php endif; ?>
                             </select>
                         </div>
                     </div>

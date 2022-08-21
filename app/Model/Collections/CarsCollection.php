@@ -51,7 +51,7 @@ class CarsCollection extends \App\System\BaseCollection
     public function getSingleCar($id)
     {
         $data['id'] = $id;
-        $sql = "SELECT c.id, mk.name AS make, mo.name AS model, c.first_registration, c.transmission, c.image, c.make_id, c.model_id";
+        $sql = "SELECT c.id, mk.name AS make, mo.name AS model, c.user_id, c.first_registration, c.transmission, c.image, c.make_id, c.model_id";
         $sql .= " FROM $this->table AS c";
         $sql .= " INNER JOIN make AS mk ON mk.id = c.make_id INNER JOIN models AS mo ON mo.id = c.model_id";
         $sql .= " WHERE c.id = :id";
@@ -60,7 +60,7 @@ class CarsCollection extends \App\System\BaseCollection
 
     public function getRowsForAPageFromCars(int $numberOfRowsInAPage, int $rowsOffset, array $where = [], $order = '')
     {
-        $sql = "SELECT c.id, mk.name AS make, mo.name AS model, c.first_registration, c.transmission, c.image";
+        $sql = "SELECT c.id, mk.name AS make, mo.name AS model, c.user_id, c.first_registration, c.transmission, c.image";
         $sql .= " FROM $this->table AS c";
         $sql .= " INNER JOIN make AS mk ON mk.id = c.make_id INNER JOIN models AS mo ON mo.id = c.model_id";
         $sql .= " WHERE 1";
@@ -73,6 +73,7 @@ class CarsCollection extends \App\System\BaseCollection
         }
         $sql .= " ORDER BY $order";
         $sql .= " LIMIT $numberOfRowsInAPage OFFSET $rowsOffset";
+
         return $this->db->fetchAll($sql, $data);
     }
 
@@ -90,5 +91,12 @@ class CarsCollection extends \App\System\BaseCollection
         ];
         $sql = "SELECT DISTINCT model FROM $this->table WHERE make = ':make' AND transmission = ':transmission'";
         return $this->db->fetchAll($sql, $data);
+    }
+
+    public function checkInCarUserId($id)
+    {
+        $sql = "SELECT c.user_id FROM $this->table AS c WHERE id = :id";
+
+        return $this->db->fetchOne($sql, ['id' => $id]);
     }
 }
