@@ -52,7 +52,7 @@ class CarsController extends AbstractController
         if ($insert) {
             $messageArray[] = 'Successfully created record in database';
         } else {
-            $messageArray[] = 'Something wend wrong';
+            $messageArray[] = 'Something went wrong';
         }
 
         $this->renderView('cars/create', [
@@ -123,7 +123,7 @@ class CarsController extends AbstractController
         $cars           = new \App\Model\Collections\CarsCollection();
         $carResults     = $cars->getCarsPagination($limit, $offset);
         $carsCount      = $cars->getCarsCount();
-        $totalPages          = (int) ceil($carsCount/$limit);
+        $totalPages     = (int) ceil($carsCount/$limit);
 
         $this->renderView('cars/listing', ['totalPages' => $totalPages, 'carResults' => $carResults]);
     }
