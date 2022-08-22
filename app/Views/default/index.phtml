@@ -53,7 +53,7 @@ require __DIR__.'/../common/topnavbar.phtml';
 
 
         <div class="col s12 m7">
-            <h2 class="header">Results</h2>
+            <h2 class="header">Results (<?= count($searchResult) ?>)</h2>
                 <?php foreach ($searchResult as $result) { ?>
                     <div class="card horizontal">
                         <div class="card-stacked">
