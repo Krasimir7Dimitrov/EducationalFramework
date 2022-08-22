@@ -17,15 +17,18 @@ class UsersController extends AbstractController
     {
         $client =  new Client();
 
+        $page = $_GET['page'] ?? 1;
+
         try {
-            $response = $client->request('get', 'https://reqres.in/api/users?page=1');
+            $response = $client->request('get', 'https://reqres.in/api/users?page=' . $page);
         } catch (\Throwable $e) {
             echo $e->getMessage();
         }
 
         $users = json_decode($response->getBody());
+        $totalPages = $users->total_pages;
 
-        $this->renderView('/users/list', ['users' => $users->data]);
+        $this->renderView('/users/list', ['users' => $users->data, 'totalPages' => $totalPages ]);
     }
 
     public function getUserById()
