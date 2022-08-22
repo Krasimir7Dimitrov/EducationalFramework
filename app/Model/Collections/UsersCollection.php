@@ -12,4 +12,11 @@ class UsersCollection extends \App\System\BaseCollection
         return $this->db->fetchOne($sql, ['username' => $username]);
     }
 
+    public function getUserByEmail($email)
+    {
+        $sql = "Select * from users where email = :email";
+
+        return $this->db->fetchOne($sql, ['email' => $email]);
+    }
+
 }

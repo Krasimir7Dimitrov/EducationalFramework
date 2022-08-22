@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Model\Collections\UsersCollection;
 use App\System\AbstractController;
+use App\System\Notifications\Email\EmailNotification;
 use App\System\Registry;
 use App\System\Traits\Auth;
 
@@ -51,6 +52,37 @@ class AuthController extends AbstractController
 
         $redirectUrl = $this->config['baseUrl'].'/auth/login';
         header("Location: {$redirectUrl}"); die();
+    }
+
+    public function forgotPassword()
+    {
+        $userEmail = $_POST['email'] ?? null;
+        $userCollection = new UsersCollection();
+        $user = $userCollection->getUserByEmail($userEmail);
+
+        $emailHtml = '<div><p>Please click on this link to reset your password <a href="">Click here</a></p></div>';
+
+        $email = new \App\System\Notifications\Email\Email();
+        $email->to = 'fake@mail.vc';
+        $email->subject = 'Reset password';
+        $email->body = var_export('<div><p>Please click on this link to reset your password <a href="http://localhost:8080/auth/resetPassword">Click here</a></p></div>', true);
+
+        if ($user) {
+            $emailNotification = new EmailNotification($email);
+
+            if ($emailNotification->send()) {
+                $message = 'Email was sent to email: ' . $userEmail . '.Please check you email.';
+                $this->setFlashMessage($message);
+            }
+        }
+
+        $this->renderView('auth/forgotPassword', []);
+    }
+
+    public function resetPassword()
+    {
+
+        $this->renderView('auth/reset', []);
     }
 
 }

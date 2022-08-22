@@ -52,21 +52,15 @@ require __DIR__.'/../common/topnavbar.phtml';
         </form>
 
 
-        <div class="col s12 m7">
+        <div class="col-lg-2">
             <h2 class="header">Results (<?= count($searchResult) ?>)</h2>
                 <?php foreach ($searchResult as $result) { ?>
                     <div class="card horizontal">
                         <div class="card-stacked">
                             <div class="card-content">
                                 <p>Make - <?= $result['makename'] ?></p>
-                            </div>
-                            <div class="card-content">
                                 <p>Model - <?= $result['modelname'] ?></p>
-                            </div>
-                            <div class="card-content">
                                 <p>First Registration - <?= $result['first_registration'] ?></p>
-                            </div>
-                            <div class="card-content">
                                 <p>Transmission - <?= $result['transmission'] ?></p>
                             </div>
                             <div class="card-action">
