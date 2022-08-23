@@ -38,7 +38,8 @@ class AuthController extends AbstractController
             $password = $_POST['password'] ?? '' ;
             $row = $this->usersCollection->getUserByUsername($username);
 
-            if ($row['password'] !== sha1($password)) {
+
+            if (!password_verify($password, $row['password'])) {
                 $this->setFlashMessage('Your password is incorrect.');
                 $this->redirect('auth', 'login');
             }
@@ -46,17 +47,16 @@ class AuthController extends AbstractController
                 $this->setFlashMessage('Your account is not activated. Please check your email for verification code.');
                 $this->redirect('auth', 'login');
             }
-            if (!empty($row) && $row['password'] === sha1($password)) {
+
+            if (password_verify($password, $row['password'])) {
                 unset($row['password']);
                 $_SESSION['user'] = $row;
                 $_SESSION['loggedIn'] = true;
                 header("Location: {$this->config['baseUrl']}"); die();
             }
-
             $errors = [
                 'authError' => 'incorrect login data',
             ];
-
         }
         $this->renderView('auth/login', ['errors' => $errors, 'url' => $this->url]);
     }
@@ -111,11 +111,26 @@ class AuthController extends AbstractController
             if (empty($regData['terms'])) {
                 $errors['terms'] = "To continue must confirm the terms!";
             }
+            if (empty($regData['g-recaptcha-response'])) {
+                $errors['recaptcha'] = "To continue must set reCaptcha!";
+            }
 
             if (empty($errors)) {
+                if(isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response']))
+                {
+                    $secret = Registry::get('config')['recaptcha']['secretKey'];
+                    $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$_POST['g-recaptcha-response']);
+                    $responseData = json_decode($verifyResponse);
+                    if(!$responseData->success) {
+                        $this->setFlashMessage('Your have reCaptcha problem, please lease report to the site admin.');
+                        $this->redirect('auth', 'login');
+                    }
+                }
+                unset($regData['g-recaptcha-response']);
                 unset($regData['terms']);
                 unset($regData['repeat_password']);
-                $encryption = sha1($regData['password']);
+
+                $encryption =  password_hash($regData['password'], PASSWORD_BCRYPT);
                 $regData['password'] = $encryption;
                 $verificationCode = $regData['verification_code'] = $this->generateRandomString();
 
@@ -167,7 +182,9 @@ class AuthController extends AbstractController
             }
             $data['email'] = $regData['email'];
             if (!$this->usersCollection->checkEmailExist($regData['email'])) {
-                $errors['email'] = 'We can not find user with that email address.';
+                //When we can not find user with that email address.
+                $this->setFlashMessage('We have sent an reset password link, please check your email address.');
+                $this->redirect('auth', 'login');
             }
             if (empty($errors)) {
                 $str = $this->generateRandomString(30);
@@ -184,7 +201,7 @@ class AuthController extends AbstractController
                 $send = new \App\System\Email\NotificationEmail($mail);
                 $send->send();
 
-                $this->setFlashMessage('Please check email for reset password link.');
+                $this->setFlashMessage('We have sent an reset password link, please check your email address.');
                 $this->redirect('auth', 'login');
             }
         }
@@ -256,6 +273,7 @@ class AuthController extends AbstractController
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
+
         return $randomString;
     }
 
@@ -280,6 +298,7 @@ class AuthController extends AbstractController
         elseif(!preg_match("#[a-z]+#",$password)) {
             $errors['password'] = "Your Password Must Contain At Least 1 Lowercase Letter!";
         }
+
         return $errors;
     }
 }

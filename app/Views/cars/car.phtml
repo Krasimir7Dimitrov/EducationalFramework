@@ -24,7 +24,7 @@ require __DIR__.'/../common/topnavbar.phtml';
                     <?php } ?>
                 </div>
             </div>
-            <?php if ($this->isLoggedIn() && ($data['user_id'] == $_SESSION['user']['id'] || $_SESSION['user']['id'] == \App\System\Debugbar\Enums\SuperAdmin::ADMIN())) : ?>
+            <?php if ($this->isLoggedIn() && ($data['user_id'] == $_SESSION['user']['id'] || $this->isAdmin($_SESSION['user']['id']))) : ?>
             <div class="d-flex justify-content-between mt-5">
                 <div>
                     <a href="<?=$baseUrl?>cars/update/<?= $data['id'] ?>" class="btn btn-info px-4" type="submit">Update</a>

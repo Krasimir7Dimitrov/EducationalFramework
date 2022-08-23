@@ -1,4 +1,7 @@
 <?php
+
+use App\System\Registry;
+
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 ?>
@@ -95,6 +98,14 @@ require __DIR__.'/../common/topnavbar.phtml';
             <div class="d-flex justify-content-between mb-4">
                 <div>
                     <button class="btn btn-info px-4" type="submit">Register</button>
+                </div>
+                <div>
+                    <div class="g-recaptcha" data-sitekey="<?= Registry::get('config')['recaptcha']['siteKey'] ?>"></div>
+                    <?php if (!empty($errors['recaptcha'])) : ?>
+                    <div style="margin-top: 0.25rem; font-size: .875em; color: #dc3545">
+                        <?=$errors['recaptcha']?>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="text-center pb-4">

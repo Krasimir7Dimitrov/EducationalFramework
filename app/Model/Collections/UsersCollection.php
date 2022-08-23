@@ -13,6 +13,13 @@ class UsersCollection extends \App\System\BaseCollection
         return $this->db->fetchOne($sql, ['username' => $username]);
     }
 
+    public function getUserById($id)
+    {
+        $sql = "Select * from users where id = :id";
+
+        return $this->db->fetchOne($sql, ['id' => $id]);
+    }
+
     public function create($data)
     {
         return $this->db->insert($this->table, $data);

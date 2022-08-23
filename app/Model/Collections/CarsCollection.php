@@ -92,11 +92,4 @@ class CarsCollection extends \App\System\BaseCollection
         $sql = "SELECT DISTINCT model FROM $this->table WHERE make = ':make' AND transmission = ':transmission'";
         return $this->db->fetchAll($sql, $data);
     }
-
-    public function checkInCarUserId($id)
-    {
-        $sql = "SELECT c.user_id FROM $this->table AS c WHERE id = :id";
-
-        return $this->db->fetchOne($sql, ['id' => $id]);
-    }
 }

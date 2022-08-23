@@ -86,15 +86,15 @@ class CarsController extends AbstractController
             $this->redirect('default', 'index');
         }
         $segment = $this->urlSegments[3];
-        $userId = $this->collectionInst->checkInCarUserId($segment);
-        if ($userId['user_id'] !== $_SESSION['user']['id'] && $_SESSION['user']['id'] !== json_encode(SuperAdmin::ADMIN(), true)) {
-            $this->redirect('default', 'index');
-        }
         if((int)$segment == 0) {
             $this->setFlashMessage('Invalid data');
             $this->redirect('cars', 'listing');
         }
         $data = $this->collectionInst->getSingleCar($segment);
+        if ($data['user_id'] !== $_SESSION['user']['id'] && !$this->isAdmin($_SESSION['user']['id'])) {
+            $this->redirect('default', 'index');
+        }
+
         $makes = $this->getMakes();
         $models = $this->getModels();
 
