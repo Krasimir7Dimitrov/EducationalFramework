@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Model\Collections\UsersCollection;
+use App\Model\Collections\UserTokensCollection;
 use App\System\AbstractController;
 use App\System\Notifications\Email\EmailNotification;
 use App\System\Registry;
@@ -23,13 +24,13 @@ class AuthController extends AbstractController
 
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method == 'POST'){
-            $username = $_POST['username'] ?? '' ;
-            $password = $_POST['password'] ?? '' ;
+            $username        = $_POST['username'] ?? '' ;
+            $password        = $_POST['password'] ?? '' ;
             $usersCollection = new UsersCollection();
-            $row = $usersCollection->getUserByUsername($username);
+            $row             = $usersCollection->getUserByUsername($username);
             if (!empty($row) && $row['password'] === sha1($password)) {
                 unset($row['password']);
-                $_SESSION['user'] = $row;
+                $_SESSION['user']     = $row;
                 $_SESSION['loggedIn'] = true;
                 header("Location: {$this->config['baseUrl']}"); die();
             }
@@ -56,33 +57,140 @@ class AuthController extends AbstractController
 
     public function forgotPassword()
     {
-        $userEmail = $_POST['email'] ?? null;
+        $userEmail      = $_POST['email'] ?? null;
         $userCollection = new UsersCollection();
-        $user = $userCollection->getUserByEmail($userEmail);
+        $user           = $userCollection->getUserByEmail($userEmail);
 
-        $emailHtml = '<div><p>Please click on this link to reset your password <a href="">Click here</a></p></div>';
+        $emailResetPasswordLink = "http://localhost:8080/auth/resetPassword?user_id=" . $user['id'] . "&token=" . $this->getToken($user);
 
-        $email = new \App\System\Notifications\Email\Email();
-        $email->to = 'fake@mail.vc';
+        $email          = new \App\System\Notifications\Email\Email();
+        $email->to      = 'fake@mail.vc';
         $email->subject = 'Reset password';
-        $email->body = var_export('<div><p>Please click on this link to reset your password <a href="http://localhost:8080/auth/resetPassword">Click here</a></p></div>', true);
+        $email->body    = var_export('<div><p>Please click on this link to reset your password <a href="' . $emailResetPasswordLink . '">Click here</a></p></div>', true);
 
-        if ($user) {
+        if (isset($_POST['submit'])) {
             $emailNotification = new EmailNotification($email);
+            $emailNotification->send();
 
-            if ($emailNotification->send()) {
-                $message = 'Email was sent to email: ' . $userEmail . '.Please check you email.';
-                $this->setFlashMessage($message);
-            }
+            $message = 'Email was sent to email: ' . $userEmail . '.Please check you email.';
+            $this->setFlashMessage($message);
         }
 
-        $this->renderView('auth/forgotPassword', []);
+        $this->renderView('auth/forgotPassword');
     }
 
     public function resetPassword()
     {
+        $userToken = $_GET['token'];
+        $userId    = $_GET['user_id'];
+        $method    = $_SERVER['REQUEST_METHOD'];
 
-        $this->renderView('auth/reset', []);
+        if ($method == 'GET') {
+
+            $usersTokensCollection = new UserTokensCollection();
+            $tokenRow              = $usersTokensCollection->getTokenRow($userToken);
+
+            if (!empty($tokenRow) && $userToken !== $tokenRow['token']) {
+                $message = 'Your token is invalid or expiredd';
+                $this->setFlashMessage($message);
+                $this->redirect('auth', 'login');
+            }
+
+            if (!empty($tokenRow) && strtotime($tokenRow['created_at']) < time() - (60 * 60)) {
+                $message = 'Your token is invalid or expired';
+                $this->setFlashMessage($message);
+                $this->redirect('auth', 'login');
+            }
+        }
+
+        if ($method == 'POST') {
+            $newPassword    = $_POST['new_password'];
+            $repeatPassword = $_POST['repeat_password'];
+
+            if (strcmp($newPassword, $repeatPassword) === 0) {
+                $usersCollection = new UsersCollection();
+                $userToBeUpdated = $usersCollection->getUserById($userId);
+
+                $where = [
+                    'id' => $userToBeUpdated['id']
+                ];
+
+                $usersCollection->update($where, ['password' => password_hash($newPassword, PASSWORD_BCRYPT)]);
+
+                $message = 'Successfully reset password. You can now login with your new password';
+                $this->setFlashMessage($message);
+                $this->redirect('auth', 'login');
+            }
+        }
+
+        $this->renderView('auth/reset');
     }
 
+    public function getToken($user)
+    {
+        $token = substr(md5(rand()), 0, 50);
+
+        $userTokenRecord = [
+            'user_id' => $user['id'],
+            'token'   => $token
+        ];
+
+        $usersTokenCollection = (new UserTokensCollection())->create($userTokenRecord);
+
+        return $token;
+    }
+
+    public function register()
+    {
+        $method    = $_SERVER['REQUEST_METHOD'];
+
+//        if ($method == 'GET') {
+//
+//        }
+
+        if ($method == 'POST') {
+            $firstName  = $_POST['first_name'];
+            $lastName   = $_POST['last_name'];
+            $username   = $_POST['username'];
+            $email      = $_POST['email'];
+            $password   = $_POST['password'];
+            $repeatPass = $_POST['repeat_password'];
+
+            if (strcmp($password, $repeatPass) !== 0) {
+                $message = 'Passwords do not match!';
+                $this->setFlashMessage($message);
+            }
+
+            $errors = $class = [];
+            $class['first_name'] = $class['last_name'] = $class['username'] = $class['email'] = $class['password'] = $class['repeat_password'] ='class="form-control is-valid"';
+
+            if (strcmp($password, $repeatPass) !== 0) {
+                $errors['password'] = 'Passwords do not match!';
+                $class['password'] = 'class="form-control is-invalid"';
+            }
+
+            if (is_string($firstName) && strlen($firstName) > 50) {
+                $errors['first_name'] = 'First Name should not be more than 50 characters';
+                $class['first_name'] = 'class="form-control is-invalid"';
+            }
+
+            if (is_string($lastName) && strlen($lastName) > 50) {
+                $errors['last_name'] = 'Last Name should not be more than 50 characters';
+                $class['last_name'] = 'class="form-control is-invalid"';
+            }
+
+            if (is_string($username) && strlen($username) > 50) {
+                $errors['username'] = 'Username should not be more than 50 characters';
+                $class['username'] = 'class="form-control is-invalid"';
+            }
+
+            if (is_string($email) && strlen($email) > 50) {
+                $errors['email'] = 'Email should not be more than 50 characters';
+                $class['email'] = 'class="form-control is-invalid"';
+            }
+
+        }
+
+        $this->renderView('auth/register', ['errors' => $errors, 'class' => $class]);
+    }
 }

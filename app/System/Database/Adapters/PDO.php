@@ -213,7 +213,7 @@ class PDO implements DbAdapterInterface
     {
         foreach ($data as $key => $value) {
             $paramTypeForBinding = self::getParamTypeForBinding($value);
-            $query->bindParam(':' . $key, $data[$key], $paramTypeForBinding);
+            $query->bindValue(':' . $key, $value, $paramTypeForBinding);
         }
     }
 }

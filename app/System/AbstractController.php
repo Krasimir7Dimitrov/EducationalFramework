@@ -18,7 +18,7 @@ abstract class AbstractController
 
     abstract public function index();
 
-    public function renderView($viewName, $params)
+    public function renderView($viewName, $params = [])
     {
         $viewDir = __DIR__ . '/../Views/';
 
