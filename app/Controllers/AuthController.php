@@ -28,7 +28,7 @@ class AuthController extends AbstractController
             $password        = $_POST['password'] ?? '' ;
             $usersCollection = new UsersCollection();
             $row             = $usersCollection->getUserByUsername($username);
-            if (!empty($row) && $row['password'] === sha1($password)) {
+            if (!empty($row) && password_verify($password, $row['password'])) {
                 unset($row['password']);
                 $_SESSION['user']     = $row;
                 $_SESSION['loggedIn'] = true;
