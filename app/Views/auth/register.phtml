@@ -2,67 +2,58 @@
 require __DIR__.'/../common/header.phtml';
 require __DIR__.'/../common/topnavbar.phtml';
 require __DIR__.'/../common/messages.phtml';
-
-var_dump($class, $errors);
 ?>
 
-<form action="" method="post">
-    <fieldset>
-        <legend>Sign Up Form:</legend>
-        <div class="form-row">
-            <div class="col-md-4 mb-3">
-                <label for="first_name"><b>First Name</b></label>
-                <input <?= $class['first_name'] ?> type="text" name="first_name" id="first_name" required>
-                <div class="invalid-feedback">
-                    <?= $errors['first_name'] ?>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="last_name"><b>Last Name</b></label>
-                <input <?= $class['last_name'] ?> type="text" name="last_name" id="last_name" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
-                <div class="invalid-feedback">
-                    <?= $errors['last_name'] ?>
-                </div>
+<form class="col-lg-6 offset-lg-3" action="" method="post">
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+            <label for="first_name"><b>First Name</b></label>
+            <input <?= $validatedResults['class']['first_name'] ?> type="text" name="first_name" id="first_name" value="<?= isset($_POST['first_name']) ? $_POST['first_name'] : ''?>" required>
+            <div class="invalid-feedback">
+                <?= $validatedResults['errors']['first_name'] ?>
             </div>
         </div>
-        <div class="form-row">
-            <div class="col-md-4 mb-3">
-                <label for="username"><b>Username</b></label>
-                <input <?= $class['username'] ?> type="text" name="username" id="username" required>
-                <div class="invalid-feedback">
-                    <?= $errors['username'] ?>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="email"><b>Email</b></label>
-                <input <?= $class['email'] ?> type="email" id="email">
-                <div class="invalid-feedback">
-                    <?= $errors['email'] ?>
-                </div>
+        <div class="col-md-4 mb-3">
+            <label for="last_name"><b>Last Name</b></label>
+            <input <?= $validatedResults['class']['last_name'] ?> type="text" name="last_name" id="last_name" value="<?= isset($_POST['last_name']) ? $_POST['last_name'] : ''?>" required>
+            <div class="invalid-feedback">
+                <?= $validatedResults['errors']['last_name'] ?>
             </div>
         </div>
-        <div class="form-row">
-            <div class="col-md-4 mb-3">
-                <label for="password"><b>Password</b></label>
-                <input <?= $class['password'] ?> type="password" name="password" id="password" required>
-                <div class="invalid-feedback">
-                    <?= $errors['password'] ?>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="repeat_password"><b>Repeat Password</b></label>
-                <input <?= $class['password'] ?> type="password" name="repeat_password" id="repeat_password" required>
-                <div class="invalid-feedback">
-                    <?= $errors['password'] ?>
-                </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+            <label for="username"><b>Username</b></label>
+            <input <?= $validatedResults['class']['username'] ?> type="text" name="username" id="username" value="<?= isset($_POST['username']) ? $_POST['username'] : ''?>" required>
+            <div class="invalid-feedback">
+                <?= $validatedResults['errors']['username'] ?>
             </div>
         </div>
-
-        <input type="submit" name="submit" value="Sign Up" class="btn">
-    </fieldset>
+        <div class="col-md-4 mb-3">
+            <label for="email"><b>Email</b></label>
+            <input <?= $validatedResults['class']['email'] ?> type="email" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : ''?>">
+            <div class="invalid-feedback">
+                <?= $validatedResults['errors']['email'] ?>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+            <label for="password"><b>Password</b></label>
+            <input <?= $validatedResults['class']['password'] ?> type="password" name="password" id="password" required>
+            <div class="invalid-feedback">
+                <?= $validatedResults['errors']['password'] ?>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="repeat_password"><b>Repeat Password</b></label>
+            <input <?= $validatedResults['class']['password'] ?> type="password" name="repeat_password" id="repeat_password" required>
+            <div class="invalid-feedback">
+                <?= $validatedResults['errors']['password'] ?>
+            </div>
+        </div>
+    </div>
+    <input type="submit" name="submit" value="Sign Up" class="btn">
 </form>
 
 <?php

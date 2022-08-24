@@ -144,53 +144,101 @@ class AuthController extends AbstractController
     {
         $method    = $_SERVER['REQUEST_METHOD'];
 
-//        if ($method == 'GET') {
-//
-//        }
-
         if ($method == 'POST') {
-            $firstName  = $_POST['first_name'];
-            $lastName   = $_POST['last_name'];
-            $username   = $_POST['username'];
-            $email      = $_POST['email'];
-            $password   = $_POST['password'];
-            $repeatPass = $_POST['repeat_password'];
+            $usersCollection = new UsersCollection();
+            $validatedResults = $this->validatePostFields($_POST);
+            if (empty($validatedResults['errors'])) {
+                $newUser = [
+                  'username'   => $_POST['username'],
+                  'first_name' => $_POST['first_name'],
+                  'last_name'  => $_POST['last_name'],
+                  'email'      => $_POST['email'],
+                  'password'   => password_hash($_POST['password'], PASSWORD_BCRYPT),
+                ];
 
-            if (strcmp($password, $repeatPass) !== 0) {
-                $message = 'Passwords do not match!';
-                $this->setFlashMessage($message);
+                $result = $usersCollection->create($newUser);
+
+                if (!empty($result)) {
+                    $message = 'Successfully created user. You can now login';
+                    $this->setFlashMessage($message);
+                    $this->redirect('auth', 'login');
+                }
+
             }
-
-            $errors = $class = [];
-            $class['first_name'] = $class['last_name'] = $class['username'] = $class['email'] = $class['password'] = $class['repeat_password'] ='class="form-control is-valid"';
-
-            if (strcmp($password, $repeatPass) !== 0) {
-                $errors['password'] = 'Passwords do not match!';
-                $class['password'] = 'class="form-control is-invalid"';
-            }
-
-            if (is_string($firstName) && strlen($firstName) > 50) {
-                $errors['first_name'] = 'First Name should not be more than 50 characters';
-                $class['first_name'] = 'class="form-control is-invalid"';
-            }
-
-            if (is_string($lastName) && strlen($lastName) > 50) {
-                $errors['last_name'] = 'Last Name should not be more than 50 characters';
-                $class['last_name'] = 'class="form-control is-invalid"';
-            }
-
-            if (is_string($username) && strlen($username) > 50) {
-                $errors['username'] = 'Username should not be more than 50 characters';
-                $class['username'] = 'class="form-control is-invalid"';
-            }
-
-            if (is_string($email) && strlen($email) > 50) {
-                $errors['email'] = 'Email should not be more than 50 characters';
-                $class['email'] = 'class="form-control is-invalid"';
-            }
-
         }
 
-        $this->renderView('auth/register', ['errors' => $errors, 'class' => $class]);
+        $this->renderView('auth/register', ['validatedResults' => $validatedResults]);
     }
+
+    public function validatePostFields($post)
+    {
+        $firstName  = $post['first_name'];
+        $lastName   = $post['last_name'];
+        $username   = $post['username'];
+        $email      = $post['email'];
+        $password   = $post['password'];
+        $repeatPass = $post['repeat_password'];
+
+        $errors = $class = [];
+        $class['first_name'] = $class['last_name'] =
+        $class['username'] = $class['email'] =
+        $class['password'] = $class['repeat_password'] ='class="form-control is-valid"';
+
+        $usersCollection = new UsersCollection();
+        $checkEmailExist = $usersCollection->getUserByEmail($email);
+        $checkUsernameExists = $usersCollection->getUserByUsername($username);
+
+        if (!empty($checkEmailExist)) {
+            $errors['email'] = 'This email already exists!';
+            $class['email'] = 'class="form-control is-invalid"';
+        } else {
+            if (is_string($email) && strlen($email) > 50) {
+                $errors['email'] = 'Email should not be more than 50 characters';
+                $class['email']  = 'class="form-control is-invalid"';
+            }
+        }
+
+        if (is_string($username) && $username !== '' && strlen($username) > 50) {
+            $errors['username'] = 'Username should not be more than 50 characters';
+            $class['username']  = 'class="form-control is-invalid"';
+        }
+
+        if (!empty($checkUsernameExists)) {
+            $errors['username'] = 'This username already exists!';
+            $class['username']  = 'class="form-control is-invalid"';
+        }
+
+        if (strcmp($password, $repeatPass) !== 0) {
+            $errors['password'] = 'Passwords do not match!';
+            $class['password']  = 'class="form-control is-invalid"';
+        }
+
+        if (is_numeric($firstName)) {
+            $errors['first_name'] = 'First Name should be of type string';
+            $class['first_name']  = 'class="form-control is-invalid"';
+        }
+
+        if (is_string($firstName) && $firstName !== ''  && strlen($firstName) > 50) {
+            $errors['first_name'] = 'First Name should not be more than 50 characters';
+            $class['first_name']  = 'class="form-control is-invalid"';
+        }
+
+        if (is_string($lastName) && strlen($lastName) > 50) {
+            $errors['last_name'] = 'Last Name should not be more than 50 characters';
+            $class['last_name']  = 'class="form-control is-invalid"';
+        }
+
+        if (is_numeric($lastName)) {
+            $errors['last_name'] = 'Last Name should be of type string';
+            $class['last_name']  = 'class="form-control is-invalid"';
+        }
+
+        if (is_numeric($username)) {
+            $errors['username'] = 'Username should be of type string';
+            $class['username']  = 'class="form-control is-invalid"';
+        }
+
+        return ['class' => $class, 'errors' => $errors];
+    }
+
 }
