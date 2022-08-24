@@ -20,7 +20,8 @@
       "ext-pdo": "*",
       "ext-curl": "*",
         "guzzlehttp/guzzle": "^7.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "pecee/simple-router": "4.3.7.2"
     },
     "minimum-stability": "stable",
     "autoload": {

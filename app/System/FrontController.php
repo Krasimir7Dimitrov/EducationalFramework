@@ -2,8 +2,6 @@
 
 namespace App\System;
 
-use http\Exception\InvalidArgumentException;
-
 class FrontController
 {
     private $controller;
@@ -13,7 +11,6 @@ class FrontController
     private $params;
 
     private $config;
-
 
     public function __construct($options = [])
     {

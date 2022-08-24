@@ -91,7 +91,7 @@ class AuthController extends AbstractController
             $tokenRow              = $usersTokensCollection->getTokenRow($userToken);
 
             if (!empty($tokenRow) && $userToken !== $tokenRow['token']) {
-                $message = 'Your token is invalid or expiredd';
+                $message = 'Your token is invalid or expired';
                 $this->setFlashMessage($message);
                 $this->redirect('auth', 'login');
             }
