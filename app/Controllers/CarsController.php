@@ -159,6 +159,7 @@ class CarsController extends AbstractController
             $this->redirect('cars', 'listing');
         }
     }
+
     private function getUrlSegments(): void
     {
         $uriPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

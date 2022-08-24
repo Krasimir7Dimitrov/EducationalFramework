@@ -36,7 +36,7 @@ class AuthController extends AbstractController
         if ($method == 'POST'){
             $username = $_POST['username'] ?? '' ;
             $password = $_POST['password'] ?? '' ;
-            $row = $this->usersCollection->getUserByUsername($username);
+            $row = $this->usersCollection->getUser(['username' => $username]);
 
 
             if (!password_verify($password, $row['password'])) {
@@ -44,7 +44,7 @@ class AuthController extends AbstractController
                 $this->redirect('auth', 'login');
             }
             if ($row['is_verified'] != 1) {
-                $this->setFlashMessage('Your account is not activated. Please check your email for verification code.');
+                $this->setFlashMessage("Your account is not activated. Please check your email for verification code. <br><form method='get'><span>Or</span><a href='{$this->url}auth/resend/{$row['id']}'> resend token</a></form>");
                 $this->redirect('auth', 'login');
             }
 
@@ -61,6 +61,29 @@ class AuthController extends AbstractController
         $this->renderView('auth/login', ['errors' => $errors, 'url' => $this->url]);
     }
 
+    public function resend()
+    {
+        $carsInst = new CarsController();
+        $segment = $carsInst->urlSegments[3];
+        if (empty($segment)) {
+            $this->redirect('auth', 'login');
+        }
+        $row = $this->usersCollection->getUser(['id' => $segment]);
+        $link = "<div><a href='{$this->url}auth/verify?verification_code={$row['verification_code']}'>Click</a></div>";
+        $mail = new \App\System\Email\Email();
+        $mail->to = $row['email'];
+        $mail->subject = 'This is your verification code';
+        $mail->body = $link;
+        $send = new \App\System\Email\NotificationEmail($mail);
+        $send->send();
+
+        $this->setFlashMessage("We have sent verification code again");
+        $this->redirect('auth', 'login');
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function registration()
     {
         if ($this->isLoggedIn()) {
@@ -83,7 +106,7 @@ class AuthController extends AbstractController
             elseif (!ctype_alpha($regData['username'])) {
                 $errors['username'] = 'Username must contain only letters';
             }
-            elseif (!empty($this->usersCollection->checkUsernameExist($regData['username']))) {
+            elseif (!empty($this->usersCollection->getUser(['username' => $regData['username']]))) {
                 $errors['username'] = 'This username already exists';
             }
             $data['username'] = $regData['username'];
@@ -94,7 +117,7 @@ class AuthController extends AbstractController
             elseif (!filter_var($regData['email'], FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'It is not valid email';
             }
-            elseif (!empty($this->usersCollection->checkEmailExist($regData['email']))) {
+            elseif (!empty($this->usersCollection->getUser(['email' => $regData['email']]))) {
                 $errors['email'] = 'This email already exists';
             }
             $data['email'] = $regData['email'];
@@ -132,11 +155,15 @@ class AuthController extends AbstractController
 
                 $encryption =  password_hash($regData['password'], PASSWORD_BCRYPT);
                 $regData['password'] = $encryption;
-                $verificationCode = $regData['verification_code'] = $this->generateRandomString();
+                $addTokenToData = $regData['verification_code'] = bin2hex(random_bytes(16));
+                $verificationCode = $addTokenToData;
 
                 $user = $this->usersCollection->create($regData);
-
-                $link = "<div><a href='{$this->url}auth/verify?id={$user}&verification_code={$verificationCode}'>Click</a></div>";
+                if (empty($user)) {
+                    $this->setFlashMessage('Your account has not been created.');
+                    $this->redirect('auth', 'login');
+                }
+                $link = "<div><a href='{$this->url}auth/verify?verification_code={$verificationCode}'>Click</a></div>";
                 $mail = new \App\System\Email\Email();
                 $mail->to = $regData['email'];
                 $mail->subject = 'This is your verification code';
@@ -155,18 +182,23 @@ class AuthController extends AbstractController
     public function verify()
     {
         $confirmReg = $_GET;
-        $code = $this->usersCollection->getVerificationCode($confirmReg['id']);
-        if ($code['is_verified'] == 0 && $confirmReg['verification_code'] === $code['verification_code']) {
-            $this->usersCollection->updateIsVerified($confirmReg['id']);
-            $this->setFlashMessage('You verify your account successfully. You can sign in in your profile.');
+        $userData = $this->usersCollection->getUser($confirmReg);
+        if (empty($userData)) {
+            $this->setFlashMessage('Your verification link is invalid or expired.');
             $this->redirect('auth', 'login');
         }
-        if ($code['is_verified'] != 0) {
+        if ($userData['is_verified'] != 0) {
             $this->setFlashMessage('Your account is already activated.');
             $this->redirect('auth', 'login');
         }
+        $this->usersCollection->updateIsVerified($userData['id']);
+        $this->setFlashMessage('You verify your account successfully. You can sign in in your profile.');
+        $this->redirect('auth', 'login');
     }
 
+    /**
+     * @throws \Exception
+     */
     public function reset()
     {
         if ($this->isLoggedIn()) {
@@ -180,20 +212,20 @@ class AuthController extends AbstractController
             if (!filter_var($regData['email'], FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'It is not valid email';
             }
-            $data['email'] = $regData['email'];
-            if (!$this->usersCollection->checkEmailExist($regData['email'])) {
+            $userData = $this->usersCollection->getUser($regData);
+            $data['user_id'] = $userData['id'];
+            if (!$this->usersCollection->getUser(['email' => $regData['email']])) {
                 //When we can not find user with that email address.
                 $this->setFlashMessage('We have sent an reset password link, please check your email address.');
                 $this->redirect('auth', 'login');
             }
             if (empty($errors)) {
-                $str = $this->generateRandomString(30);
-                $this->usersCollection->deleteIfEmailExist($regData['email']);
-                $data['email'] = $regData['email'];
-                $data['token'] = $str;
+                $token = bin2hex(random_bytes(16));
+                $this->usersCollection->deleteIfUserIdExist($regData['user_id']);
+                $data['token'] = $token;
                 $this->usersCollection->createToken($data);
 
-                $link = "<div><a href='{$this->url}auth/change?email={$regData['email']}&token={$str}'>Click</a></div>";
+                $link = "<div><a href='{$this->url}auth/change?token={$token}'>Click</a></div>";
                 $mail = new \App\System\Email\Email();
                 $mail->to = $regData['email'];
                 $mail->subject = 'This is your verification code';
@@ -215,16 +247,16 @@ class AuthController extends AbstractController
             $this->redirect();
         }
         $query = $_GET;
-        $token = $this->usersCollection->getDataFromPassReset($query);
-        if (empty($token)) {
+        $resetPassData = $this->usersCollection->getDataFromPassReset($query);
+        if (empty($resetPassData)) {
+            $this->setFlashMessage('This token is invalid or expired.');
             $this->redirect('auth', 'login');
         }
-
         $datetime = new DateTime();
         $now = $datetime->format('Y-m-d H:i:s');
-        $time = strtotime($now) - strtotime($token['created_at']);
+        $time = strtotime($now) - strtotime($resetPassData['created_at']);
         if (($time / 3600) > 1) {
-            $this->setFlashMessage('Your reset link is expired.');
+            $this->setFlashMessage('Your reset link is invalid or expired.');
             $this->redirect('auth', 'login');
         }
         $errors = [];
@@ -241,7 +273,8 @@ class AuthController extends AbstractController
 
             if (empty($errors)) {
                 try {
-                    $this->usersCollection->update(['password' => sha1($regData['password'])], ['email' => $query['email']]);
+                    $this->usersCollection->update(['password' => password_hash($regData['password'], PASSWORD_BCRYPT)], ['email' => $resetPassData['user_id']]);
+                    $this->usersCollection->deleteIfUserIdExist($resetPassData['user_id']);
                 } catch (\Throwable $e) {
                     $e->getMessage();
                     $this->setFlashMessage('Something went wrong.');

@@ -6,18 +6,18 @@ class UsersCollection extends \App\System\BaseCollection
 {
     protected $table = 'users';
 
-    public function getUserByUsername($username)
+    public function getUser(array $where)
     {
-        $sql = "Select * from users where username = :username";
+        $sql = "SELECT * FROM users AS u WHERE 1";
+        $data = [];
+        foreach ($where as $key => $value) {
+            if (!empty($value)) {
+                $data[$key] = $value;
+                $sql .= " AND u.{$key} = :{$key}";
+            }
+        }
 
-        return $this->db->fetchOne($sql, ['username' => $username]);
-    }
-
-    public function getUserById($id)
-    {
-        $sql = "Select * from users where id = :id";
-
-        return $this->db->fetchOne($sql, ['id' => $id]);
+        return $this->db->fetchOne($sql, $data);
     }
 
     public function create($data)
@@ -30,35 +30,14 @@ class UsersCollection extends \App\System\BaseCollection
         return $this->db->update($this->table, $data, $where);
     }
 
-    public function getVerificationCode($id)
-    {
-        $sql = "SELECT u.is_verified, u.verification_code FROM $this->table AS u WHERE u.id = :id ";
-
-        return $this->db->fetchOne($sql, ['id' => $id]);
-    }
-
     public function updateIsVerified($id)
     {
         return $this->db->update($this->table, ['is_verified' => 1], ['id' => $id]);
     }
 
-    public function checkUsernameExist($username)
+    public function deleteIfUserIdExist($user_id)
     {
-        $sql = "SELECT u.id, u.username FROM $this->table AS u WHERE u.username = :username";
-
-        return $this->db->fetchOne($sql, ['username' => $username]);
-    }
-
-    public function checkEmailExist($email)
-    {
-        $sql = "SELECT u.id, u.email FROM $this->table AS u WHERE u.email = :email";
-
-        return $this->db->fetchOne($sql, ['email' => $email]);
-    }
-
-    public function deleteIfEmailExist($email)
-    {
-        return $this->db->delete('password_resets', ['email' => $email]);
+        return $this->db->delete('password_resets', ['user_id' => $user_id]);
     }
 
     public function createToken($data)

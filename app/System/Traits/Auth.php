@@ -14,7 +14,7 @@ trait Auth
     public function isAdmin($user_id): bool
     {
         $authColl = new UsersCollection();
-        $user = $authColl->getUserById($user_id);
+        $user = $authColl->getUser(['id' => $user_id]);
 
         return !empty($user['is_admin']);
     }

@@ -1,8 +1,10 @@
 <?php
 foreach ($this->getFlashMessages() as $flashMessage) :
     ?>
-    <div class="alert alert-info text-center" role="alert">
-        <?= $flashMessage ?>
+    <div style="padding: 0 600px; margin-top: 30px">
+        <div style="padding: 10px 30px" class="alert alert-info text-center" role="alert">
+            <?= $flashMessage ?>
+        </div>
     </div>
 <?php
 endforeach
