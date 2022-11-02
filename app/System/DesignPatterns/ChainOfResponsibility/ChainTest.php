@@ -20,10 +20,13 @@ class ChainTest extends TestCase
         $checkEmail->then($checkId);
         $checkId->then($checkName);
 
-        $checkEmail->check($user);
+        $myException = '';
+        try {
+            $checkEmail->check($user);
+        } catch (\Exception $e) {
+            $myException = $e->getMessage();
+        }
 
-        $this->assertEquals('', '$first');
-        $this->assertEquals('', '$first');
-
+        $this->assertEquals('first', $myException);
     }
 }
