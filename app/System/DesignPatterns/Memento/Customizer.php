@@ -18,7 +18,7 @@ class Customizer
 
     public function restore(Memento $memento)
     {
-        $this->car = $memento->getCar();
+        $this->car = $memento->getBackup();
     }
 
     public function changeColor($color)

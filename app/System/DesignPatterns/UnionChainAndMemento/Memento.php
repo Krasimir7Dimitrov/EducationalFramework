@@ -1,8 +1,6 @@
 <?php
 
-namespace App\System\DesignPatterns\Memento;
-
-use phpDocumentor\Reflection\Types\This;
+namespace App\System\DesignPatterns\UnionChainAndMemento;
 
 class Memento
 {
